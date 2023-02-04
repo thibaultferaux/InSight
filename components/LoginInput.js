@@ -1,7 +1,7 @@
 import { View, Text, TextInput } from 'react-native'
 import React, { useState } from 'react'
 
-const LoginInput = ({ placeholder, keyboardType, secureTextEntry, onChangeText, value, children }) => {
+const LoginInput = ({ placeholder, keyboardType, autoCapitalize, secureTextEntry, onChangeText, value, children }) => {
     const [borderColor, setBorderColor] = useState('#00000000');
 
     const onFocus = () => {
@@ -24,7 +24,7 @@ const LoginInput = ({ placeholder, keyboardType, secureTextEntry, onChangeText, 
                 style={{ fontFamily: 'Poppins_400Regular', paddingTop: 4, paddingBottom: 0 }}
                 textAlignVertical="center"
                 className="flex-1 text-sm text-slate-900 font-normal align-text-bottom"
-                autoCapitalize='none'
+                autoCapitalize={autoCapitalize}
                 onFocus={() => onFocus()}
                 onBlur={() => onBlur()}
                 secureTextEntry={secureTextEntry}

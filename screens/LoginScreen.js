@@ -1,4 +1,4 @@
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, ScrollView, ScrollViewComponent, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -6,11 +6,15 @@ import { useFonts, Poppins_400Regular, Poppins_600SemiBold } from '@expo-google-
 import { EnvelopeIcon, LockClosedIcon } from "react-native-heroicons/outline";
 import LoginInput from '../components/LoginInput'
 import { supabase } from '../lib/supabase'
+import { useNavigation } from '@react-navigation/native'
 
 export default function LoginScreen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const navigation = useNavigation();
+
     // load fonts
     let [fontsLoaded] = useFonts({
         Poppins_400Regular,
@@ -40,24 +44,24 @@ export default function LoginScreen() {
                         style={{ width: 130, resizeMode: 'contain' }}
                     />
                 </View>
-                <View className="flex-1 w-full bg-white rounded-t-[50px] items-center px-10 pt-10">
+                <View className="h-5/6 w-full bg-white rounded-t-[50px] items-center px-10 pt-10 pb-0 mb-0">
                     <Text
                         style={{ fontFamily: 'Poppins_600SemiBold' }}
                         className="text-3xl font-semibold"
                     >Log in</Text>
                     <View className="flex-1 w-full mt-12 space-y-7">
                         <View>
-                            <LoginInput placeholder="Email" keyboardType="email-address" secureTextEntry={false} onChangeText={(text) => setEmail(text)} value={email}>
+                            <LoginInput placeholder="Email" keyboardType="email-address" autoCapitalize="none" secureTextEntry={false} onChangeText={(text) => setEmail(text)} value={email}>
                                 <EnvelopeIcon color="#0F172A" size={22} />
                             </LoginInput>
                         </View>
                         <View>
-                            <LoginInput placeholder="Wachtwoord" keyboardType="default" secureTextEntry={true} onChangeText={(text) => setPassword(text)} value={password}>
+                            <LoginInput placeholder="Wachtwoord" keyboardType="default" autoCapitalize="none" secureTextEntry={true} onChangeText={(text) => setPassword(text)} value={password}>
                                 <LockClosedIcon color="#0F172A" size={22} />
                             </LoginInput>
                         </View>
                     </View>
-                    <View className="mb-8 w-full items-center">
+                    <View className="py-8 w-full items-center">
                         <TouchableOpacity className="bg-neutral-900 w-full p-4 rounded-[10px] justify-center items-center" onPress={() => login()} disabled={loading}>
                             <Text
                                 className="text-white text-base"
@@ -65,7 +69,7 @@ export default function LoginScreen() {
                             >Login</Text>
                         </TouchableOpacity>
                         <Text className="mt-2 text-sm text-gray-400">
-                            Nog geen account? <Text className="text-violet-600">Registreer</Text>
+                            Nog geen account? <Text className="text-violet-600" onPress={() => navigation.navigate('Register')}>Registreer</Text>
                         </Text>
                     </View>
                 </View>
