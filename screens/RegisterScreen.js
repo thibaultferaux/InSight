@@ -20,8 +20,6 @@ const RegisterScreen = () => {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
 
-    console.log(insets.top)
-
     // load fonts
     let [fontsLoaded] = useFonts({
         Poppins_400Regular,
@@ -35,23 +33,39 @@ const RegisterScreen = () => {
 
     const register = async () => {
         setLoading(true);
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
             email: email,
             password: password,
         })
-
         if (error) {
             Alert.alert(error.message)
         } else {
-            navigation.navigate("Login")
-            showMessage({
-                message: "Je account is succesvol aangemaakt",
-                type: "success",
-                style: { paddingTop: insets.top },
-                duration: 5000,
-                icon: 'success',
-                position: 'left'
-            })
+            console.log(data)
+            console.log(data.user.id)
+            const profile = {
+                id: data.user.id,
+                email: email,
+                first_name: firstName,
+                last_name: lastName,
+                updated_at: new Date()
+            }
+
+            const { error } = await supabase.from('profiles').upsert(profile)
+
+            if (error) {
+                Alert.alert(error.message)
+            } else {
+                navigation.navigate("Login")
+                showMessage({
+                    message: "Je account is succesvol aangemaakt",
+                    type: "success",
+                    style: { paddingTop: insets.top },
+                    duration: 5000,
+                    icon: 'success',
+                    position: 'left'
+                })
+            }
+
         }
         setLoading(false)
     }

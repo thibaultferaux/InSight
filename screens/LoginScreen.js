@@ -1,4 +1,4 @@
-import { FlatList, Image, ScrollView, ScrollViewComponent, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, Image, ScrollView, ScrollViewComponent, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -26,10 +26,18 @@ export default function LoginScreen() {
         return null;
     }
 
-    const login = () => {
+    const login = async () => {
         setLoading(true);
-        console.log(email);
-        console.log(password);
+        const { error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        })
+
+        if (error) {
+            Alert.alert(error.message)
+        }
+
+        setLoading(false)
     }
 
     return (
@@ -62,7 +70,7 @@ export default function LoginScreen() {
                         </View>
                     </View>
                     <View className="py-8 w-full items-center">
-                        <TouchableOpacity className="bg-neutral-900 w-full p-4 rounded-[10px] justify-center items-center" onPress={() => login()} disabled={loading}>
+                        <TouchableOpacity className={`${loading ? 'bg-neutral-500' : 'bg-neutral-900'} w-full p-4 rounded-[10px] justify-center items-center`} onPress={() => login()} disabled={loading}>
                             <Text
                                 className="text-white text-base"
                                 style={{ fontFamily: 'Poppins_400Regular' }}
