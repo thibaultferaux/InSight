@@ -58,7 +58,7 @@ const StudentDashboard = ({ route }) => {
                 <Text>Loading...</Text>
             ) : (
                 <View className="space-y-4">
-                    <Text style={{ fontFamily: 'Poppins_400Regular' }}>Hallo {firstName}</Text>
+                    <Text style={{ fontFamily: 'Poppins_400Regular' }}>Hoi {firstName}</Text>
                     <TouchableOpacity className="bg-neutral-900 px-4 py-2 rounded-md" onPress={() => supabase.auth.signOut()}>
                         <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-white">Uitloggen</Text>
                     </TouchableOpacity>

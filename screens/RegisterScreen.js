@@ -85,7 +85,7 @@ const RegisterScreen = () => {
                             style={{ width: 130, resizeMode: 'contain' }}
                         />
                     </View>
-                    <View className="flex-1 w-full bg-white rounded-t-[50px] items-center px-10 pt-10">
+                    <View className="flex-1 w-full bg-white rounded-t-[50px] items-center px-7 pt-10">
                         <Text
                             style={{ fontFamily: 'Poppins_600SemiBold' }}
                             className="text-3xl font-semibold"

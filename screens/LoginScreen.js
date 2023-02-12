@@ -52,7 +52,7 @@ export default function LoginScreen() {
                         style={{ width: 130, resizeMode: 'contain' }}
                     />
                 </View>
-                <View className="h-5/6 w-full bg-white rounded-t-[50px] items-center px-10 pt-10 pb-0 mb-0">
+                <View className="h-5/6 w-full bg-white rounded-t-[50px] items-center px-7 pt-10 pb-0 mb-0">
                     <Text
                         style={{ fontFamily: 'Poppins_600SemiBold' }}
                         className="text-3xl font-semibold"
