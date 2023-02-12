@@ -55,6 +55,7 @@ const RegisterScreen = () => {
             if (error) {
                 Alert.alert(error.message)
             } else {
+                supabase.auth.signOut()
                 navigation.navigate("Login")
                 showMessage({
                     message: "Je account is succesvol aangemaakt",

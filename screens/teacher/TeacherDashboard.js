@@ -1,9 +1,9 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabase';
+import { supabase } from '../../lib/supabase';
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 
-const DashboardScreen = ({ route }) => {
+const TeacherDashboard = ({ route }) => {
     const { session } = route.params;
     const [loading, setLoading] = useState(true);
     const [firstName, setFirstName] = useState('')
@@ -58,6 +58,7 @@ const DashboardScreen = ({ route }) => {
                 <Text>Loading...</Text>
             ) : (
                 <View className="space-y-4">
+                    <Text className="text-lg" style={{ fontFamily: 'Poppins_600SemiBold' }}>Teacher</Text>
                     <Text style={{ fontFamily: 'Poppins_400Regular' }}>Hallo {firstName}</Text>
                     <TouchableOpacity className="bg-neutral-900 px-4 py-2 rounded-md" onPress={() => supabase.auth.signOut()}>
                         <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-white">Uitloggen</Text>
@@ -68,4 +69,4 @@ const DashboardScreen = ({ route }) => {
     )
 }
 
-export default DashboardScreen
+export default TeacherDashboard

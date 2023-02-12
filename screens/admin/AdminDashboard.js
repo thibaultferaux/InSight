@@ -1,9 +1,9 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabase';
+import { supabase } from '../../lib/supabase';
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 
-const DashboardScreen = ({ route }) => {
+const AdminDashboard = ({ route }) => {
     const { session } = route.params;
     const [loading, setLoading] = useState(true);
     const [firstName, setFirstName] = useState('')
@@ -68,4 +68,4 @@ const DashboardScreen = ({ route }) => {
     )
 }
 
-export default DashboardScreen
+export default AdminDashboard
