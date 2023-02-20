@@ -66,6 +66,11 @@ const AdminDashboard = ({ route }) => {
         setBorderColor('#00000000');
     }
 
+    const logout = async () => {
+        await AsyncStorage.removeItem('user')
+        supabase.auth.signOut()
+    }
+
     return (
         <SafeAreaView className="flex-1 justify-start bg-white px-7 pt-14">
             {loading ? (
@@ -76,7 +81,7 @@ const AdminDashboard = ({ route }) => {
                 <>
                     <View className="flex-row justify-between items-start">
                         <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Hallo {firstName},</Text>
-                        <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => supabase.auth.signOut()}>
+                        <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={logout()}>
                             <ArrowRightOnRectangleIcon color="white" size={22} />
                         </TouchableOpacity>
                     </View>

@@ -65,9 +65,6 @@ export default function App() {
 
     const getUser = async () => {
         let result = await AsyncStorage.getItem('user');
-        console.log('--------------------------')
-        console.log(result);
-        console.log('--------------------------')
         if (result) {
             let { email, password } = JSON.parse(result);
             const { error } = await supabase.auth.signInWithPassword({
