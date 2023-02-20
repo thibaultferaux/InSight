@@ -6,11 +6,14 @@ import FlashMessage from 'react-native-flash-message';
 import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { supabase } from './lib/supabase';
 import AdminDashboard from './screens/admin/AdminDashboard';
+import MakeClassroom from './screens/admin/MakeClassroom';
 import DashboardScreen from './screens/DashboardScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import StudentDashboard from './screens/student/StudentDashboard';
 import TeacherDashboard from './screens/teacher/TeacherDashboard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function App() {
     const [session, setSession] = useState(null)
@@ -19,6 +22,10 @@ export default function App() {
     const Stack = createNativeStackNavigator();
 
     useEffect(() => {
+        console.log('--------------------------')
+        getUser();
+        console.log('--------------------------')
+
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session)
         })
@@ -56,6 +63,25 @@ export default function App() {
         }
     }, [session])
 
+    const getUser = async () => {
+        let result = await AsyncStorage.getItem('user');
+        console.log('--------------------------')
+        console.log(result);
+        console.log('--------------------------')
+        if (result) {
+            let { email, password } = JSON.parse(result);
+            const { error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            })
+            if (error) {
+                Alert.alert(error.message)
+            }
+        }
+    }
+
+
+
     return (
         <NavigationContainer>
             <SafeAreaProvider>
@@ -65,6 +91,7 @@ export default function App() {
                         {session && session.user ? (role === 3 ? (
                             <>
                                 <Stack.Screen name="Dashboard" component={AdminDashboard} initialParams={{ session: session }} />
+                                <Stack.Screen name="MakeClassroom" component={MakeClassroom} />
                             </>
                         ) : (role === 2 ? (
                             <>

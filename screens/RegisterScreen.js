@@ -78,7 +78,7 @@ const RegisterScreen = () => {
         >
             <SafeAreaView className="flex-1 items-center justify-center">
                 <ScrollView className="w-full">
-
+ 
                     <View className="h-1/6 items-center justify-center">
                         <Image
                             source={require('../assets/logo/Logo-Purple.png')}

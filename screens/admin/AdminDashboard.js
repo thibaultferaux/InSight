@@ -4,12 +4,15 @@ import { supabase } from '../../lib/supabase';
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowRightOnRectangleIcon, MagnifyingGlassIcon, PlusIcon } from 'react-native-heroicons/outline';
+import MakeClassroom from './MakeClassroom';
+import { useNavigation } from '@react-navigation/native';
 
 const AdminDashboard = ({ route }) => {
     const { session } = route.params;
     const [loading, setLoading] = useState(true);
     const [firstName, setFirstName] = useState('')
     const [borderColor, setBorderColor] = useState('#00000000');
+    const navigation = useNavigation();
 
 
     useEffect(() => {
@@ -92,7 +95,7 @@ const AdminDashboard = ({ route }) => {
                                 onBlur={() => onBlur()}
                             />
                         </View>
-                        <TouchableOpacity className="bg-violet-500 justify-center w-[52px] items-center rounded-2xl">
+                        <TouchableOpacity className="bg-violet-500 justify-center w-[52px] items-center rounded-2xl" onPress={() => navigation.navigate(MakeClassroom)}>
                             <PlusIcon size={22} color="white" />
                         </TouchableOpacity>
                     </View>

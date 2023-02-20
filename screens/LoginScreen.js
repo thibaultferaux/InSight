@@ -7,6 +7,9 @@ import { EnvelopeIcon, LockClosedIcon } from "react-native-heroicons/outline";
 import LoginInput from '../components/LoginInput'
 import { supabase } from '../lib/supabase'
 import { useNavigation } from '@react-navigation/native'
+import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 export default function LoginScreen() {
     const [email, setEmail] = useState('');
@@ -28,12 +31,14 @@ export default function LoginScreen() {
 
     const login = async () => {
         setLoading(true);
+        await AsyncStorage.setItem('user', JSON.stringify({ email, password }))
         const { error } = await supabase.auth.signInWithPassword({
             email: email,
             password: password
         })
 
         if (error) {
+            await AsyncStorage.removeItem('user')
             Alert.alert(error.message)
         }
 
