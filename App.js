@@ -13,6 +13,8 @@ import RegisterScreen from './screens/RegisterScreen';
 import StudentDashboard from './screens/student/StudentDashboard';
 import TeacherDashboard from './screens/teacher/TeacherDashboard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ScanClassroom from './screens/admin/ScanClassroom';
+import ScanSuccess from './screens/admin/ScanSuccess';
 
 
 export default function App() {
@@ -89,6 +91,8 @@ export default function App() {
                             <>
                                 <Stack.Screen name="Dashboard" component={AdminDashboard} initialParams={{ session: session }} />
                                 <Stack.Screen name="MakeClassroom" component={MakeClassroom} />
+                                <Stack.Screen name="ScanClassroom" component={ScanClassroom} />
+                                <Stack.Screen name="ScanSuccess" component={ScanSuccess} />
                             </>
                         ) : (role === 2 ? (
                             <>

@@ -7,9 +7,7 @@ import { EnvelopeIcon, LockClosedIcon } from "react-native-heroicons/outline";
 import LoginInput from '../components/LoginInput'
 import { supabase } from '../lib/supabase'
 import { useNavigation } from '@react-navigation/native'
-import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
 
 export default function LoginScreen() {
     const [email, setEmail] = useState('');

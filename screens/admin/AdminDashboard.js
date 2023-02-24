@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowRightOnRectangleIcon, MagnifyingGlassIcon, PlusIcon } from 'react-native-heroicons/outline';
 import MakeClassroom from './MakeClassroom';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AdminDashboard = ({ route }) => {
     const { session } = route.params;
@@ -81,7 +82,7 @@ const AdminDashboard = ({ route }) => {
                 <>
                     <View className="flex-row justify-between items-start">
                         <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Hallo {firstName},</Text>
-                        <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={logout()}>
+                        <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => logout()}>
                             <ArrowRightOnRectangleIcon color="white" size={22} />
                         </TouchableOpacity>
                     </View>

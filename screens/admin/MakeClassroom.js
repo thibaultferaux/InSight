@@ -39,7 +39,7 @@ const MakeClassroom = () => {
                 </View>
             </View>
             <View className="mt-12 items-end">
-                <TouchableOpacity className="py-[10px] px-[15px] bg-violet-500 flex-row space-x-2 rounded-lg">
+                <TouchableOpacity className="py-[10px] px-[15px] bg-violet-500 flex-row space-x-2 rounded-lg" onPress={() => navigation.navigate("ScanClassroom", { name: classroom })}>
                     <Text className="text-white">Volgende</Text>
                     <ArrowRightIcon size={22} color="white" />
                 </TouchableOpacity>
