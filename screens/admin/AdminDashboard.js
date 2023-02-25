@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase';
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowRightOnRectangleIcon, MagnifyingGlassIcon, PlusIcon } from 'react-native-heroicons/outline';
+import { ArrowRightOnRectangleIcon, ArrowUpRightIcon, MagnifyingGlassIcon, PlusIcon } from 'react-native-heroicons/outline';
 import MakeClassroom from './MakeClassroom';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,12 +13,24 @@ const AdminDashboard = ({ route }) => {
     const [loading, setLoading] = useState(true);
     const [firstName, setFirstName] = useState('')
     const [borderColor, setBorderColor] = useState('#00000000');
+    const [classrooms, setClassrooms] = useState([]);
     const navigation = useNavigation();
 
-
     useEffect(() => {
-        if (session) getProfile()
-        if (session) console.log(session.user)
+        setLoading(true)
+        if (session) {
+            getProfile()
+            getClassrooms()
+        }
+        const classroomListener = supabase
+            .channel('public:classroomtag')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'classroomtag' },
+                (payload) => {
+                    getClassrooms()
+                }
+            ).subscribe();
+        setLoading(false)
+        // return classroomListener.unsubscribe()
     }, [])
 
     // load fonts
@@ -29,7 +41,6 @@ const AdminDashboard = ({ route }) => {
 
     const getProfile = async () => {
         try {
-            setLoading(true);
             if (!session?.user) throw new Error('No user on the session')
 
             let { data, error, status } = await supabase
@@ -49,8 +60,30 @@ const AdminDashboard = ({ route }) => {
             if (error instanceof Error) {
                 Alert.alert(error.message)
             }
-        } finally {
-            setLoading(false)
+        }
+    }
+
+    const getClassrooms = async () => {
+        try {
+            if (!session?.user) throw new Error('No user on the session')
+
+            let { data, error, status } = await supabase
+                .from('classroomtag')
+                .select()
+                .order('name', { ascending: true })
+
+            if (error && status !== 406) {
+                throw error
+            }
+
+            if (data) {
+                console.log(data)
+                setClassrooms(data)
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                Alert.alert(error.message)
+            }
         }
     }
 
@@ -104,6 +137,22 @@ const AdminDashboard = ({ route }) => {
                         <TouchableOpacity className="bg-violet-500 justify-center w-[52px] items-center rounded-2xl" onPress={() => navigation.navigate(MakeClassroom)}>
                             <PlusIcon size={22} color="white" />
                         </TouchableOpacity>
+                    </View>
+                    <View className="mt-4">
+                        {classrooms.map((classroom, index) => (
+                            <TouchableOpacity key={index} className="flex-row justify-between items-center py-4 border-b-[1px] border-gray-300">
+                                <View className="space-y-2">
+                                    <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-xl text-neutral-900">{classroom.name}</Text>
+                                    <View className="flex-col">
+                                        <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-xs text-gray-400">#{classroom.id}</Text>
+                                    </View>
+                                </View>
+                                <View className="">
+                                    <ArrowUpRightIcon size={24} color="#7C3AED" />
+                                </View>
+                            </TouchableOpacity>
+                        ))}
+
                     </View>
                 </>
             )}
