@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import 'expo-dev-client';
 import NfcManager, { NfcTech, Ndef, NfcEvents } from 'react-native-nfc-manager';
 import { supabase } from '../../lib/supabase';
+import * as Haptics from 'expo-haptics';
 
 
 NfcManager.start();
@@ -38,6 +39,9 @@ const ScanClassroom = ({ route }) => {
         checkIsSupported();
 
         NfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
+            Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Warning
+            )
             console.log('tag found')
             console.log(tag)
             NfcManager.unregisterTagEvent().catch(() => 0);
