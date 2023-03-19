@@ -77,7 +77,6 @@ const AdminDashboard = ({ route }) => {
             }
 
             if (data) {
-                console.log(data)
                 setClassrooms(data)
             }
         } catch (error) {

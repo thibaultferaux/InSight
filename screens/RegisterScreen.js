@@ -40,8 +40,6 @@ const RegisterScreen = () => {
         if (error) {
             Alert.alert(error.message)
         } else {
-            console.log(data)
-            console.log(data.user.id)
             const profile = {
                 id: data.user.id,
                 email: email,

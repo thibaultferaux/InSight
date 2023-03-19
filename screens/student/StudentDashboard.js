@@ -11,7 +11,6 @@ const StudentDashboard = ({ route }) => {
 
     useEffect(() => {
         if (session) getProfile()
-        if (session) console.log(session.user)
     }, [])
 
     // load fonts

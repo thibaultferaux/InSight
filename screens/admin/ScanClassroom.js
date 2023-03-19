@@ -42,8 +42,6 @@ const ScanClassroom = ({ route }) => {
             Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Warning
             )
-            console.log('tag found')
-            console.log(tag)
             NfcManager.unregisterTagEvent().catch(() => 0);
             makeClassroom(name, tag.id);
         })

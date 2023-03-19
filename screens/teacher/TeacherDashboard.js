@@ -1,22 +1,26 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase';
-import { useFonts, Poppins_400Regular, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
+import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
+import { ArrowRightOnRectangleIcon, PlusIcon } from 'react-native-heroicons/outline';
+import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TeacherDashboard = ({ route }) => {
     const { session } = route.params;
     const [loading, setLoading] = useState(true);
-    const [firstName, setFirstName] = useState('')
+    const [firstName, setFirstName] = useState('');
+    const navigation = useNavigation();
 
 
     useEffect(() => {
         if (session) getProfile()
-        if (session) console.log(session.user)
     }, [])
 
     // load fonts
     let [fontsLoaded] = useFonts({
         Poppins_400Regular,
+        Poppins_500Medium,
         Poppins_600SemiBold
     });
 
@@ -53,19 +57,26 @@ const TeacherDashboard = ({ route }) => {
     }
 
     return (
-        <View className="flex-1 justify-center items-center">
+        <SafeAreaView className="flex-1 justify-start bg-white px-7 pt-14">
             {loading ? (
                 <Text>Loading...</Text>
             ) : (
-                <View className="space-y-4">
-                    <Text className="text-lg" style={{ fontFamily: 'Poppins_600SemiBold' }}>Teacher</Text>
-                    <Text style={{ fontFamily: 'Poppins_400Regular' }}>Hallo {firstName}</Text>
-                    <TouchableOpacity className="bg-neutral-900 px-4 py-2 rounded-md" onPress={() => supabase.auth.signOut()}>
-                        <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-white">Uitloggen</Text>
-                    </TouchableOpacity>
-                </View>
+                <>
+                    <View className="flex-row justify-between items-start mb-4">
+                        <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Hallo {firstName},</Text>
+                        <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => logout()}>
+                            <ArrowRightOnRectangleIcon color="white" size={22} />
+                        </TouchableOpacity>
+                    </View>
+                    <View className="mt-2">
+                        <TouchableOpacity className="w-full rounded-full flex-row bg-violet-500 p-4 justify-center align-middle space-x-2" onPress={() => navigation.navigate("MakeLesson", { session })}>
+                            <PlusIcon color="white" size={24} />
+                            <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-white mt-[2px]">Nieuwe les</Text>
+                        </TouchableOpacity>
+                    </View>
+                </>
             )}
-        </View>
+        </SafeAreaView>
     )
 }
 

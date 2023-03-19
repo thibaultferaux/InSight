@@ -15,6 +15,7 @@ import TeacherDashboard from './screens/teacher/TeacherDashboard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ScanClassroom from './screens/admin/ScanClassroom';
 import ScanSuccess from './screens/admin/ScanSuccess';
+import MakeLesson from './screens/teacher/MakeLesson';
 
 
 export default function App() {
@@ -24,9 +25,7 @@ export default function App() {
     const Stack = createNativeStackNavigator();
 
     useEffect(() => {
-        console.log('--------------------------')
         getUser();
-        console.log('--------------------------')
 
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session)
@@ -97,6 +96,7 @@ export default function App() {
                         ) : (role === 2 ? (
                             <>
                                 <Stack.Screen name="Dashboard" component={TeacherDashboard} initialParams={{ session: session }} />
+                                <Stack.Screen name="MakeLesson" component={MakeLesson} />
                             </>
                         ) : (
                             <>
