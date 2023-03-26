@@ -81,7 +81,9 @@ const ScanClassroom = ({ route }) => {
             id: id,
             name: name,
         }
-        const { error } = await supabase.from('classroomtag').upsert(classroom);
+        const { error, status } = await supabase.from('classroomtag').upsert(classroom);
+
+        console.log(status);
 
         if (error) {
             Alert.alert(error.message)

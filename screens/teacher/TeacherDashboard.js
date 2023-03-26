@@ -5,6 +5,7 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import { ArrowRightOnRectangleIcon, PlusIcon } from 'react-native-heroicons/outline';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TeacherDashboard = ({ route }) => {
     const { session } = route.params;
@@ -54,6 +55,11 @@ const TeacherDashboard = ({ route }) => {
     // if fonts are not loaded, return null
     if (!fontsLoaded) {
         return null;
+    }
+
+    const logout = async () => {
+        await AsyncStorage.removeItem('user')
+        supabase.auth.signOut()
     }
 
     return (
