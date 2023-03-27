@@ -152,7 +152,7 @@ const MakeLesson = ({ route }) => {
             setErrors({
                 ...errors,
                 subject: !subject ? 'Vak is verplicht' : '',
-                classroom: !classroom ? 'Klas is verplicht' : '',
+                classroom: !classroom ? 'Lokaal is verplicht' : '',
                 date: !date ? 'Datum is verplicht' : '',
                 time: !startTime || !endTime ? 'Tijd is verplicht' : ''
             })
@@ -243,7 +243,7 @@ const MakeLesson = ({ route }) => {
                     onChange={changeClassroom}
                     value={classroom}
                     containerStyle={{ width: '100%', borderRadius: 10 }}
-                    placeholder="Selecteer een vak"
+                    placeholder="Selecteer een lokaal"
                     className={`items-center bg-slate-100 w-full p-4 rounded-[10px] space-x-4 text-sm ${errors.classroom && 'border-red-500 border'}`}
                     placeholderStyle={{ color: '#6B7280', marginTop: 4, fontSize: 14 }}
                     selectedTextStyle={{ marginTop: 4, fontSize: 14, color:'#0F172A' }}

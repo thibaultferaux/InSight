@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
@@ -11,11 +11,24 @@ const TeacherDashboard = ({ route }) => {
     const { session } = route.params;
     const [loading, setLoading] = useState(true);
     const [firstName, setFirstName] = useState('');
+    const [lessons, setLessons] = useState([]);
     const navigation = useNavigation();
 
 
     useEffect(() => {
-        if (session) getProfile()
+        setLoading(true)
+        if (session) {
+            getProfile()
+            getLessons()
+        }
+        const lessonListener = supabase
+            .channel('public:lesson')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'lesson' },
+                (payload) => {
+                    getLessons()
+                }
+            ).subscribe();
+        setLoading(false)
     }, [])
 
     // load fonts
@@ -42,6 +55,38 @@ const TeacherDashboard = ({ route }) => {
 
             if (data) {
                 setFirstName(data.first_name)
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                Alert.alert(error.message)
+            }
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const getLessons = async () => {
+        try {
+            setLoading(true);
+            if (!session?.user) throw new Error('No user on the session')
+
+            let { data, error, status } = await supabase
+                .from('lesson')
+                .select('id, date, startTime, endTime, course(name), classroomtag(name)')
+                .eq('course.teacherId', session?.user.id)
+
+            if (error && status !== 406) {
+                throw error
+            }
+
+            if (data) {
+                // group by day in an array
+                const groupedLessons = data.reduce((r, a) => {
+                    r[a.date] = [...r[a.date] || [], a];
+                    return r;
+                }, {});
+                const groupedLessonsArray = Object.entries(groupedLessons).map(([date, items]) => ({ date, items }));
+                setLessons(groupedLessonsArray);
             }
         } catch (error) {
             if (error instanceof Error) {
