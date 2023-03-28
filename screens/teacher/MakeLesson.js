@@ -146,6 +146,17 @@ const MakeLesson = ({ route }) => {
         return `${hours}:${minutes}`;
     }
 
+    const combineTime = (date, time) => {
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+        const hours = time.getHours();
+        const minutes = time.getMinutes();
+        const seconds = time.getSeconds();
+
+        return new Date(year, month, day, hours, minutes, seconds);
+    }
+
     const onSubmit = async () => {
 
         if(!subject || !classroom || !date || !startTime || !endTime) {
@@ -161,6 +172,7 @@ const MakeLesson = ({ route }) => {
         
         try {
             if (!session?.user) throw new Error('No user on the session')
+
             
             let { error, status } = await supabase
             .from('lesson')
@@ -168,9 +180,8 @@ const MakeLesson = ({ route }) => {
                 {
                     courseId: subject.id,
                     classroomtagId: classroom.id,
-                    date: date,
-                    startTime: formatTime(startTime),
-                    endTime: formatTime(endTime)
+                    startTime: combineTime(date, startTime),
+                    endTime: combineTime(date, endTime),
                 }
             )
 

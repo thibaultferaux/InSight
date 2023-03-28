@@ -1,8 +1,8 @@
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, ScrollView, RefreshControl } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import { ArrowRightOnRectangleIcon, ArrowUpRightIcon, PlusIcon } from 'react-native-heroicons/outline';
+import { ArrowRightOnRectangleIcon, ArrowUpRightIcon, ClockIcon, MapPinIcon, PlusIcon } from 'react-native-heroicons/outline';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,6 +13,7 @@ const TeacherDashboard = ({ route }) => {
     const [loading, setLoading] = useState(true);
     const [firstName, setFirstName] = useState('');
     const [lessons, setLessons] = useState([]);
+    const [currentLesson, setCurrentLesson] = useState({});
     const navigation = useNavigation();
 
 
@@ -73,19 +74,34 @@ const TeacherDashboard = ({ route }) => {
 
             let { data, error, status } = await supabase
                 .from('lesson')
-                .select('id, date, startTime, endTime, course(name), classroomtag(name)')
+                .select('id, startTime, endTime, course(name), classroomtag(name)')
                 .eq('course.teacherId', session?.user.id)
-                .order('date', { ascending: true })
                 .order('startTime', { ascending: true })
+                .gte('endTime', new Date().toISOString())
 
-            if (error && status !== 406) {
-                throw error
-            }
-
+                
+                if (error && status !== 406) {
+                    throw error
+                }
+                
             if (data) {
+                // check if date and startTime is before now and else if date is today and now is between startTime and endTime else add to array
+                const filteredLessons = data.filter(lesson => {
+                    const now = new Date()
+                    const startTime = new Date(lesson.startTime)
+                    const endTime = new Date(lesson.endTime)
+                    // if day of date is before today, return false
+                    if (startTime < now && endTime > now) {
+                        setCurrentLesson(lesson);
+                        return false
+                    } else {
+                        return true
+                    }
+                });
+
                 // group by day in an array
-                const groupedLessons = data.reduce((r, a) => {
-                    r[a.date] = [...r[a.date] || [], a];
+                const groupedLessons = filteredLessons.reduce((r, a) => {
+                    r[a.startTime] = [...r[a.startTime] || [], a];
                     return r;
                 }, {});
                 const groupedLessonsArray = Object.entries(groupedLessons).map(([date, items]) => ({ date, items }));
@@ -123,6 +139,15 @@ const TeacherDashboard = ({ route }) => {
         return `${weekdayName} ${day}/${month}`
     }
 
+    const formatTime = (time) => {
+        const someTime = new Date(time)
+        // hours with leading zero
+        const hours = String(someTime.getHours()).padStart(2, '0');
+        // minutes with leading zero
+        const minutes = String(someTime.getMinutes()).padStart(2, '0');
+
+        return `${hours}:${minutes}`
+    }
 
     // if fonts are not loaded, return null
     if (!fontsLoaded) {
@@ -139,13 +164,37 @@ const TeacherDashboard = ({ route }) => {
             {loading ? (
                 <Text>Loading...</Text>
             ) : (
-                <>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl refreshing={loading} onRefresh={getLessons} />
+                    }
+                >
                     <View className="flex-row justify-between items-start mb-4">
                         <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Hallo {firstName},</Text>
                         <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => logout()}>
                             <ArrowRightOnRectangleIcon color="white" size={22} />
                         </TouchableOpacity>
                     </View>
+                    {/* if currentlesson */}
+                    {currentLesson.id && (
+                        <View className="bg-white rounded-md p-4 mb-4">
+                            <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base mb-2 text-slate-400">Huidige les</Text>
+                            <View className="flex-row justify-between items-center">
+                                <View className="flex-row items-center">
+                                    <View className="bg-neutral-900 rounded-full w-8 h-8 flex-row justify-center items-center">
+                                        <ClockIcon color="white" size={16} />
+                                    </View>
+                                    <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base ml-2">{formatDate(currentLesson.startTime)} {formatTime(currentLesson.startTime)} - {formatTime(currentLesson.endTime)}</Text>
+                                </View>
+                                <View className="flex-row items-center">
+                                    <View className="bg-neutral-900 rounded-full w-8 h-8 flex-row justify-center items-center">
+                                        <MapPinIcon color="white" size={16} />
+                                    </View>
+                                    <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base ml-2">{currentLesson.classroomtag.name}</Text>
+                                </View>
+                            </View>
+                        </View>
+                    )}
                     <View className="mt-2">
                         <TouchableOpacity className="w-full rounded-full flex-row bg-violet-500 p-4 justify-center align-middle space-x-2" onPress={() => navigation.navigate("MakeLesson", { session })}>
                             <PlusIcon color="white" size={24} />
@@ -160,7 +209,7 @@ const TeacherDashboard = ({ route }) => {
                                     <View key={index} className="flex-row justify-between bg-white shadow-lg shadow-black/40 mb-2 p-3 rounded-2xl">
                                         <View className="justify-between">
                                             <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base">{item.course.name}</Text>
-                                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-500">{item.startTime} - {item.endTime}</Text>
+                                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-500">{formatTime(item.startTime)} - {formatTime(item.endTime)}</Text>
                                         </View>
                                         <View className="justify-between items-end space-y-2">
                                             <ArrowUpRightIcon color="#c4b5fd" size={24} />
@@ -178,7 +227,7 @@ const TeacherDashboard = ({ route }) => {
                             </View>
                         ))}
                     </View>
-                </>
+                </ScrollView>
             )}
         </SafeAreaView>
     )
