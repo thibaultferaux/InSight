@@ -101,7 +101,7 @@ const AdminDashboard = ({ route }) => {
 
     const logout = async () => {
         await AsyncStorage.removeItem('user')
-        supabase.auth.signOut()
+        await supabase.auth.signOut()
     }
 
     return (

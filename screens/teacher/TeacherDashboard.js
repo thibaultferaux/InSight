@@ -166,7 +166,7 @@ const TeacherDashboard = ({ route }) => {
 
     const logout = async () => {
         await AsyncStorage.removeItem('user')
-        supabase.auth.signOut()
+        await supabase.auth.signOut()
     }
 
     return (
@@ -233,21 +233,21 @@ const TeacherDashboard = ({ route }) => {
                                 </View>
                             </View>
                         </Modal>
-                            <TouchableOpacity className="bg-white rounded-3xl px-4 pt-4 pb-2 mb-4 overflow-hidden" onPress={ () => setModalVisible(true) }>
+                            <TouchableOpacity className="bg-white rounded-3xl px-4 pt-4 pb-2 mb-4 overflow-hidden" onPress={ () => !currentLesson.active && setModalVisible(true) }>
                                 <LinearGradient
-                                    colors={['#E7EBF0', '#D1D5DB']}
+                                    colors={currentLesson.active ? ['#7C3AED', '#A855F7'] : ['#E7EBF0', '#D1D5DB']}
                                     className="absolute inset-0"
                                     start={{ x: 0, y: 0 }}
                                     end={{ x: 1, y: 1 }}
                                 />
                                 <View className="flex-row justify-between">
-                                    <Text className="text-base text-gray-500" style={{ fontFamily: 'Poppins_500Medium' }}>{ formatTime(currentLesson.startTime)} - { formatTime(currentLesson.endTime) }</Text>
+                                    <Text className={`text-base ${currentLesson.active ? 'text-violet-300' : 'text-gray-500'}`} style={{ fontFamily: 'Poppins_500Medium' }}>{ formatTime(currentLesson.startTime)} - { formatTime(currentLesson.endTime) }</Text>
                                     <Text className="text-base bg-white px-3 py-1 pt-[5px] rounded-full" style={{ fontFamily: 'Poppins_600SemiBold' }}>{ currentLesson.classroomtag.name }</Text>
                                 </View>
-                                <Text className="text-2xl mt-1" style={{ fontFamily: 'Poppins_600SemiBold' }}>{ currentLesson.course.name }</Text>
+                                <Text className={`text-2xl mt-1 ${currentLesson.active && 'text-white'}`} style={{ fontFamily: 'Poppins_600SemiBold' }}>{ currentLesson.course.name }</Text>
                                 <View className="items-center mt-3">
                                     { currentLesson.active ? (
-                                        <Text style={{ fontFamily: 'Poppins_500Medium' }}>klik om te bekijken</Text>
+                                        <Text className="text-violet-400" style={{ fontFamily: 'Poppins_500Medium' }}>klik om te bekijken</Text>
                                     ) : (
                                         <Text className="text-slate-400" style={{ fontFamily: 'Poppins_500Medium' }}>klik om actief te zetten</Text>
                                     ) }

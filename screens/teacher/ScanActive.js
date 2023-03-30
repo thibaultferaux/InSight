@@ -42,7 +42,6 @@ const ScanActive = ({ route }) => {
             )
             if (tag.id == classroomId) {
                 makeLessonActive(id);
-                NfcManager.unregisterTagEvent().catch(() => 0);
             } else {
                 console.log(tag.id, classroomId)
                 Alert.alert('Fout', 'Dit is niet het juiste lokaal');
@@ -100,14 +99,14 @@ const ScanActive = ({ route }) => {
 
     return (
         <SafeAreaView className="flex-1 justify-start bg-white px-7 py-10">
-            <View className="justify-between items-start space-y-2">
+            <View className="items-start space-y-2 h-36">
                 <TouchableOpacity className="flex-row space-x-1 justify-center items-center" onPress={() => navigation.goBack()}>
                     <ArrowLeftIcon size={16} color="#9ca3af" />
                     <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Terug</Text>
                 </TouchableOpacity>
                 <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Scan de tag van het lokaal</Text>
             </View>
-            <View className="justify-center items-center">
+            <View className="justify-center items-center mt-12">
                 <AnimatedLottieView source={require('../../assets/animations/NFC-Scan.json')} autoPlay loop style={{ width: '80%' }} />
             </View>
             <View className="mt-6 items-center">
