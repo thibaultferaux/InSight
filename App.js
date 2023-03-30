@@ -16,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ScanClassroom from './screens/admin/ScanClassroom';
 import ScanSuccess from './screens/admin/ScanSuccess';
 import MakeLesson from './screens/teacher/MakeLesson';
+import ScanActive from './screens/teacher/ScanActive';
 
 
 export default function App() {
@@ -97,6 +98,7 @@ export default function App() {
                             <>
                                 <Stack.Screen name="Dashboard" component={TeacherDashboard} initialParams={{ session: session }} />
                                 <Stack.Screen name="MakeLesson" component={MakeLesson} />
+                                <Stack.Screen name="ScanActive" component={ScanActive} />
                             </>
                         ) : (
                             <>

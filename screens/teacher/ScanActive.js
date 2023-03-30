@@ -10,14 +10,12 @@ import NfcManager, { NfcTech, Ndef, NfcEvents } from 'react-native-nfc-manager';
 import { supabase } from '../../lib/supabase';
 import * as Haptics from 'expo-haptics';
 
-
 NfcManager.start();
 
-const ScanClassroom = ({ route }) => {
+const ScanActive = ({ route }) => {
     const [hasNfc, setHasNfc] = useState(false);
     const [isScanning, setIsScanning] = useState(false);
-    const [isWriting, setIsWriting] = useState(false);
-    const { name } = route.params;
+    const { id, classroomId } = route.params;
 
     const navigation = useNavigation();
 
@@ -40,10 +38,15 @@ const ScanClassroom = ({ route }) => {
 
         NfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
             Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Warning
+                Haptics.NotificationFeedbackType.Success
             )
-            NfcManager.unregisterTagEvent().catch(() => 0);
-            makeClassroom(name, tag.id);
+            if (tag.id == classroomId) {
+                makeLessonActive(id);
+                NfcManager.unregisterTagEvent().catch(() => 0);
+            } else {
+                console.log(tag.id, classroomId)
+                Alert.alert('Fout', 'Dit is niet het juiste lokaal');
+            }
         })
 
         readTag();
@@ -52,9 +55,6 @@ const ScanClassroom = ({ route }) => {
             NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
         }
     })
-
-    if (hasNfc === null) return null;
-
 
     // load fonts
     let [fontsLoaded] = useFonts({
@@ -76,18 +76,20 @@ const ScanClassroom = ({ route }) => {
         )
     }
 
-    const makeClassroom = async (name, id) => {
-        const classroom = {
-            id: id,
-            name: name,
-        }
-        const { error, status } = await supabase.from('classroomtag').upsert(classroom);
+    const makeLessonActive = async (lessonId) => {
+        // update lesson with lessonId to active
+        const { data, error } = await supabase
+            .from('lesson')
+            .update({ active: true })
+            .eq('id', lessonId)
 
         if (error) {
-            Alert.alert(error.message)
+            Alert.alert('Er ging iets mis', 'Probeer het later opnieuw');
+            console.log(error);
+            return;
         } else {
             stopScanning();
-            navigation.navigate('ScanSuccess')
+            navigation.navigate('Dashboard');
         }
     }
 
@@ -96,21 +98,23 @@ const ScanClassroom = ({ route }) => {
         await NfcManager.unregisterTagEvent();
     }
 
-
     return (
         <SafeAreaView className="flex-1 justify-start bg-white px-7 py-10">
-            <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl h-36">Scan de tag</Text>
+            <View className="justify-between items-start space-y-2">
+                <TouchableOpacity className="flex-row space-x-1 justify-center items-center" onPress={() => navigation.goBack()}>
+                    <ArrowLeftIcon size={16} color="#9ca3af" />
+                    <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Terug</Text>
+                </TouchableOpacity>
+                <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Scan de tag van het lokaal</Text>
+            </View>
             <View className="justify-center items-center">
                 <AnimatedLottieView source={require('../../assets/animations/NFC-Scan.json')} autoPlay loop style={{ width: '80%' }} />
             </View>
-            <View className="mt-12 items-start">
-                <TouchableOpacity className="py-[10px] px-[15px] bg-neutral-400 flex-row space-x-2 rounded-lg" onPress={() => navigation.goBack()}>
-                    <ArrowLeftIcon size={22} color="white" />
-                    <Text className="text-white">Vorige</Text>
-                </TouchableOpacity>
+            <View className="mt-6 items-center">
+            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400 text-center">Raak met de achterkant van je telefoon te tag aan om deze te scannen.</Text>
             </View>
         </SafeAreaView>
     )
 }
 
-export default ScanClassroom
+export default ScanActive

@@ -75,7 +75,7 @@ const TeacherDashboard = ({ route }) => {
 
             let { data, error, status } = await supabase
                 .from('lesson')
-                .select('id, startTime, endTime, course(name), classroomtag(name)')
+                .select('id, startTime, endTime, active, course(name), classroomtag(id, name)')
                 .eq('course.teacherId', session?.user.id)
                 .order('startTime', { ascending: true })
                 .gte('endTime', new Date().toISOString())
@@ -153,6 +153,12 @@ const TeacherDashboard = ({ route }) => {
         return `${hours}:${minutes}`
     }
 
+    const handleSetActive = (lesson) => {
+        setModalVisible(false);
+        console.log(lesson.classroomtag.id);
+        navigation.navigate("ScanActive", { id: lesson.id, classroomId: lesson.classroomtag.id })
+    }
+
     // if fonts are not loaded, return null
     if (!fontsLoaded) {
         return null;
@@ -217,7 +223,7 @@ const TeacherDashboard = ({ route }) => {
                                         <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-neutral-900">{formatTime(currentLesson.startTime)} - {formatTime(currentLesson.endTime)}</Text>
                                     </View>
                                     <View className="mt-4 flex-row gap">
-                                        <TouchableOpacity className="bg-violet-500 items-center py-3 rounded-xl flex-1 mr-1">
+                                        <TouchableOpacity className="bg-violet-500 items-center py-3 rounded-xl flex-1 mr-1" onPress={() => handleSetActive(currentLesson)}>
                                             <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-white mt-[2px]">Zet actief</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity className="bg-neutral-400 items-center rounded-xl aspect-square justify-center">
