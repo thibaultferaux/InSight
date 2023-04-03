@@ -43,7 +43,6 @@ const ScanActive = ({ route }) => {
             if (tag.id == classroomId) {
                 makeLessonActive(id);
             } else {
-                console.log(tag.id, classroomId)
                 Alert.alert('Fout', 'Dit is niet het juiste lokaal');
             }
         })
@@ -84,7 +83,6 @@ const ScanActive = ({ route }) => {
 
         if (error) {
             Alert.alert('Er ging iets mis', 'Probeer het later opnieuw');
-            console.log(error);
             return;
         } else {
             stopScanning();

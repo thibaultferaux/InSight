@@ -153,7 +153,6 @@ const TeacherDashboard = ({ route }) => {
 
     const handleSetActive = (lesson) => {
         setModalVisible(false);
-        console.log(lesson.classroomtag.id);
         navigation.navigate("ScanActive", { id: lesson.id, classroomId: lesson.classroomtag.id })
     }
 

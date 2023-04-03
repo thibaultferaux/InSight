@@ -5,6 +5,7 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowRightOnRectangleIcon, ArrowUpRightIcon } from 'react-native-heroicons/outline';
 import { LinearGradient } from 'expo-linear-gradient';
+import DateSlider from './components/DateSlider';
 
 const StudentDashboard = ({ route }) => {
     const { session } = route.params;
@@ -12,6 +13,7 @@ const StudentDashboard = ({ route }) => {
     const [firstName, setFirstName] = useState('');
     const [lessons, setLessons] = useState([]);
     const [currentLesson, setCurrentLesson] = useState(null);
+    const [selectedDay, setSelectedDay] = useState(null);
 
     useEffect(() => {
         if (session) {
@@ -63,7 +65,6 @@ const StudentDashboard = ({ route }) => {
             let { data, error, status } = await supabase.rpc('getLessons', { profileId: session?.user.id });
                 
             if (error && status !== 406) {
-                console.log(error)
                 throw error
             }
 
@@ -72,7 +73,6 @@ const StudentDashboard = ({ route }) => {
                     const now = new Date()
                     const startTime = new Date(lesson.startTime)
                     const endTime = new Date(lesson.endTime)
-                    console.log(lesson.startTime);
                     if (startTime < now && endTime > now) {
                         setCurrentLesson(lesson);
                         return false
@@ -99,6 +99,10 @@ const StudentDashboard = ({ route }) => {
         } finally {
             setLoading(false)
         }
+    }
+
+    const handleDaySelected = (day) => {
+        setSelectedDay(day)
     }
 
     // check if date is equal to today
@@ -183,34 +187,43 @@ const StudentDashboard = ({ route }) => {
                         )}
 
                         {/* make a horizontal slider with days after today to select */}
-                        
+                        <DateSlider lessons={lessons} onDaySelected={handleDaySelected} />
                         
 
                         <View className="mt-4 space-y-4">
-                            {lessons.map((lesson, index) => (
-                                <View key={index} className={`border-b-gray-300 pb-3 ${index === lessons.length - 1 ? 'border-none' : 'border-b-[1px]'}`}>
-                                    <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base mb-2 text-slate-400">{ isToday(lesson.date) ? 'Vandaag' : formatDate(lesson.date)}</Text>
-                                    {lesson.items.map((item, index) => (
-                                        <View key={index} className="flex-row justify-between bg-white shadow-lg shadow-black/40 mb-2 p-3 rounded-2xl">
-                                            <View className="justify-between">
-                                                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base">{item.courseName}</Text>
-                                                <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-500">{formatTime(item.startTime)} - {formatTime(item.endTime)}</Text>
+                            { selectedDay && selectedDay.items.length > 0 ? (
+                                <View>
+                                    {
+                                        selectedDay.items.map((item, index) => (
+                                            <View key={index} className={`border-b-gray-300 pb-3 ${index === selectedDay.items.length - 1 ? 'border-none' : 'border-b-[1px]'}`}>
+                                                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base mb-2 text-slate-400">{ isToday(item.startTime) ? 'Vandaag' : formatDate(item.startTime)}</Text>
+                                                <View className="flex-row justify-between bg-white shadow-lg shadow-black/40 mb-2 p-3 rounded-2xl">
+                                                    <View className="justify-between">
+                                                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base">{item.courseName}</Text>
+                                                        <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-slate-400">{item.classroomtagName}</Text>
+                                                    </View>
+                                                    <View className="flex-row items-center">
+                                                        <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-slate-400">{ formatTime(item.startTime)} - { formatTime(item.endTime) }</Text>
+                                                        <View className="bg-neutral-900 p-2 rounded-md ml-3">
+                                                            <ArrowRightOnRectangleIcon color="white" size={22} />
+                                                        </View>
+                                                    </View>
+                                                </View>
                                             </View>
-                                            <View className="justify-between items-end space-y-2">
-                                                <ArrowUpRightIcon color="#c4b5fd" size={24} />
-                                                <LinearGradient
-                                                    colors={['#E5E6EA', '#F8FAFC', '#F8FAFC']}
-                                                    start={{ x: 1, y: 0 }}
-                                                    end={{ x: 1, y: 1 }}
-                                                    className="px-2 py-[1px] rounded-full shadow-inner shadow-black/40 bg-slate-50"
-                                                >
-                                                    <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm uppercase">{item.classroomtagName}</Text>
-                                                </LinearGradient>
-                                            </View>
-                                        </View>
-                                    ))}
+                                        ))
+                                    }
                                 </View>
-                            ))}
+                            ) : isToday(selectedDay.date) ? (
+                                // TODO: add illustration
+                                <View className="flex-row justify-center items-center">
+                                    <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-slate-400">Geen verdere lessen vandaag</Text>
+                                </View>
+                            ) : (
+                                <View className="flex-row justify-center items-center">
+                                    <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-slate-400">Geen lessen deze dag</Text>
+                                </View>
+                            )}
+                            
                         </View>
                     </View>
                 </ScrollView>
