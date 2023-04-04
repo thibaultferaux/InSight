@@ -264,11 +264,11 @@ const TeacherDashboard = ({ route }) => {
                                     <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base mb-2 text-slate-400">{ isToday(lesson.date) ? 'Vandaag' : formatDate(lesson.date)}</Text>
                                     {lesson.items.map((item, index) => (
                                         <View key={index} className="flex-row justify-between bg-white shadow-lg shadow-black/40 mb-2 p-3 rounded-2xl">
-                                            <View className="justify-between">
+                                            <View className="justify-between space-y-3">
                                                 <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base">{item.course.name}</Text>
                                                 <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-500">{formatTime(item.startTime)} - {formatTime(item.endTime)}</Text>
                                             </View>
-                                            <View className="justify-between items-end space-y-2">
+                                            <View className="justify-between items-end">
                                                 <ArrowUpRightIcon color="#c4b5fd" size={24} />
                                                 <LinearGradient
                                                     colors={['#E5E6EA', '#F8FAFC', '#F8FAFC']}

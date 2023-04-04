@@ -1,10 +1,15 @@
 import { View, Text, FlatList, TouchableOpacity } from 'react-native'
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import moment from 'moment/moment'
 
 const DateSlider = ({ lessons, onDaySelected }) => {
     const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'));
+
+    useEffect(() => {
+        const selectedDay = lessons.find((lesson) => lesson.date === selectedDate) ?? { date: selectedDate, items: [] };
+        onDaySelected(selectedDay);
+    }, [ selectedDate ]);
 
     // load fonts
     let [fontsLoaded] = useFonts({
@@ -22,8 +27,6 @@ const DateSlider = ({ lessons, onDaySelected }) => {
 
     const handleDayPress = (date) => {
         setSelectedDate(date);
-        const selectedDay = lessons.find((lesson) => lesson.date === date) ?? { date, items: [] };
-        onDaySelected(selectedDay);
     };
 
     const formatDay = (date) => {

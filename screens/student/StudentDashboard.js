@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowRightOnRectangleIcon, ArrowUpRightIcon } from 'react-native-heroicons/outline';
 import { LinearGradient } from 'expo-linear-gradient';
 import DateSlider from './components/DateSlider';
+import moment from 'moment';
 
 const StudentDashboard = ({ route }) => {
     const { session } = route.params;
@@ -191,22 +192,26 @@ const StudentDashboard = ({ route }) => {
                         
 
                         <View className="mt-4 space-y-4">
-                            { selectedDay && selectedDay.items.length > 0 ? (
+                            { selectedDay && (selectedDay.items.length > 0 ? (
                                 <View>
                                     {
                                         selectedDay.items.map((item, index) => (
-                                            <View key={index} className={`border-b-gray-300 pb-3 ${index === selectedDay.items.length - 1 ? 'border-none' : 'border-b-[1px]'}`}>
-                                                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base mb-2 text-slate-400">{ isToday(item.startTime) ? 'Vandaag' : formatDate(item.startTime)}</Text>
-                                                <View className="flex-row justify-between bg-white shadow-lg shadow-black/40 mb-2 p-3 rounded-2xl">
-                                                    <View className="justify-between">
+                                            <View key={index} className={`border-b-gray-300 pb-3 flex-row space-x-4 ${index === selectedDay.items.length - 1 ? 'border-none' : 'border-b-[1px]'}`}>
+                                                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base mb-2 text-slate-400 pt-4">{ moment(item.startTime).format('HH:mm') }</Text>
+                                                <View className="flex-1 flex-row justify-between bg-white shadow-lg shadow-black/40 mb-2 p-3 rounded-2xl">
+                                                    <View className="justify-between space-y-2">
                                                         <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base">{item.courseName}</Text>
-                                                        <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-slate-400">{item.classroomtagName}</Text>
+                                                        <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-500">{ moment(item.startTime).format('HH:mm') } - { moment(item.endTime).format('HH:mm') }</Text>
                                                     </View>
-                                                    <View className="flex-row items-center">
-                                                        <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-slate-400">{ formatTime(item.startTime)} - { formatTime(item.endTime) }</Text>
-                                                        <View className="bg-neutral-900 p-2 rounded-md ml-3">
-                                                            <ArrowRightOnRectangleIcon color="white" size={22} />
-                                                        </View>
+                                                    <View className="justify-end">
+                                                        <LinearGradient
+                                                            colors={['#E5E6EA', '#F8FAFC', '#F8FAFC']}
+                                                            start={{ x: 1, y: 0 }}
+                                                            end={{ x: 1, y: 1 }}
+                                                            className="px-2 py-[1px] rounded-full shadow-inner shadow-black/40 bg-slate-50"
+                                                        >
+                                                            <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm uppercase">{item.classroomtagName}</Text>
+                                                        </LinearGradient>
                                                     </View>
                                                 </View>
                                             </View>
@@ -222,7 +227,7 @@ const StudentDashboard = ({ route }) => {
                                 <View className="flex-row justify-center items-center">
                                     <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-slate-400">Geen lessen deze dag</Text>
                                 </View>
-                            )}
+                            ))}
                             
                         </View>
                     </View>
