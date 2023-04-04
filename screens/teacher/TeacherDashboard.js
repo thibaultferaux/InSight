@@ -13,7 +13,7 @@ const TeacherDashboard = ({ route }) => {
     const [loading, setLoading] = useState(true);
     const [firstName, setFirstName] = useState('');
     const [lessons, setLessons] = useState([]);
-    const [currentLesson, setCurrentLesson] = useState({});
+    const [currentLesson, setCurrentLesson] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation();
 
@@ -71,11 +71,12 @@ const TeacherDashboard = ({ route }) => {
     const getLessons = async () => {
         try {
             setLoading(true);
+            setCurrentLesson(null);
             if (!session?.user) throw new Error('No user on the session')
 
             let { data, error, status } = await supabase
                 .from('lesson')
-                .select('id, startTime, endTime, active, course(name), classroomtag(id, name)')
+                .select('id, startTime, endTime, active, course(id, name), classroomtag(id, name)')
                 .eq('course.teacherId', session?.user.id)
                 .order('startTime', { ascending: true })
                 .gte('endTime', new Date().toISOString())
@@ -153,7 +154,7 @@ const TeacherDashboard = ({ route }) => {
 
     const handleSetActive = (lesson) => {
         setModalVisible(false);
-        navigation.navigate("ScanActive", { id: lesson.id, classroomId: lesson.classroomtag.id })
+        navigation.navigate("ScanActive", { lessonId: lesson.id, classroomId: lesson.classroomtag.id, courseId: lesson.course.id })
     }
 
     // if fonts are not loaded, return null

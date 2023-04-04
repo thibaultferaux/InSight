@@ -17,6 +17,7 @@ import ScanClassroom from './screens/admin/ScanClassroom';
 import ScanSuccess from './screens/admin/ScanSuccess';
 import MakeLesson from './screens/teacher/MakeLesson';
 import ScanActive from './screens/teacher/ScanActive';
+import ScanAttendance from './screens/student/ScanAttendance';
 
 
 export default function App() {
@@ -103,6 +104,7 @@ export default function App() {
                         ) : (
                             <>
                                 <Stack.Screen name="Dashboard" component={StudentDashboard} initialParams={{ session: session }} />
+                                <Stack.Screen name="ScanAttendance" component={ScanAttendance} />
                             </>
                         ))) : (
                             <>

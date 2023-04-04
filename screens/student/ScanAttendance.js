@@ -12,10 +12,10 @@ import * as Haptics from 'expo-haptics';
 
 NfcManager.start();
 
-const ScanActive = ({ route }) => {
+const ScanAttendance = ({ route }) => {
     const [hasNfc, setHasNfc] = useState(false);
     const [isScanning, setIsScanning] = useState(false);
-    const { lessonId, classroomId, courseId } = route.params;
+    const { lessonId, classroomId, userId } = route.params;
 
     const navigation = useNavigation();
 
@@ -41,10 +41,10 @@ const ScanActive = ({ route }) => {
                 Haptics.notificationAsync(
                     Haptics.NotificationFeedbackType.Success
                 )
-                addStudentsToAttendance();
+                makePresent(lessonId, userId);
             } else {
                 Haptics.notificationAsync(
-                    Haptics.NotificationFeedbackType.Warning
+                    Haptics.NotificationFeedbackType.Error
                 )
                 Alert.alert('Fout', 'Dit is niet het juiste lokaal');
             }
@@ -64,7 +64,6 @@ const ScanActive = ({ route }) => {
         Poppins_600SemiBold
     });
 
-    // if fonts are not loaded, return null
     if (!fontsLoaded) {
         return null;
     }
@@ -77,14 +76,15 @@ const ScanActive = ({ route }) => {
         )
     }
 
-    const makeLessonActive = async () => {
-        // update lesson with lessonId to active
-        const { error } = await supabase
-            .from('lesson')
-            .update({ active: true })
-            .eq('id', lessonId)
+    const makePresent = async (lessonId, userId) => {
+        const { data, error } = await supabase
+            .from('presentstudent')
+            .update({ present: true })
+            .eq('lessonId', lessonId)
+            .eq('userId', userId);
 
         if (error) {
+            console.log(error);
             Alert.alert('Er ging iets mis', 'Probeer het later opnieuw');
             return;
         } else {
@@ -92,41 +92,6 @@ const ScanActive = ({ route }) => {
             navigation.navigate('Dashboard');
         }
     }
-
-    const addStudentsToAttendance = async () => {
-        try {
-            // get all students from classroom that exist in the usercourse table
-            const { data, error } = await supabase
-                .from('usercourse')
-                .select('id, userId, courseId')
-                .eq('courseId', courseId)
-
-            if (error) {
-                console.log(error);
-                throw new Error('Er ging iets mis, probeer het later opnieuw')
-            }
-
-            // add students to attendance table
-            const attendanceData = data.map((student) => ({
-                userId: student.userId,
-                lessonId: lessonId,
-            }))
-
-            const { error: insertError } = await supabase.from('presentstudent').insert(attendanceData)
-            
-            if (insertError) {
-                console.log(insertError);
-                throw new Error('Er ging iets mis, probeer het later opnieuw')
-            }
-
-            makeLessonActive();
-
-        } catch (error) {
-            console.error(error);
-            Alert.alert('Fout', error.message)
-        }
-    }
-        
 
     const stopScanning = async () => {
         setIsScanning(false);
@@ -152,4 +117,4 @@ const ScanActive = ({ route }) => {
     )
 }
 
-export default ScanActive
+export default ScanAttendance
