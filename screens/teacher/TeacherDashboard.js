@@ -231,7 +231,7 @@ const TeacherDashboard = ({ route }) => {
                                         </View>
                                     </View>
                                 </Modal>
-                                <TouchableOpacity className="bg-white rounded-3xl px-4 pt-4 pb-2 mb-4 overflow-hidden" onPress={ () => !currentLesson.active && setModalVisible(true) }>
+                                <TouchableOpacity className="bg-white rounded-3xl px-4 pt-4 pb-2 mb-4 overflow-hidden" onPress={ () => !currentLesson.active ? setModalVisible(true) : navigation.navigate('ViewAttendances', { lesson: currentLesson }) }>
                                     <LinearGradient
                                         colors={currentLesson.active ? ['#7C3AED', '#A855F7'] : ['#E7EBF0', '#D1D5DB']}
                                         className="absolute inset-0"

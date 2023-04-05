@@ -25,6 +25,13 @@ const StudentDashboard = ({ route }) => {
             getProfile()
             getLessons()
         }
+        const lessonListener = supabase
+            .channel('public:presentstudent:userId=eq.' + session?.user.id)
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'presentstudent' },
+                (payload) => {
+                    getLessons()
+                }
+            ).subscribe();
     }, [])
 
     // load fonts

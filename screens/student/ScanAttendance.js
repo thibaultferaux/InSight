@@ -79,7 +79,7 @@ const ScanAttendance = ({ route }) => {
     const makePresent = async (lessonId, userId) => {
         const { data, error } = await supabase
             .from('presentstudent')
-            .update({ present: true })
+            .update({ present: true, presentAt: new Date() })
             .eq('lessonId', lessonId)
             .eq('userId', userId);
 
