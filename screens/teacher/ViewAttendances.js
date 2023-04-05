@@ -1,10 +1,12 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { ArrowLeftIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline';
+import { ArrowLeftIcon, CheckIcon, MagnifyingGlassIcon, TrashIcon, XMarkIcon } from 'react-native-heroicons/outline';
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_500Medium } from '@expo-google-fonts/poppins';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { supabase } from '../../lib/supabase';
+import { CheckCircleIcon, XCircleIcon } from 'react-native-heroicons/solid';
+import { RefreshControl } from 'react-native';
 
 const ViewAttendances = ({ route }) => {
     const [borderColor, setBorderColor] = useState('#00000000');
@@ -15,6 +17,13 @@ const ViewAttendances = ({ route }) => {
 
     useEffect(() => {
         getAttendences()
+        const attendanceListener = supabase
+            .channel('public:presentstudent:lessonId=eq.' + lesson.id)
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'presentstudent' },
+                (payload) => {
+                    getAttendences()
+                }
+            ).subscribe();
     }, [])
 
     // load fonts
@@ -30,7 +39,7 @@ const ViewAttendances = ({ route }) => {
                 .from('presentstudent')
                 .select('userId, present, presentAt, profiles(first_name, last_name)')
                 .eq('lessonId', lesson.id)
-                .order('presentAt', { ascending: false })
+                .order('presentAt', { ascending: true })
 
             if (error && status !== 406) {
                 console.error(error);
@@ -67,6 +76,16 @@ const ViewAttendances = ({ route }) => {
         const month = String(someDate.getMonth() + 1).padStart(2, '0');
 
         return `${day}/${month}`
+    }
+
+    const formatTime = (time) => {
+        const someTime = new Date(time)
+        // hours with leading zero
+        const hours = String(someTime.getHours()).padStart(2, '0');
+        // minutes with leading zero
+        const minutes = String(someTime.getMinutes()).padStart(2, '0');
+
+        return `${hours}:${minutes}`
     }
 
     const onFocus = () => {
@@ -107,32 +126,50 @@ const ViewAttendances = ({ route }) => {
                     />
                 </View>
             </View>
-            { students.present && (
-                <View className="mt-6">
-                    <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-lg">Aanwezig</Text>
-                    <View className="mt-4">
-                        { students.present.map((student, index) => (
-                            <View key={index} className="flex-row justify-between items-center">
-                                <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm">{ student.profiles.first_name } { student.profiles.last_name }</Text>
-                                <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm">{ formatDate(student.presentAt) }</Text>
-                            </View>
-                        ))}
+            <ScrollView className="mt-2 flex-1" vertical>
+                { students.present && (
+                    <View className="mt-6">
+                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-gray-400">Aanwezig</Text>
+                        <View className="mt-3 space-y-3">
+                            { students.present.map((student, index) => (
+                                <View key={index} className="flex-row justify-between items-center">
+                                    <View className="flex-row items-center space-x-2">
+                                        <CheckCircleIcon size={34} color="#10B981" />
+                                        <View>
+                                            <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base">{ student.profiles.first_name } { student.profiles.last_name }</Text>
+                                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-300 -mt-1">{ formatTime(student.presentAt) }</Text>
+                                        </View>
+                                    </View>
+                                    <TouchableOpacity className="flex-row items-center space-x-1">
+                                        <XMarkIcon size={24} color="#C4C4C4" />
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
+                        </View>
                     </View>
-                </View>
-            )}
-            { students.absent && (
-                <View className="mt-6">
-                    <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-lg">Afwezig</Text>
-                    <View className="mt-4">
-                        { students.absent.map((student, index) => (
-                            <View key={index} className="flex-row justify-between items-center">
-                                <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm">{ student.profiles.first_name } { student.profiles.last_name }</Text>
-                                <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm">{ formatDate(student.presentAt) }</Text>
-                            </View>
-                        ))}
+                )}
+                { students.absent && (
+                    <View className="mt-6">
+                        <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-base text-gray-400">Afwezig</Text>
+                        <View className="mt-4">
+                            { students.absent.map((student, index) => (
+                                <View key={index} className="flex-row justify-between items-center">
+                                    <View className="flex-row items-center space-x-2">
+                                        <XCircleIcon size={34} color="#EF4444" />
+                                        <View>
+                                            <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base">{ student.profiles.first_name } { student.profiles.last_name }</Text>
+                                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-300 -mt-1">{ formatTime(student.presentAt) }</Text>
+                                        </View>
+                                    </View>
+                                    <TouchableOpacity className="flex-row items-center space-x-1">
+                                        <CheckIcon size={24} color="#C4C4C4" />
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
+                        </View>
                     </View>
-                </View>
-            )}
+                )}
+            </ScrollView>
         </SafeAreaView>
     )
 }

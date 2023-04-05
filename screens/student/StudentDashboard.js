@@ -25,9 +25,16 @@ const StudentDashboard = ({ route }) => {
             getProfile()
             getLessons()
         }
-        const lessonListener = supabase
+        const attendanceListener = supabase
             .channel('public:presentstudent:userId=eq.' + session?.user.id)
             .on('postgres_changes', { event: '*', schema: 'public', table: 'presentstudent' },
+                (payload) => {
+                    getLessons()
+                }
+            ).subscribe();
+        const lessonListender = supabase
+            .channel('public:lesson')
+            .on('postgres_changes', { event: 'update', schema: 'public', table: 'lesson' },
                 (payload) => {
                     getLessons()
                 }
@@ -76,6 +83,8 @@ const StudentDashboard = ({ route }) => {
 
             // get all lessons from the user
             let { data, error, status } = await supabase.rpc('getLessons', { profileId: session?.user.id });
+
+            console.log(session?.user.id);
                 
             if (error && status !== 406) {
                 throw error
@@ -87,6 +96,7 @@ const StudentDashboard = ({ route }) => {
                     const startTime = new Date(lesson.startTime)
                     const endTime = new Date(lesson.endTime)
                     if (startTime < now && endTime > now && lesson.active) {
+                        console.log(lesson);
                         setCurrentLesson(lesson);
                         return false
                     } else {
