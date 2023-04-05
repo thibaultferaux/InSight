@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { ArrowLeftIcon, CheckIcon, MagnifyingGlassIcon, TrashIcon, XMarkIcon } from 'react-native-heroicons/outline';
@@ -62,6 +62,46 @@ const ViewAttendances = ({ route }) => {
         } catch (error) {
             if (error instanceof Error) {
                 console.error(error);
+            }
+        }
+    }
+
+    const setPresent = async (userId) => {
+        try {
+            const { error, status } = await supabase
+                .from('presentstudent')
+                .update({ present: true, presentAt: new Date() })
+                .eq('userId', userId)
+                .eq('lessonId', lesson.id)
+
+            if (error && status !== 406) {
+                console.error(error);
+                throw error
+            }
+
+        } catch (error) {
+            if (error) {
+                Alert.alert('Fout', 'Er is iets fout gegaan, probeer het later opnieuw.');
+            }
+        }
+    }
+
+    const setAbsent = async (userId) => {
+        try {
+            const { error, status } = await supabase
+                .from('presentstudent')
+                .update({ present: false, presentAt: new Date() })
+                .eq('userId', userId)
+                .eq('lessonId', lesson.id)
+
+            if (error && status !== 406) {
+                console.error(error);
+                throw error
+            }
+
+        } catch (error) {
+            if (error) {
+                Alert.alert('Fout', 'Er is iets fout gegaan, probeer het later opnieuw.');
             }
         }
     }
@@ -140,7 +180,7 @@ const ViewAttendances = ({ route }) => {
                                             <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-300 -mt-1">{ formatTime(student.presentAt) }</Text>
                                         </View>
                                     </View>
-                                    <TouchableOpacity className="flex-row items-center space-x-1">
+                                    <TouchableOpacity className="flex-row items-center space-x-1" onPress={() => setAbsent(student.userId)} >
                                         <XMarkIcon size={24} color="#C4C4C4" />
                                     </TouchableOpacity>
                                 </View>
@@ -150,8 +190,8 @@ const ViewAttendances = ({ route }) => {
                 )}
                 { students.absent && (
                     <View className="mt-6">
-                        <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-base text-gray-400">Afwezig</Text>
-                        <View className="mt-4">
+                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-gray-400">Afwezig</Text>
+                        <View className="mt-3 space-y-3">
                             { students.absent.map((student, index) => (
                                 <View key={index} className="flex-row justify-between items-center">
                                     <View className="flex-row items-center space-x-2">
@@ -161,7 +201,7 @@ const ViewAttendances = ({ route }) => {
                                             <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-300 -mt-1">{ formatTime(student.presentAt) }</Text>
                                         </View>
                                     </View>
-                                    <TouchableOpacity className="flex-row items-center space-x-1">
+                                    <TouchableOpacity className="flex-row items-center space-x-1" onPress={() => setPresent(student.userId)}>
                                         <CheckIcon size={24} color="#C4C4C4" />
                                     </TouchableOpacity>
                                 </View>
