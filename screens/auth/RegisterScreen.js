@@ -7,6 +7,8 @@ import { supabase } from '../../core/api/supabase'
 import { useNavigation } from '@react-navigation/native'
 import { showMessage } from 'react-native-flash-message'
 import LoginInput from '../../Components/Form/LoginInput'
+import { register } from '../../core/modules/auth/api';
+// import { register } from '../../core/modules/auth/api';
 
 
 const RegisterScreen = () => {
@@ -18,10 +20,32 @@ const RegisterScreen = () => {
 
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
+    
+    // register({ email, password, first_name: firstName, last_name: lastName, role_id: 1 })
 
-    const register = async () => {
+
+    const handleRegister = async () => {
         setLoading(true);
-        const { data, error } = await supabase.auth.signUp({
+        if (email !== '' && password !== '' && firstName !== '' && lastName !== '') {
+            try {
+                await register({ email: email, password, first_name: firstName, last_name: lastName, role_id: 1 })
+
+                showMessage({
+                    message: "Je account is succesvol aangemaakt",
+                    type: "success",
+                    style: { paddingTop: insets.top },
+                    duration: 5000,
+                    icon: 'success',
+                    position: 'left'
+                })
+            } catch (error) {
+                console.log(error)
+                Alert.alert(error.message)
+            }
+        } else {
+            Alert.alert("Vul alle velden in")
+        }
+        /* const { data, error } = await supabase.auth.signUp({
             email: email,
             password: password,
         })
@@ -53,7 +77,7 @@ const RegisterScreen = () => {
                 navigation.navigate("Login")
             }
 
-        }
+        } */
         setLoading(false)
     }
 
@@ -101,7 +125,7 @@ const RegisterScreen = () => {
                     </View>
                 </ScrollView>
                 <View className="px-10 py-8 w-full items-center bg-white absolute bottom-0">
-                    <TouchableOpacity className={`${loading ? 'bg-neutral-500' : 'bg-neutral-900'} w-full p-4 rounded-[10px] justify-center items-center`} onPress={() => register()} disabled={loading}>
+                    <TouchableOpacity className={`${loading ? 'bg-neutral-500' : 'bg-neutral-900'} w-full p-4 rounded-[10px] justify-center items-center`} onPress={() => handleRegister()} disabled={loading}>
                         <Text
                             className="text-white text-base"
                             style={{ fontFamily: 'Poppins_400Regular' }}

@@ -9,23 +9,20 @@ import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BlinkingDot from './components/BlinkingDot';
+import { useAuthContext } from '../../Components/Auth/AuthProvider';
 
-const StudentDashboard = ({ route }) => {
-    const { session } = route.params;
-    const [loading, setLoading] = useState(true);
-    const [firstName, setFirstName] = useState('');
+const StudentDashboard = () => {
+    const { user } = useAuthContext();
     const [lessons, setLessons] = useState([]);
     const [currentLesson, setCurrentLesson] = useState(null);
     const [selectedDay, setSelectedDay] = useState(null);
+    const [refreshing, setRefreshing] = useState(false);
     const navigation = useNavigation();
 
     useEffect(() => {
-        if (session) {
-            getProfile()
-            getLessons()
-        }
+        getLessons()
         const attendanceListener = supabase
-            .channel('public:presentstudent:userId=eq.' + session?.user.id)
+            .channel('public:presentstudent:userId=eq.' + user.id)
             .on('postgres_changes', { event: '*', schema: 'public', table: 'presentstudent' },
                 (payload) => {
                     getLessons()
@@ -40,41 +37,13 @@ const StudentDashboard = ({ route }) => {
             ).subscribe();
     }, [])
 
-    const getProfile = async () => {
-        try {
-            setLoading(true);
-            if (!session?.user) throw new Error('No user on the session')
-
-            let { data, error, status } = await supabase
-                .from('profiles')
-                .select('first_name')
-                .eq('id', session?.user.id)
-                .single()
-
-            if (error && status !== 406) {
-                throw error
-            }
-
-            if (data) {
-                setFirstName(data.first_name)
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            }
-        } finally {
-            setLoading(false)
-        }
-    }
-
     const getLessons = async () => {
         try {
-            setLoading(true);
+            setRefreshing(true);
             setCurrentLesson(null);
-            if (!session?.user) throw new Error('No user on the session')
 
             // get all lessons from the user
-            let { data, error, status } = await supabase.rpc('getLessons', { profileId: session?.user.id });
+            let { data, error, status } = await supabase.rpc('getLessons', { profileId: user.id });
                 
             if (error && status !== 406) {
                 throw error
@@ -109,7 +78,7 @@ const StudentDashboard = ({ route }) => {
                 Alert.alert(error.message)
             }
         } finally {
-            setLoading(false)
+            setRefreshing(false);
         }
     }
 
@@ -157,17 +126,14 @@ const StudentDashboard = ({ route }) => {
 
     return (
         <SafeAreaView className="flex-1 justify-start bg-slate-50">
-            {loading ? (
-                <Text>Loading...</Text>
-            ) : (
                 <ScrollView
                     refreshControl={
-                        <RefreshControl refreshing={loading} onRefresh={getLessons} />
+                        <RefreshControl refreshing={refreshing} onRefresh={getLessons} />
                     }
                 >
                     <View className="px-7 pt-14">
                         <View className="flex-row justify-between items-start mb-4">
-                            <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Hallo {firstName},</Text>
+                            <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Hallo {user.first_name},</Text>
                             <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => logout()}>
                                 <ArrowRightOnRectangleIcon color="white" size={22} />
                             </TouchableOpacity>
@@ -192,7 +158,7 @@ const StudentDashboard = ({ route }) => {
                                 </View>
                             </TouchableOpacity>
                         ) : (
-                            <TouchableOpacity className="bg-white rounded-3xl px-4 pt-4 pb-2 mb-4 overflow-hidden" onPress={() => navigation.navigate('ScanAttendance', { lessonId: currentLesson.id, classroomId: currentLesson.classroomtagId, userId: session?.user.id })}>
+                            <TouchableOpacity className="bg-white rounded-3xl px-4 pt-4 pb-2 mb-4 overflow-hidden" onPress={() => navigation.navigate('ScanAttendance', { lessonId: currentLesson.id, classroomId: currentLesson.classroomtagId, userId: user.id })}>
                                 <LinearGradient
                                     colors={['#7C3AED', '#A855F7']}
                                     className="absolute inset-0"
@@ -255,7 +221,6 @@ const StudentDashboard = ({ route }) => {
                         </View>
                     </View>
                 </ScrollView>
-            )}
         </SafeAreaView>
     )
 }

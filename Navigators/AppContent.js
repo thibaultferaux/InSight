@@ -16,8 +16,25 @@ import ScanAttendance from '../screens/student/ScanAttendance'
 import LoginScreen from '../screens/auth/LoginScreen'
 import RegisterScreen from '../screens/auth/RegisterScreen'
 import { getCurrentSession } from '../core/modules/auth/api'
+import { useAuthContext } from '../Components/Auth/AuthProvider'
+import AuthNavigator from './AuthNavigator'
+import StudentNavigator from './StudentNavigator'
+import TeacherNavigator from './TeacherNavigator'
+import AdminNavigator from './AdminNavigator'
 
-const AppNavigator = () => {
+const AppContent = () => {
+    const { isLoggedIn, user } = useAuthContext();
+
+    if (!isLoggedIn) {
+        return <AuthNavigator />
+    } else if (user.role_id === 3) {
+        return <AdminNavigator />
+    } else if (user.role_id === 2) {
+        return <TeacherNavigator />
+    } else {
+        return <StudentNavigator />
+    }
+
     const [session, setSession] = useState(null)
     const [role, setRole] = useState(0)
 
@@ -101,8 +118,7 @@ const AppNavigator = () => {
                     </>
                 ))) : (
                     <>
-                        <Stack.Screen name="Login" component={ LoginScreen } />
-                        <Stack.Screen name="Register" component={ RegisterScreen } />
+                        
                     </>
                 )}
             </Stack.Group>
@@ -110,4 +126,4 @@ const AppNavigator = () => {
     )
 }
 
-export default AppNavigator
+export default AppContent
