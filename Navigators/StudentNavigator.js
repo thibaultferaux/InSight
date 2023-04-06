@@ -8,8 +8,6 @@ import { useAuthContext } from '../Components/Auth/AuthProvider';
 const Stack = createNativeStackNavigator();
 
 const StudentNavigator = () => {
-    const { user } = useAuthContext();
-
     return (
         <Stack.Navigator>
             <Stack.Group screenOptions={{ headerShown: false }}>

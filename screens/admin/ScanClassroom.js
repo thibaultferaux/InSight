@@ -15,7 +15,6 @@ NfcManager.start();
 const ScanClassroom = ({ route }) => {
     const [hasNfc, setHasNfc] = useState(false);
     const [isScanning, setIsScanning] = useState(false);
-    const [isWriting, setIsWriting] = useState(false);
     const { name } = route.params;
 
     const navigation = useNavigation();

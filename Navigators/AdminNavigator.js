@@ -5,15 +5,15 @@ import AdminDashboard from '../screens/admin/AdminDashboard';
 import MakeClassroom from '../screens/admin/MakeClassroom';
 import ScanClassroom from '../screens/admin/ScanClassroom';
 import ScanSuccess from '../screens/admin/ScanSuccess';
+import { useAuthContext } from '../Components/Auth/AuthProvider';
 
 const Stack = createNativeStackNavigator();
 
 const AdminNavigator = () => {
-
     return (
         <Stack.Navigator>
             <Stack.Group screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Dashboard" component={AdminDashboard} initialParams={{ session: session }} />
+                <Stack.Screen name="Dashboard" component={AdminDashboard} />
                 <Stack.Screen name="MakeClassroom" component={MakeClassroom} />
                 <Stack.Screen name="ScanClassroom" component={ScanClassroom} />
                 <Stack.Screen name="ScanSuccess" component={ScanSuccess} />

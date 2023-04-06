@@ -11,7 +11,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const MakeLesson = ({ route }) => {
     const navigation = useNavigation();
-    const { session } = route.params;
+    const { userId } = route.params;
     const [ subject, setSubject ] = useState();
     const [ classroom, setClassroom ] = useState();
     const [ courses, setCourses ] = useState([]);
@@ -25,10 +25,8 @@ const MakeLesson = ({ route }) => {
     const [ errors, setErrors ] = useState({ subject: '', classroom: '', date: '', time: '' });
 
     useEffect(() => {
-        if (session) {
-            getCourses();
-            getClassrooms();
-        }
+        getCourses();
+        getClassrooms();
     }, [])
 
     const changeSubject = (item) => {
@@ -86,12 +84,11 @@ const MakeLesson = ({ route }) => {
 
     const getCourses = async () => {
         try {
-            if (!session?.user) throw new Error('No user on the session')
 
             let { data, error, status } = await supabase
                 .from('course')
                 .select()
-                .eq('teacherId', session?.user.id)
+                .eq('teacherId', userId)
 
             if (error && status !== 406) {
                 throw error
@@ -109,8 +106,6 @@ const MakeLesson = ({ route }) => {
 
     const getClassrooms = async () => {
         try {
-            if (!session?.user) throw new Error('No user on the session')
-
             let { data, error, status } = await supabase
                 .from('classroomtag')
                 .select()
@@ -170,9 +165,6 @@ const MakeLesson = ({ route }) => {
         }
         
         try {
-            if (!session?.user) throw new Error('No user on the session')
-
-            
             let { error, status } = await supabase
             .from('lesson')
             .upsert(

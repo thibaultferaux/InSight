@@ -13,7 +13,7 @@ const TeacherNavigator = () => {
     return (
         <Stack.Navigator>
             <Stack.Group screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Dashboard" component={TeacherDashboard} initialParams={{ session: session }} />
+                <Stack.Screen name="Dashboard" component={TeacherDashboard} />
                 <Stack.Screen name="MakeLesson" component={MakeLesson} />
                 <Stack.Screen name="ScanActive" component={ScanActive} />
                 <Stack.Screen name="ViewAttendances" component={ViewAttendances} />

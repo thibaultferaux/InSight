@@ -6,11 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useAuthContext } from '../../Components/Auth/AuthProvider';
 
-const TeacherDashboard = ({ route }) => {
-    const { session } = route.params;
+const TeacherDashboard = () => {
+    const { user } = useAuthContext();
     const [loading, setLoading] = useState(true);
-    const [firstName, setFirstName] = useState('');
     const [lessons, setLessons] = useState([]);
     const [currentLesson, setCurrentLesson] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
@@ -18,11 +18,7 @@ const TeacherDashboard = ({ route }) => {
 
 
     useEffect(() => {
-        setLoading(true)
-        if (session) {
-            getProfile()
-            getLessons()
-        }
+        getLessons()
         const lessonListener = supabase
             .channel('public:lesson')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'lesson' },
@@ -30,46 +26,17 @@ const TeacherDashboard = ({ route }) => {
                     getLessons()
                 }
             ).subscribe();
-        setLoading(false)
     }, [])
-
-    const getProfile = async () => {
-        try {
-            setLoading(true);
-            if (!session?.user) throw new Error('No user on the session')
-
-            let { data, error, status } = await supabase
-                .from('profiles')
-                .select('first_name')
-                .eq('id', session?.user.id)
-                .single()
-
-            if (error && status !== 406) {
-                throw error
-            }
-
-            if (data) {
-                setFirstName(data.first_name)
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            }
-        } finally {
-            setLoading(false)
-        }
-    }
 
     const getLessons = async () => {
         try {
             setLoading(true);
             setCurrentLesson(null);
-            if (!session?.user) throw new Error('No user on the session')
 
             let { data, error, status } = await supabase
                 .from('lesson')
                 .select('id, startTime, endTime, active, course(id, name), classroomtag(id, name)')
-                .eq('course.teacherId', session?.user.id)
+                .eq('course.teacherId', user.id)
                 .order('startTime', { ascending: true })
                 .gte('endTime', new Date().toISOString())
 
@@ -167,7 +134,7 @@ const TeacherDashboard = ({ route }) => {
                     <View className="px-7 pt-14">
                         
                         <View className="flex-row justify-between items-start mb-4">
-                            <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Hallo {firstName},</Text>
+                            <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Hallo {user.first_name},</Text>
                             <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => logout()}>
                                 <ArrowRightOnRectangleIcon color="white" size={22} />
                             </TouchableOpacity>
@@ -241,7 +208,7 @@ const TeacherDashboard = ({ route }) => {
                             </>
                         )}
                         <View className="mt-2">
-                            <TouchableOpacity className="w-full rounded-full flex-row bg-violet-500 p-4 justify-center align-middle space-x-2" onPress={() => navigation.navigate("MakeLesson", { session })}>
+                            <TouchableOpacity className="w-full rounded-full flex-row bg-violet-500 p-4 justify-center align-middle space-x-2" onPress={() => navigation.navigate("MakeLesson", { userId: user.id })}>
                                 <PlusIcon color="white" size={24} />
                                 <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-white mt-[2px]">Nieuwe les</Text>
                             </TouchableOpacity>
