@@ -7,6 +7,7 @@ import { supabase } from '../../core/api/supabase'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import LoginInput from '../../Components/Form/LoginInput'
+import { login } from '../../core/modules/auth/api';
 
 export default function LoginScreen() {
     const [email, setEmail] = useState('');
@@ -15,9 +16,22 @@ export default function LoginScreen() {
 
     const navigation = useNavigation();
 
-    const login = async () => {
+    const handleLogin = async () => {
         setLoading(true);
-        await AsyncStorage.setItem('user', JSON.stringify({ email, password }))
+        if (email !== '' && password !== '') {
+            try {
+                await login({ email, password })
+
+
+            } catch (error) {
+                console.log(error)
+                Alert.alert(error.message)
+            }
+        } else {
+            Alert.alert("Vul alle velden in")
+        }
+
+        /* await AsyncStorage.setItem('user', JSON.stringify({ email, password }))
         const { error } = await supabase.auth.signInWithPassword({
             email: email,
             password: password
@@ -26,7 +40,7 @@ export default function LoginScreen() {
         if (error) {
             await AsyncStorage.removeItem('user')
             Alert.alert(error.message)
-        }
+        } */
 
         setLoading(false)
     }
@@ -61,7 +75,7 @@ export default function LoginScreen() {
                         </View>
                     </View>
                     <View className="py-8 w-full items-center">
-                        <TouchableOpacity className={`${loading ? 'bg-neutral-500' : 'bg-neutral-900'} w-full p-4 rounded-[10px] justify-center items-center`} onPress={() => login()} disabled={loading}>
+                        <TouchableOpacity className={`${loading ? 'bg-neutral-500' : 'bg-neutral-900'} w-full p-4 rounded-[10px] justify-center items-center`} onPress={() => handleLogin()} disabled={loading}>
                             <Text
                                 className="text-white text-base"
                                 style={{ fontFamily: 'Poppins_400Regular' }}

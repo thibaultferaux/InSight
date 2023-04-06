@@ -5,7 +5,6 @@ import { ArrowLeftIcon, CheckIcon, MagnifyingGlassIcon, TrashIcon, XMarkIcon } f
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { supabase } from '../../core/api/supabase';
 import { CheckCircleIcon, XCircleIcon } from 'react-native-heroicons/solid';
-import { RefreshControl } from 'react-native';
 
 const ViewAttendances = ({ route }) => {
     const [borderColor, setBorderColor] = useState('#00000000');
@@ -18,7 +17,7 @@ const ViewAttendances = ({ route }) => {
         getAttendences()
         const attendanceListener = supabase
             .channel('public:presentstudent:lessonId=eq.' + lesson.id)
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'presentstudent' },
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'presentstudent', filter: 'lessonId=eq.' + lesson.id },
                 (payload) => {
                     getAttendences()
                 }

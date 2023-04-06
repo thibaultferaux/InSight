@@ -23,7 +23,7 @@ const StudentDashboard = () => {
         getLessons()
         const attendanceListener = supabase
             .channel('public:presentstudent:userId=eq.' + user.id)
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'presentstudent' },
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'presentstudent', filter: 'userId=eq.' + user.id },
                 (payload) => {
                     getLessons()
                 }
