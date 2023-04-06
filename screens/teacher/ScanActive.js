@@ -89,7 +89,7 @@ const ScanActive = ({ route }) => {
                 .eq('courseId', courseId)
 
             if (error) {
-                console.log(error);
+                console.error(error);
                 throw new Error('Er ging iets mis, probeer het later opnieuw')
             }
 
@@ -102,7 +102,7 @@ const ScanActive = ({ route }) => {
             const { error: insertError } = await supabase.from('presentstudent').insert(attendanceData)
             
             if (insertError) {
-                console.log(insertError);
+                console.error(insertError);
                 throw new Error('Er ging iets mis, probeer het later opnieuw')
             }
 

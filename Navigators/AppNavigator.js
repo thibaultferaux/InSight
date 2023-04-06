@@ -15,6 +15,7 @@ import StudentDashboard from '../screens/student/StudentDashboard'
 import ScanAttendance from '../screens/student/ScanAttendance'
 import LoginScreen from '../screens/auth/LoginScreen'
 import RegisterScreen from '../screens/auth/RegisterScreen'
+import { getCurrentSession } from '../core/modules/auth/api'
 
 const AppNavigator = () => {
     const [session, setSession] = useState(null)

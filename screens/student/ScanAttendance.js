@@ -72,7 +72,7 @@ const ScanAttendance = ({ route }) => {
             .eq('userId', userId);
 
         if (error) {
-            console.log(error);
+            console.error(error);
             Alert.alert('Er ging iets mis', 'Probeer het later opnieuw');
             return;
         } else {

@@ -8,17 +8,20 @@ import { supabase } from './core/api/supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppNavigator from './Navigators/AppNavigator';
 import AppContainer from './Components/App/AppContainer';
+import AuthProvider from './Components/Auth/AuthProvider';
 
 
 export default function App() {
     return (
         <AppContainer>
-            <NavigationContainer>
-                <SafeAreaProvider>
-                    <AppNavigator />
-                    <FlashMessage position="top" />
-                </SafeAreaProvider>
-            </NavigationContainer>
+            <AuthProvider>
+                <NavigationContainer>
+                    <SafeAreaProvider>
+                        <AppNavigator />
+                        <FlashMessage position="top" />
+                    </SafeAreaProvider>
+                </NavigationContainer>
+            </AuthProvider>
         </AppContainer>
     );
 }
