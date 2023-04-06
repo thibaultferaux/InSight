@@ -2,12 +2,11 @@ import { Alert, Image, ScrollView, Text, TextInput, TouchableOpacity, View } fro
 import React, { useState } from 'react'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
-import { useFonts, Poppins_400Regular, Poppins_600SemiBold } from '@expo-google-fonts/poppins'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from "react-native-heroicons/outline";
-import LoginInput from '../components/LoginInput'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../../core/api/supabase'
 import { useNavigation } from '@react-navigation/native'
 import { showMessage } from 'react-native-flash-message'
+import LoginInput from '../../Components/Form/LoginInput'
 
 
 const RegisterScreen = () => {
@@ -19,17 +18,6 @@ const RegisterScreen = () => {
 
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
-
-    // load fonts
-    let [fontsLoaded] = useFonts({
-        Poppins_400Regular,
-        Poppins_600SemiBold
-    });
-
-    // if fonts are not loaded, return null
-    if (!fontsLoaded) {
-        return null;
-    }
 
     const register = async () => {
         setLoading(true);
@@ -79,7 +67,7 @@ const RegisterScreen = () => {
  
                     <View className="h-1/6 items-center justify-center">
                         <Image
-                            source={require('../assets/logo/Logo-Purple.png')}
+                            source={require('../../assets/logo/Logo-Purple.png')}
                             style={{ width: 130, resizeMode: 'contain' }}
                         />
                     </View>

@@ -1,13 +1,12 @@
 import { View, Text, Image, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_500Medium } from '@expo-google-fonts/poppins';
 import AnimatedLottieView from 'lottie-react-native';
 import { ArrowLeftIcon } from 'react-native-heroicons/outline';
 import { useNavigation } from '@react-navigation/native';
 import 'expo-dev-client';
 import NfcManager, { NfcTech, Ndef, NfcEvents } from 'react-native-nfc-manager';
-import { supabase } from '../../lib/supabase';
+import { supabase } from '../../core/api/supabase';
 import * as Haptics from 'expo-haptics';
 
 NfcManager.start();
@@ -56,17 +55,6 @@ const ScanAttendance = ({ route }) => {
             NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
         }
     })
-
-    // load fonts
-    let [fontsLoaded] = useFonts({
-        Poppins_400Regular,
-        Poppins_500Medium,
-        Poppins_600SemiBold
-    });
-
-    if (!fontsLoaded) {
-        return null;
-    }
 
     if (!hasNfc) {
         return (

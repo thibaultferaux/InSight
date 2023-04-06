@@ -1,12 +1,11 @@
 import { View, Text, TouchableOpacity, Alert, Button } from 'react-native'
-import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_500Medium } from '@expo-google-fonts/poppins';
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { ArrowLeftIcon, ArrowRightIcon, ChevronDownIcon, ClockIcon } from 'react-native-heroicons/outline';
 import { CalendarIcon } from 'react-native-heroicons/solid';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useForm, Controller } from "react-hook-form";
-import { supabase } from '../../lib/supabase';
+import { supabase } from '../../core/api/supabase';
 import { Dropdown } from 'react-native-element-dropdown';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
@@ -196,18 +195,6 @@ const MakeLesson = ({ route }) => {
         } catch (error) {
             Alert.alert(error.message)
         }
-    }
-
-    // load fonts
-    let [fontsLoaded] = useFonts({
-        Poppins_400Regular,
-        Poppins_500Medium,
-        Poppins_600SemiBold
-    });
-
-    // if fonts are not loaded, return null
-    if (!fontsLoaded) {
-        return null;
     }
 
     return (

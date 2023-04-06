@@ -5,7 +5,7 @@ import 'react-native-url-polyfill/auto'
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
     auth: {
-        localStorage: AsyncStorage,
+        storage: AsyncStorage,
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: false,

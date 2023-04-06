@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { supabase } from '../../lib/supabase';
-import { useFonts, Poppins_400Regular, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
+import { supabase } from '../../core/api/supabase';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowRightOnRectangleIcon, ArrowUpRightIcon, MagnifyingGlassIcon, PlusIcon } from 'react-native-heroicons/outline';
 import MakeClassroom from './MakeClassroom';
@@ -32,12 +31,6 @@ const AdminDashboard = ({ route }) => {
         setLoading(false)
         // return classroomListener.unsubscribe()
     }, [])
-
-    // load fonts
-    let [fontsLoaded] = useFonts({
-        Poppins_400Regular,
-        Poppins_600SemiBold
-    });
 
     const getProfile = async () => {
         try {
@@ -84,11 +77,6 @@ const AdminDashboard = ({ route }) => {
                 Alert.alert(error.message)
             }
         }
-    }
-
-    // if fonts are not loaded, return null
-    if (!fontsLoaded) {
-        return null;
     }
 
     const onFocus = () => {

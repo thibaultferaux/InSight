@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity, Alert, ScrollView, RefreshControl, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { supabase } from '../../lib/supabase';
-import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
+import { supabase } from '../../core/api/supabase';
 import { ArrowRightOnRectangleIcon, ArrowUpRightIcon, PencilIcon, PlusIcon, XMarkIcon } from 'react-native-heroicons/outline';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -33,13 +32,6 @@ const TeacherDashboard = ({ route }) => {
             ).subscribe();
         setLoading(false)
     }, [])
-
-    // load fonts
-    let [fontsLoaded] = useFonts({
-        Poppins_400Regular,
-        Poppins_500Medium,
-        Poppins_600SemiBold
-    });
 
     const getProfile = async () => {
         try {
@@ -155,11 +147,6 @@ const TeacherDashboard = ({ route }) => {
     const handleSetActive = (lesson) => {
         setModalVisible(false);
         navigation.navigate("ScanActive", { lessonId: lesson.id, classroomId: lesson.classroomtag.id, courseId: lesson.course.id })
-    }
-
-    // if fonts are not loaded, return null
-    if (!fontsLoaded) {
-        return null;
     }
 
     const logout = async () => {

@@ -2,9 +2,8 @@ import { View, Text, TouchableOpacity, TextInput, ScrollView, Alert } from 'reac
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { ArrowLeftIcon, CheckIcon, MagnifyingGlassIcon, TrashIcon, XMarkIcon } from 'react-native-heroicons/outline';
-import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_500Medium } from '@expo-google-fonts/poppins';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { supabase } from '../../lib/supabase';
+import { supabase } from '../../core/api/supabase';
 import { CheckCircleIcon, XCircleIcon } from 'react-native-heroicons/solid';
 import { RefreshControl } from 'react-native';
 
@@ -25,13 +24,6 @@ const ViewAttendances = ({ route }) => {
                 }
             ).subscribe();
     }, [])
-
-    // load fonts
-    let [fontsLoaded] = useFonts({
-        Poppins_400Regular,
-        Poppins_500Medium,
-        Poppins_600SemiBold
-    });
 
     const getAttendences = async () => {
         try {
@@ -134,11 +126,6 @@ const ViewAttendances = ({ route }) => {
 
     const onBlur = () => {
         setBorderColor('#00000000');
-    }
-
-    // if fonts are not loaded, return null
-    if (!fontsLoaded) {
-        return null;
     }
 
     return (

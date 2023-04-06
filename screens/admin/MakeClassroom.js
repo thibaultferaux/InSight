@@ -1,25 +1,12 @@
 import { View, Text, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_500Medium } from '@expo-google-fonts/poppins';
 import { ArrowLeftIcon, ArrowRightIcon, TagIcon } from 'react-native-heroicons/outline';
 import { useNavigation } from '@react-navigation/native';
 
 const MakeClassroom = () => {
     const [classroom, setClassroom] = useState('')
     const navigation = useNavigation();
-
-    // load fonts
-    let [fontsLoaded] = useFonts({
-        Poppins_400Regular,
-        Poppins_500Medium,
-        Poppins_600SemiBold
-    });
-
-    // if fonts are not loaded, return null
-    if (!fontsLoaded) {
-        return null;
-    }
 
     return (
         <SafeAreaView className="flex-1 justify-start bg-white px-7 pt-10">

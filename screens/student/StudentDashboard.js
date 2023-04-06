@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity, Alert, ScrollView, RefreshControl } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { supabase } from '../../lib/supabase';
-import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
+import { supabase } from '../../core/api/supabase';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowRightOnRectangleIcon, ArrowUpRightIcon } from 'react-native-heroicons/outline';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -40,13 +39,6 @@ const StudentDashboard = ({ route }) => {
                 }
             ).subscribe();
     }, [])
-
-    // load fonts
-    let [fontsLoaded] = useFonts({
-        Poppins_400Regular,
-        Poppins_500Medium,
-        Poppins_600SemiBold
-    });
 
     const getProfile = async () => {
         try {
@@ -159,11 +151,6 @@ const StudentDashboard = ({ route }) => {
         const minutes = String(someTime.getMinutes()).padStart(2, '0');
 
         return `${hours}:${minutes}`
-    }
-
-    // if fonts are not loaded, return null
-    if (!fontsLoaded) {
-        return null;
     }
 
     const logout = async () => {

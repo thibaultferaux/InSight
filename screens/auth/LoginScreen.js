@@ -2,12 +2,11 @@ import { Alert, FlatList, Image, ScrollView, ScrollViewComponent, Text, TextInpu
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
-import { useFonts, Poppins_400Regular, Poppins_600SemiBold } from '@expo-google-fonts/poppins'
 import { EnvelopeIcon, LockClosedIcon } from "react-native-heroicons/outline";
-import LoginInput from '../components/LoginInput'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../../core/api/supabase'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import LoginInput from '../../Components/Form/LoginInput'
 
 export default function LoginScreen() {
     const [email, setEmail] = useState('');
@@ -15,17 +14,6 @@ export default function LoginScreen() {
     const [loading, setLoading] = useState(false);
 
     const navigation = useNavigation();
-
-    // load fonts
-    let [fontsLoaded] = useFonts({
-        Poppins_400Regular,
-        Poppins_600SemiBold
-    });
-
-    // if fonts are not loaded, return null
-    if (!fontsLoaded) {
-        return null;
-    }
 
     const login = async () => {
         setLoading(true);
@@ -51,7 +39,7 @@ export default function LoginScreen() {
             <SafeAreaView className="flex-1 items-center justify-center">
                 <View className="h-1/6 items-center justify-center">
                     <Image
-                        source={require('../assets/logo/Logo-Purple.png')}
+                        source={require('../../assets/logo/Logo-Purple.png')}
                         style={{ width: 130, resizeMode: 'contain' }}
                     />
                 </View>
