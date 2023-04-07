@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, ScrollView, RefreshControl } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, ScrollView, RefreshControl, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../core/api/supabase';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,11 +7,14 @@ import MakeClassroom from './MakeClassroom';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuthContext } from '../../Components/Auth/AuthProvider';
+import LogoutAlert from '../../Components/Auth/LogoutAlert';
+import { getAllClassrooms } from '../../core/modules/classroom/api';
 
 const AdminDashboard = () => {
     const { user } = useAuthContext();
     const [borderColor, setBorderColor] = useState('#00000000');
     const [classrooms, setClassrooms] = useState([]);
+    const [showLogout, setShowLogout] = useState(false);
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -28,14 +31,7 @@ const AdminDashboard = () => {
 
     const getClassrooms = async () => {
         try {
-            let { data, error, status } = await supabase
-                .from('classroomtag')
-                .select()
-                .order('name', { ascending: true })
-
-            if (error && status !== 406) {
-                throw error
-            }
+            const data = await getAllClassrooms();
 
             if (data) {
                 setClassrooms(data)
@@ -55,17 +51,12 @@ const AdminDashboard = () => {
         setBorderColor('#00000000');
     }
 
-    const logout = async () => {
-        await AsyncStorage.removeItem('user')
-        await supabase.auth.signOut()
-    }
-
     return (
         <SafeAreaView className="flex-1 justify-start bg-white px-7 pt-14">
             <ScrollView>
                 <View className="flex-row justify-between items-start">
                     <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Hallo {user.first_name},</Text>
-                    <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => logout()}>
+                    <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => setShowLogout(true)}>
                         <ArrowRightOnRectangleIcon color="white" size={22} />
                     </TouchableOpacity>
                 </View>
@@ -105,6 +96,7 @@ const AdminDashboard = () => {
 
                 </View>
             </ScrollView>
+            { showLogout && <LogoutAlert onCancel={() => setShowLogout(false)} /> }
         </SafeAreaView>
     )
 }

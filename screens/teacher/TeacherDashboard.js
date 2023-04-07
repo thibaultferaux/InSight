@@ -4,9 +4,11 @@ import { supabase } from '../../core/api/supabase';
 import { ArrowRightOnRectangleIcon, ArrowUpRightIcon, PencilIcon, PlusIcon, XMarkIcon } from 'react-native-heroicons/outline';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuthContext } from '../../Components/Auth/AuthProvider';
+import LogoutAlert from '../../Components/Auth/LogoutAlert';
+import { getLessonsForTeacher } from '../../core/modules/lesson/api';
+import { formatDate, formatTime, isToday } from '../../core/utils/dateTime';
 
 const TeacherDashboard = () => {
     const { user } = useAuthContext();
@@ -14,6 +16,7 @@ const TeacherDashboard = () => {
     const [lessons, setLessons] = useState([]);
     const [currentLesson, setCurrentLesson] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
+    const [showLogout, setShowLogout] = useState(false);
     const navigation = useNavigation();
 
 
@@ -33,82 +36,17 @@ const TeacherDashboard = () => {
             setRefreshing(true);
             setCurrentLesson(null);
 
-            let { data, error, status } = await supabase
-                .from('lesson')
-                .select('id, startTime, endTime, active, course(id, name), classroomtag(id, name)')
-                .eq('course.teacherId', user.id)
-                .order('startTime', { ascending: true })
-                .gte('endTime', new Date().toISOString())
+            await getLessonsForTeacher(user.id, setLessons, setCurrentLesson);
 
-                
-                if (error && status !== 406) {
-                    throw error
-                }
-                
-            if (data) {
-                const filteredLessons = data.filter(lesson => {
-                    const now = new Date()
-                    const startTime = new Date(lesson.startTime)
-                    const endTime = new Date(lesson.endTime)
-                    if (startTime < now && endTime > now) {
-                        setCurrentLesson(lesson);
-                        return false
-                    } else {
-                        return true
-                    }
-                });
-
-                // group by day
-                const groupedLessons = filteredLessons.reduce((r, a) => {
-                    r[a.startTime.split('T')[0]] = [...r[a.startTime.split('T')[0]] || [], a];
-                    return r;
-                }, {});
-
-                // convert object to array
-                const groupedLessonsArray = Object.entries(groupedLessons).map(([date, items]) => ({ date, items }));
-                
-                setLessons(groupedLessonsArray);
-            }
         } catch (error) {
             if (error instanceof Error) {
                 Alert.alert(error.message)
+            } else {
+                Alert.alert(error)
             }
         } finally {
             setRefreshing(false)
         }
-    }
-
-    // check if date is equal to today
-    const isToday = (date) => {
-        const today = new Date()
-        const someDate = new Date(date)
-        return someDate.getDate() == today.getDate() &&
-            someDate.getMonth() == today.getMonth() &&
-            someDate.getFullYear() == today.getFullYear()
-    }
-
-    const formatDate = (date) => {
-        const someDate = new Date(date)
-        // weekday as short form in dutch
-        const weekday = someDate.getDay();
-        const weekdays = ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"];
-        const weekdayName = weekdays[weekday];
-        // day with leading zero
-        const day = String(someDate.getDate()).padStart(2, '0');
-        // month with leading zero
-        const month = String(someDate.getMonth() + 1).padStart(2, '0');
-
-        return `${weekdayName} ${day}/${month}`
-    }
-
-    const formatTime = (time) => {
-        const someTime = new Date(time)
-        // hours with leading zero
-        const hours = String(someTime.getHours()).padStart(2, '0');
-        // minutes with leading zero
-        const minutes = String(someTime.getMinutes()).padStart(2, '0');
-
-        return `${hours}:${minutes}`
     }
 
     const handleSetActive = (lesson) => {
@@ -116,23 +54,18 @@ const TeacherDashboard = () => {
         navigation.navigate("ScanActive", { lessonId: lesson.id, classroomId: lesson.classroomtag.id, courseId: lesson.course.id })
     }
 
-    const logout = async () => {
-        await AsyncStorage.removeItem('user')
-        await supabase.auth.signOut()
-    }
-
     return (
         <SafeAreaView className="flex-1 justify-start bg-slate-50">
             <ScrollView
                 refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={getLessons} />
+                    <RefreshControl onRefresh={getLessons} />
                 }
             >
                 <View className="px-7 pt-14">
                     
                     <View className="flex-row justify-between items-start mb-4">
                         <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Hallo {user.first_name},</Text>
-                        <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => logout()}>
+                        <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => setShowLogout(true)}>
                             <ArrowRightOnRectangleIcon color="white" size={22} />
                         </TouchableOpacity>
                     </View>
@@ -238,6 +171,7 @@ const TeacherDashboard = () => {
                     </View>
                 </View>
             </ScrollView>
+            { showLogout && <LogoutAlert onCancel={() => setShowLogout(false)} /> }
         </SafeAreaView>
     )
 }

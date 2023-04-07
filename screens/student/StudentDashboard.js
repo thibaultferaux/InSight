@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BlinkingDot from './components/BlinkingDot';
 import { useAuthContext } from '../../Components/Auth/AuthProvider';
+import LogoutAlert from '../../Components/Auth/LogoutAlert';
 
 const StudentDashboard = () => {
     const { user } = useAuthContext();
@@ -17,6 +18,7 @@ const StudentDashboard = () => {
     const [currentLesson, setCurrentLesson] = useState(null);
     const [selectedDay, setSelectedDay] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
+    const [showLogout, setShowLogout] = useState(false);
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -119,11 +121,6 @@ const StudentDashboard = () => {
         return `${hours}:${minutes}`
     }
 
-    const logout = async () => {
-        await AsyncStorage.removeItem('user')
-        await supabase.auth.signOut()
-    }
-
     return (
         <SafeAreaView className="flex-1 justify-start bg-slate-50">
                 <ScrollView
@@ -134,7 +131,7 @@ const StudentDashboard = () => {
                     <View className="px-7 pt-14">
                         <View className="flex-row justify-between items-start mb-4">
                             <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Hallo {user.first_name},</Text>
-                            <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => logout()}>
+                            <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => setShowLogout(true)}>
                                 <ArrowRightOnRectangleIcon color="white" size={22} />
                             </TouchableOpacity>
                         </View>
@@ -221,6 +218,7 @@ const StudentDashboard = () => {
                         </View>
                     </View>
                 </ScrollView>
+                { showLogout && <LogoutAlert onCancel={() => setShowLogout(false)} /> }
         </SafeAreaView>
     )
 }

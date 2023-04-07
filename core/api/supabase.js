@@ -24,7 +24,9 @@ export const createAccounts = async () => {
             }
         }
     });
-    console.error(error);
+    if (error) {
+        console.error(error);
+    }
     const { data: data2, error: error2 } = await supabase.auth.signUp({
         email: "teacher@example.com",
         password: "password123",
@@ -36,5 +38,7 @@ export const createAccounts = async () => {
             }
         }
     });
-    console.error(error2);
+    if (error2) {
+        console.error(error2);
+    }
 }

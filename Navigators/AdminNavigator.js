@@ -5,7 +5,6 @@ import AdminDashboard from '../screens/admin/AdminDashboard';
 import MakeClassroom from '../screens/admin/MakeClassroom';
 import ScanClassroom from '../screens/admin/ScanClassroom';
 import ScanSuccess from '../screens/admin/ScanSuccess';
-import { useAuthContext } from '../Components/Auth/AuthProvider';
 
 const Stack = createNativeStackNavigator();
 

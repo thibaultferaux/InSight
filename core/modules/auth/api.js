@@ -42,3 +42,7 @@ export const register = async (credentials) => {
     }
     return Promise.resolve(data);
 }
+
+export const logout = () => {
+    return supabase.auth.signOut();
+}

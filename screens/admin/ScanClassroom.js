@@ -8,24 +8,37 @@ import 'expo-dev-client';
 import NfcManager, { NfcTech, Ndef, NfcEvents } from 'react-native-nfc-manager';
 import { supabase } from '../../core/api/supabase';
 import * as Haptics from 'expo-haptics';
+import { makeClassroom } from '../../core/modules/classroom/api';
+import NfcProxy from '../../core/proxy/NfcProxy';
 
 
 NfcManager.start();
 
 const ScanClassroom = ({ route }) => {
-    const [hasNfc, setHasNfc] = useState(false);
-    const [isScanning, setIsScanning] = useState(false);
+    /* const [hasNfc, setHasNfc] = useState(false);
+    const [isScanning, setIsScanning] = useState(false); */
     const { name } = route.params;
 
     const navigation = useNavigation();
 
-    const readTag = async () => {
+    /* const readTag = async () => {
         setIsScanning(true);
         await NfcManager.registerTagEvent();
-    }
+    } */
 
     useEffect(() => {
-        const checkIsSupported = async () => {
+        NfcProxy.readTag()
+            .then((tag) => {
+                if (tag) {
+                    console.log(tag);
+                    Haptics.notificationAsync(
+                        Haptics.NotificationFeedbackType.Warning
+                    )
+                    handleMakeClassroom(name, tag.id);
+                }
+            })
+
+        /* const checkIsSupported = async () => {
             const deviceIsSupported = await NfcManager.isSupported();
 
             setHasNfc(deviceIsSupported);
@@ -41,45 +54,43 @@ const ScanClassroom = ({ route }) => {
                 Haptics.NotificationFeedbackType.Warning
             )
             NfcManager.unregisterTagEvent().catch(() => 0);
-            makeClassroom(name, tag.id);
+            handleMakeClassroom(name, tag.id);
         })
 
         readTag();
 
         return () => {
             NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
-        }
-    })
+        } */
+    }, [navigation])
 
-    if (hasNfc === null) return null;
+    // if (hasNfc === null) return null;
 
-    if (!hasNfc) {
+    /* if (!hasNfc) {
         return (
             <View className="flex-1 items-center justify-center bg-white space-y-4">
                 <Text className="text-gray-500">NFC not supported</Text>
             </View>
         )
-    }
+    } */
 
-    const makeClassroom = async (name, id) => {
-        const classroom = {
-            id: id,
-            name: name,
-        }
-        const { error, status } = await supabase.from('classroomtag').upsert(classroom);
-
-        if (error) {
-            Alert.alert(error.message)
-        } else {
-            stopScanning();
+    const handleMakeClassroom = async (name, id) => {
+        try {
+            await makeClassroom(name, id);
             navigation.navigate('ScanSuccess')
+        } catch (error) {
+            if (error.status) {
+                Alert.alert('Dit klaslokaal bestaat al, u kunt deze aanpassen in het overzicht');
+            } else {
+                console.error(error);
+            }
         }
     }
 
-    const stopScanning = async () => {
+    /* const stopScanning = async () => {
         setIsScanning(false);
         await NfcManager.unregisterTagEvent();
-    }
+    } */
 
 
     return (

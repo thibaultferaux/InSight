@@ -9,19 +9,27 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppContainer from './Components/App/AppContainer';
 import AuthProvider from './Components/Auth/AuthProvider';
 import AppContent from './Navigators/AppContent';
+import NfcContainer from './Components/Nfc/NfcContainer';
+import NfcModalProvider from './Components/Nfc/NfcModalProvider';
+import NfcModalAndroid from './Components/Nfc/NfcModalAndroid';
 
 
 export default function App() {
     return (
         <AppContainer>
-            <AuthProvider>
-                <NavigationContainer>
-                    <SafeAreaProvider>
-                        <AppContent />
-                        <FlashMessage position="top" />
-                    </SafeAreaProvider>
-                </NavigationContainer>
-            </AuthProvider>
+            <NfcContainer>
+                <AuthProvider>
+                    <NavigationContainer>
+                        <SafeAreaProvider>
+                            <NfcModalProvider>
+                                <AppContent />
+                                <FlashMessage position="top" />
+                                <NfcModalAndroid />
+                            </NfcModalProvider>
+                        </SafeAreaProvider>
+                    </NavigationContainer>
+                </AuthProvider>
+            </NfcContainer>
         </AppContainer>
     );
 }
