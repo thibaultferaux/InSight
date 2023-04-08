@@ -21,10 +21,8 @@ export default function LoginScreen() {
         if (email !== '' && password !== '') {
             try {
                 await login({ email, password })
-
-
             } catch (error) {
-                console.log(error)
+                console.error(error)
                 Alert.alert(error.message)
             }
         } else {

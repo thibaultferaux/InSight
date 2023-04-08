@@ -26,7 +26,6 @@ export const login = async ({ email, password }) => {
 }
 
 export const register = async (credentials) => {
-    console.log(credentials)
     const { email, password, ...extra } = credentials;
     const { data, error } = await supabase.auth.signUp({
         email: email,

@@ -1,12 +1,31 @@
-import { View, Text, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ArrowLeftIcon, ArrowRightIcon, TagIcon } from 'react-native-heroicons/outline';
 import { useNavigation } from '@react-navigation/native';
+import NfcProxy from '../../core/proxy/NfcProxy';
+import { makeClassroom } from '../../core/modules/classroom/api';
 
 const MakeClassroom = () => {
     const [classroom, setClassroom] = useState('')
     const navigation = useNavigation();
+
+    const handleMakeClassroom = async () => {
+        const tag = await NfcProxy.readTag()
+        if (tag) {
+            try {
+                await makeClassroom(classroom, tag.id);
+            } catch (error) {
+                if (error.status == 409) {
+                    Alert.alert('Dit klaslokaal bestaat al, u kunt deze aanpassen in het overzicht');
+                } else {
+                    console.error(error);
+                }
+            } finally {
+                navigation.navigate('Dashboard')
+            }
+        }
+    }
 
     return (
         <SafeAreaView className="flex-1 justify-start bg-white px-7 pt-10">
@@ -26,8 +45,8 @@ const MakeClassroom = () => {
                 </View>
             </View>
             <View className="mt-12 items-end">
-                <TouchableOpacity className="py-[10px] px-[15px] bg-violet-500 flex-row space-x-2 rounded-lg" onPress={() => navigation.navigate("ScanClassroom", { name: classroom })}>
-                    <Text className="text-white">Volgende</Text>
+                <TouchableOpacity className="py-[10px] px-[15px] bg-violet-500 flex-row space-x-2 rounded-lg" onPress={handleMakeClassroom}>
+                    <Text className="text-white">Scan</Text>
                     <ArrowRightIcon size={22} color="white" />
                 </TouchableOpacity>
             </View>

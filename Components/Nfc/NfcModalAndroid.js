@@ -1,13 +1,14 @@
 import { View, Text, Animated, Modal, TouchableOpacity } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import NfcModalProvider, { useNfcModalContext } from './NfcModalProvider';
 import AnimatedLottieView from 'lottie-react-native';
 import nfcManager from 'react-native-nfc-manager';
+import { store } from '../../core/store/store';
+import { useGlobalState } from 'state-pool';
 
 const NfcModalAndroid = (props) => {
     const [visible, setVisible] = useState(false);
     const animValue = useRef(new Animated.Value(0)).current;
-    const {modalData, setModalData} = useNfcModalContext();
+    const [ modalData, setModalData ] = useGlobalState(store);
 
     useEffect(() => {
         if (modalData.visible) {
@@ -64,13 +65,19 @@ const NfcModalAndroid = (props) => {
                         <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-gray-400 text-xl">
                             {modalData.message}
                         </Text>
-                        <AnimatedLottieView source={require('../../assets/animations/NFC-Scan.json')} autoPlay loop style={{ width: 120 }} />
-                        <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base">
+                        {
+                            modalData.success ? (
+                                <AnimatedLottieView source={require('../../assets/animations/NFC-succes.json')} autoPlay loop={false} style={{ width: 120 }} />
+                            ) : (
+                                <AnimatedLottieView source={require('../../assets/animations/NFC-Scan.json')} autoPlay loop style={{ width: 120 }} />
+                            )
+                        }
+                        <Text style={{ fontFamily: 'Poppins_400Regular' }} className={`text-base ${modalData.success && 'opacity-0'}`}>
                             Hou je telefoon tegen de NFC tag
                         </Text>
                     </View>
 
-                    <TouchableOpacity onPress={cancelNfcScan} className="w-full justify-center items-center py-5 bg-gray-300 rounded-lg">
+                    <TouchableOpacity onPress={cancelNfcScan} disabled={modalData.success} className={`w-full justify-center items-center py-5 bg-gray-300 rounded-lg ${modalData.success && 'opacity-0'}`}>
                         <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-base pt-[1px]">
                             Cancel
                         </Text>

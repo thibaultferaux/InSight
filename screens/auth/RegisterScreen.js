@@ -39,7 +39,7 @@ const RegisterScreen = () => {
                     position: 'left'
                 })
             } catch (error) {
-                console.log(error)
+                console.error(error)
                 Alert.alert(error.message)
             }
         } else {

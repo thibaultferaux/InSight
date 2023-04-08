@@ -4071,6 +4071,11 @@ image-size@^0.6.0:
   resolved "https://registry.npmjs.org/image-size/-/image-size-0.6.3.tgz"
   integrity sha512-47xSUiQioGaB96nqtp5/q55m0aBQSQdyIloMOc/x+QVTDZLNmXE892IIDrJ0hM1A5vcNUDD5tDffkSP5lCaIIA==
 
+immer@>=6.0.3:
+  version "9.0.21"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.21.tgz#1e025ea31a40f24fb064f1fef23e931496330176"
+  integrity sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA==
+
 import-fresh@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/import-fresh/-/import-fresh-2.0.0.tgz"
@@ -6743,6 +6748,13 @@ stacktrace-parser@^0.1.3:
   integrity sha512-KJP1OCML99+8fhOHxwwzyWrlUuVX5GQ0ZpJTd1DFXhdkrvg1szxfHhawXUZ3g9TkXORQd4/WG68jMlQZ2p8wlg==
   dependencies:
     type-fest "^0.7.1"
+
+state-pool@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/state-pool/-/state-pool-0.9.0.tgz#002ba56fbc0fdc5b9de2b29dab3469773be56baa"
+  integrity sha512-82732wx9lZvHWFufWDEIwLIHY2FC+eSe2nC9qD2UgPXEoMKlF8kMr1JsGwvk/ueQ/l1/uDElQ086P3PKMJwd4g==
+  dependencies:
+    immer ">=6.0.3"
 
 static-extend@^0.1.1:
   version "0.1.2"

@@ -52,8 +52,8 @@ const AdminDashboard = () => {
     }
 
     return (
-        <SafeAreaView className="flex-1 justify-start bg-white px-7 pt-14">
-            <ScrollView>
+        <SafeAreaView className="flex-1 justify-start bg-white">
+            <ScrollView contentContainerStyle={{ paddingHorizontal: 28, paddingVertical: 56 }}>
                 <View className="flex-row justify-between items-start">
                     <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Hallo {user.first_name},</Text>
                     <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => setShowLogout(true)}>

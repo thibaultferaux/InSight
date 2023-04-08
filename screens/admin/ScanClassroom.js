@@ -30,7 +30,6 @@ const ScanClassroom = ({ route }) => {
         NfcProxy.readTag()
             .then((tag) => {
                 if (tag) {
-                    console.log(tag);
                     Haptics.notificationAsync(
                         Haptics.NotificationFeedbackType.Warning
                     )

@@ -18,7 +18,8 @@ export const makeClassroom = async (name, id) => {
     }
     let { error, status } = await supabase.from('classroomtag').upsert(classroom);
 
-    error.status = status;
-
-    if (error) throw error;
+    if (error) {
+        error.status = status;
+        throw error;
+    };
 }
