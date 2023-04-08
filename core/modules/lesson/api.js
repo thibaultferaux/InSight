@@ -36,3 +36,12 @@ export const getLessonsForTeacher = async (teacherId, setLessons, setCurrentLess
             setLessons(groupedLessonsArray);
         }
 }
+
+export const makeLessonActive = async (lessonId) => {
+    const { error } = await supabase
+        .from('lesson')
+        .update({ active: true })
+        .eq('id', lessonId)
+
+    if (error) throw error;
+}

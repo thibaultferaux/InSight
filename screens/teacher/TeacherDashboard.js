@@ -9,6 +9,8 @@ import { useAuthContext } from '../../Components/Auth/AuthProvider';
 import LogoutAlert from '../../Components/Auth/LogoutAlert';
 import { getLessonsForTeacher } from '../../core/modules/lesson/api';
 import { formatDate, formatTime, isToday } from '../../core/utils/dateTime';
+import NfcProxy from '../../core/proxy/NfcProxy';
+import { addStudentsToAttendance } from '../../core/modules/attendance/api';
 
 const TeacherDashboard = () => {
     const { user } = useAuthContext();
@@ -39,19 +41,26 @@ const TeacherDashboard = () => {
             await getLessonsForTeacher(user.id, setLessons, setCurrentLesson);
 
         } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            } else {
-                Alert.alert(error)
-            }
+            console.error(error)
+            Alert.alert("Er is iets misgegaan met het ophalen van de lessen. Probeer het later opnieuw.")
         } finally {
             setRefreshing(false)
         }
     }
 
-    const handleSetActive = (lesson) => {
+    const handleSetActive = async (lesson) => {
         setModalVisible(false);
-        navigation.navigate("ScanActive", { lessonId: lesson.id, classroomId: lesson.classroomtag.id, courseId: lesson.course.id })
+        const resp = await NfcProxy.checkTag(lesson.classroomtag.id)
+        if (resp) {
+            try {
+                await addStudentsToAttendance(lesson.course.id, lesson.id)
+            } catch (error) {
+                console.error(error)
+                Alert.alert("Er is iets misgegaan met het activeren van de les. Probeer het later opnieuw.")
+            }
+        } else {
+            Alert.alert('Fout', 'Dit is niet het juiste lokaal');
+        }
     }
 
     return (

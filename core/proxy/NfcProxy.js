@@ -7,7 +7,7 @@ import * as Haptics from 'expo-haptics';
 
 // wrapper function that checks if platform is android and if so shows the androidmodal
 const checkPlatform = (fn) => {
-    const wrapper = async () => {
+    async function wrapper() {
         try {
             let modalData;
             if (Platform.OS == 'android') {
@@ -22,16 +22,30 @@ const checkPlatform = (fn) => {
             const data = await fn.apply(null, arguments);
 
             if (Platform.OS === 'android') {
-                modalData = {
-                    visible: true,
-                    message: 'Gescand',
-                    success: true,
-                };
+                if (data) {
+                    modalData = {
+                        visible: true,
+                        message: 'Gescand',
+                        success: true,
+                    };
+                } else {
+                    modalData = {
+                        visible: false,
+                        message: '',
+                        success: false,
+                    };
+                }
                 store.setValue(modalData);
             }
 
             return data;
         } catch (error) {
+            modalData = {
+                visible: false,
+                message: '',
+                success: false,
+            };
+            store.setValue(modalData);
             throw error;
         } finally {
             if (Platform.OS === 'android') {
@@ -42,7 +56,7 @@ const checkPlatform = (fn) => {
                         success: true,
                     };
                     store.setValue(modalData);
-                }, 1800)
+                }, 800)
             }
         }
     };
@@ -90,6 +104,35 @@ class NfcProxy {
 
         return tag;
     });
+
+    checkTag = checkPlatform(async (classroomId) => {
+        let tag = null;
+        let result = false;
+
+        try {
+            await NfcManager.requestTechnology(NfcTech.Ndef);
+
+            tag = await NfcManager.getTag();
+
+            if (tag.id !== classroomId) {
+                throw new Error('Tag is niet hetzelfde');
+            }
+
+            Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Success
+            )
+
+            result = true
+        } catch (error) {
+            Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Warning
+            )
+        } finally {
+            NfcManager.cancelTechnologyRequest();
+        }
+            
+        return result;
+    })
 }
 
 export default new NfcProxy();
