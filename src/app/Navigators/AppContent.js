@@ -1,9 +1,9 @@
 import React from 'react'
-import { useAuthContext } from '../Components/Auth/AuthProvider'
 import AuthNavigator from './AuthNavigator'
 import StudentNavigator from './StudentNavigator'
 import TeacherNavigator from './TeacherNavigator'
 import AdminNavigator from './AdminNavigator'
+import { useAuthContext } from '../Components/Auth/AuthProvider'
 
 const AppContent = () => {
     const { isLoggedIn, user } = useAuthContext();

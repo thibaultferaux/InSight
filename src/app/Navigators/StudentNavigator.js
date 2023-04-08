@@ -1,9 +1,7 @@
-import { View, Text } from 'react-native'
 import React from 'react'
-import ScanAttendance from '../src/app/Screens/Student/ScanAttendance'
-import StudentDashboard from '../src/app/Screens/Student/StudentDashboard'
+import ScanAttendance from '../Screens/Student/ScanAttendance'
+import StudentDashboard from '../Screens/Student/StudentDashboard'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useAuthContext } from '../Components/Auth/AuthProvider';
 
 const Stack = createNativeStackNavigator();
 

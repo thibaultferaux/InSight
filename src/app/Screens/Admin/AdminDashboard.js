@@ -5,9 +5,9 @@ import { ArrowRightOnRectangleIcon, ArrowUpRightIcon, MagnifyingGlassIcon, PlusI
 import MakeClassroom from './MakeClassroom';
 import { useNavigation } from '@react-navigation/native';
 import { supabase } from '../../../core/api/supabase';
-import { useAuthContext } from '../../../../Components/Auth/AuthProvider';
-import LogoutAlert from '../../../../Components/Auth/LogoutAlert';
+import LogoutAlert from '../../Components/Auth/LogoutAlert';
 import { getAllClassrooms } from '../../../core/modules/classroom/api';
+import { useAuthContext } from '../../Components/Auth/AuthProvider';
 
 const AdminDashboard = () => {
     const { user } = useAuthContext();

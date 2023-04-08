@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, Easing, View } from 'react-native';
+import { Animated } from 'react-native';
 
 const BlinkingDot = ({ size = 5, color = 'black' }) => {
   const opacity = new Animated.Value(1);

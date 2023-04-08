@@ -1,7 +1,6 @@
-import { View, Text } from 'react-native'
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_500Medium } from '@expo-google-fonts/poppins';
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
 SplashScreen.preventAutoHideAsync();
 

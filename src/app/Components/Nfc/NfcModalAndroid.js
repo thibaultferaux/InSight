@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import AnimatedLottieView from 'lottie-react-native';
 import nfcManager from 'react-native-nfc-manager';
 import { useGlobalState } from 'state-pool';
-import { store } from '../../src/core/store/store';
+import { store } from '../../../core/store/store';
 
 const NfcModalAndroid = (props) => {
     const [visible, setVisible] = useState(false);
@@ -67,9 +67,9 @@ const NfcModalAndroid = (props) => {
                         </Text>
                         {
                             modalData.success ? (
-                                <AnimatedLottieView source={require('../../assets/animations/NFC-succes.json')} autoPlay loop={false} style={{ width: 120 }} />
+                                <AnimatedLottieView source={require('../../../../assets/animations/NFC-succes.json')} autoPlay loop={false} style={{ width: 120 }} />
                             ) : (
-                                <AnimatedLottieView source={require('../../assets/animations/NFC-Scan.json')} autoPlay loop style={{ width: 120 }} />
+                                <AnimatedLottieView source={require('../../../../assets/animations/NFC-Scan.json')} autoPlay loop style={{ width: 120 }} />
                             )
                         }
                         <Text style={{ fontFamily: 'Poppins_400Regular' }} className={`text-base ${modalData.success && 'opacity-0'}`}>

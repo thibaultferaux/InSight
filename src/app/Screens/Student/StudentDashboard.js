@@ -4,11 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowRightOnRectangleIcon } from 'react-native-heroicons/outline';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import { useAuthContext } from '../../../../Components/Auth/AuthProvider';
-import LogoutAlert from '../../../../Components/Auth/LogoutAlert';
+import { useAuthContext } from '../../Components/Auth/AuthProvider';
+import LogoutAlert from '../../Components/Auth/LogoutAlert';
 import { supabase } from '../../../core/api/supabase';
-import DateSlider from '../../../../Components/Data/DateSlider';
-import BlinkingDot from '../../../../Components/Animations/BlinkingDot';
+import DateSlider from '../../Components/Data/DateSlider';
+import BlinkingDot from '../../Components/Animations/BlinkingDot';
 
 const StudentDashboard = () => {
     const { user } = useAuthContext();

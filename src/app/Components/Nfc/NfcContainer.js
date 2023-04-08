@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import NfcProxy from '../../src/core/proxy/NfcProxy';
-import NfcNotSupported from '../../src/app/Screens/Nfc/NfcNotSupported';
+import NfcProxy from '../../../core/proxy/NfcProxy';
+import NfcNotSupported from '../../Screens/Nfc/NfcNotSupported';
 
 const NfcContainer = ({ children }) => {
     const [supported, setSupported] = useState(false);

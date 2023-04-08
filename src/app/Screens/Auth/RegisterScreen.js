@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from "react-native-heroicons/outline";
 import { useNavigation } from '@react-navigation/native'
 import { showMessage } from 'react-native-flash-message'
-import LoginInput from '../../../../Components/Form/LoginInput';
+import LoginInput from '../../Components/Form/LoginInput';
 import { register } from '../../../core/modules/auth/api';
 
 

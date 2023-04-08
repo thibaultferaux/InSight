@@ -1,6 +1,6 @@
-import { View, Text, Alert } from 'react-native'
-import React, { useEffect } from 'react'
-import { logout } from '../../src/core/modules/auth/api'
+import { Alert } from 'react-native'
+import { useEffect } from 'react'
+import { logout } from '../../../core/modules/auth/api'
 
 const LogoutAlert = ({ onCancel }) => {
     useEffect(() => {

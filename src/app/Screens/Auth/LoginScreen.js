@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import { EnvelopeIcon, LockClosedIcon } from "react-native-heroicons/outline";
 import { useNavigation } from '@react-navigation/native'
-import LoginInput from '../../../../Components/Form/LoginInput'
+import LoginInput from '../../Components/Form/LoginInput'
 import { login } from '../../../core/modules/auth/api';
 
 export default function LoginScreen() {

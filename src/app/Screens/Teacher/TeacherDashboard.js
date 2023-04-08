@@ -8,8 +8,8 @@ import { formatDate, formatTime, isToday } from '../../../core/utils/dateTime';
 import NfcProxy from '../../../core/proxy/NfcProxy';
 import { addStudentsToAttendance } from '../../../core/modules/attendance/api';
 import { supabase } from '../../../core/api/supabase';
-import { useAuthContext } from '../../../../Components/Auth/AuthProvider';
-import LogoutAlert from '../../../../Components/Auth/LogoutAlert';
+import { useAuthContext } from '../../Components/Auth/AuthProvider';
+import LogoutAlert from '../../Components/Auth/LogoutAlert';
 import { getLessonsForTeacher } from '../../../core/modules/lesson/api';
 
 const TeacherDashboard = () => {
