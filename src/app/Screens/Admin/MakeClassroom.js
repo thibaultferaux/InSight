@@ -3,8 +3,8 @@ import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ArrowLeftIcon, ArrowRightIcon, TagIcon } from 'react-native-heroicons/outline';
 import { useNavigation } from '@react-navigation/native';
-import NfcProxy from '../../core/proxy/NfcProxy';
-import { makeClassroom } from '../../core/modules/classroom/api';
+import { makeClassroom } from '../../../core/modules/classroom/api';
+import NfcProxy from '../../../core/proxy/NfcProxy';
 
 const MakeClassroom = () => {
     const [classroom, setClassroom] = useState('')

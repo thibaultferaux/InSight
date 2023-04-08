@@ -2,8 +2,8 @@ import { View, Text, Animated, Modal, TouchableOpacity } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import AnimatedLottieView from 'lottie-react-native';
 import nfcManager from 'react-native-nfc-manager';
-import { store } from '../../core/store/store';
 import { useGlobalState } from 'state-pool';
+import { store } from '../../src/core/store/store';
 
 const NfcModalAndroid = (props) => {
     const [visible, setVisible] = useState(false);

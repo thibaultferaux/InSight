@@ -1,16 +1,14 @@
 import { View, Text, TouchableOpacity, Alert, ScrollView, RefreshControl } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { supabase } from '../../core/api/supabase';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowRightOnRectangleIcon, ArrowUpRightIcon } from 'react-native-heroicons/outline';
+import { ArrowRightOnRectangleIcon } from 'react-native-heroicons/outline';
 import { LinearGradient } from 'expo-linear-gradient';
-import DateSlider from './components/DateSlider';
-import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import BlinkingDot from './components/BlinkingDot';
-import { useAuthContext } from '../../Components/Auth/AuthProvider';
-import LogoutAlert from '../../Components/Auth/LogoutAlert';
+import { useAuthContext } from '../../../../Components/Auth/AuthProvider';
+import LogoutAlert from '../../../../Components/Auth/LogoutAlert';
+import { supabase } from '../../../core/api/supabase';
+import DateSlider from '../../../../Components/Data/DateSlider';
+import BlinkingDot from '../../../../Components/Animations/BlinkingDot';
 
 const StudentDashboard = () => {
     const { user } = useAuthContext();

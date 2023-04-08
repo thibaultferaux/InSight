@@ -1,9 +1,9 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import TeacherDashboard from '../screens/teacher/TeacherDashboard'
-import MakeLesson from '../screens/teacher/MakeLesson'
-import ScanActive from '../screens/teacher/ScanActive'
-import ViewAttendances from '../screens/teacher/ViewAttendances'
+import TeacherDashboard from '../src/app/Screens/Teacher/TeacherDashboard'
+import MakeLesson from '../src/app/Screens/Teacher/MakeLesson'
+import ScanActive from '../src/app/Screens/Teacher/ScanActive'
+import ViewAttendances from '../src/app/Screens/Teacher/ViewAttendances'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 const Stack = createNativeStackNavigator();

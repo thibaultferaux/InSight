@@ -1,14 +1,12 @@
-import { Alert, Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from "react-native-heroicons/outline";
-import { supabase } from '../../core/api/supabase'
 import { useNavigation } from '@react-navigation/native'
 import { showMessage } from 'react-native-flash-message'
-import LoginInput from '../../Components/Form/LoginInput'
-import { register } from '../../core/modules/auth/api';
-// import { register } from '../../core/modules/auth/api';
+import LoginInput from '../../../../Components/Form/LoginInput';
+import { register } from '../../../core/modules/auth/api';
 
 
 const RegisterScreen = () => {
@@ -20,9 +18,6 @@ const RegisterScreen = () => {
 
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
-    
-    // register({ email, password, first_name: firstName, last_name: lastName, role_id: 1 })
-
 
     const handleRegister = async () => {
         setLoading(true);
@@ -45,39 +40,7 @@ const RegisterScreen = () => {
         } else {
             Alert.alert("Vul alle velden in")
         }
-        /* const { data, error } = await supabase.auth.signUp({
-            email: email,
-            password: password,
-        })
-        if (error) {
-            Alert.alert(error.message)
-        } else {
-            const profile = {
-                id: data.user.id,
-                email: email,
-                first_name: firstName,
-                last_name: lastName,
-                updated_at: new Date()
-            }
-
-            const { error } = await supabase.from('profiles').upsert(profile)
-
-            if (error) {
-                Alert.alert(error.message)
-            } else {
-                supabase.auth.signOut()
-                showMessage({
-                    message: "Je account is succesvol aangemaakt",
-                    type: "success",
-                    style: { paddingTop: insets.top },
-                    duration: 5000,
-                    icon: 'success',
-                    position: 'left'
-                })
-                navigation.navigate("Login")
-            }
-
-        } */
+        
         setLoading(false)
     }
 
@@ -91,7 +54,7 @@ const RegisterScreen = () => {
  
                     <View className="h-1/6 items-center justify-center">
                         <Image
-                            source={require('../../assets/logo/Logo-Purple.png')}
+                            source={require('../../../../assets/logo/Logo-Purple.png')}
                             style={{ width: 130, resizeMode: 'contain' }}
                         />
                     </View>

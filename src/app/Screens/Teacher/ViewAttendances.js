@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { ArrowLeftIcon, CheckIcon, MagnifyingGlassIcon, TrashIcon, XMarkIcon } from 'react-native-heroicons/outline';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { supabase } from '../../core/api/supabase';
 import { CheckCircleIcon, XCircleIcon } from 'react-native-heroicons/solid';
+import { supabase } from '../../../core/api/supabase';
 
 const ViewAttendances = ({ route }) => {
     const [borderColor, setBorderColor] = useState('#00000000');

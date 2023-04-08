@@ -18,7 +18,7 @@ const NfcNotSupported = ({ reloadFunction, reload }) => {
                         <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-center  text-gray-500">
                             Tot er een oplossing is, kunt u de app niet gebruiken. Onze excuses voor het ongemak.
                         </Text>
-                    </View>
+                    </View> 
                 </ScrollView>
             </SafeAreaView>
         </SafeAreaProvider>

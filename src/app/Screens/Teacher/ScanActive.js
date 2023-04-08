@@ -1,13 +1,13 @@
-import { View, Text, Image, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AnimatedLottieView from 'lottie-react-native';
 import { ArrowLeftIcon } from 'react-native-heroicons/outline';
 import { useNavigation } from '@react-navigation/native';
 import 'expo-dev-client';
-import NfcManager, { NfcTech, Ndef, NfcEvents } from 'react-native-nfc-manager';
-import { supabase } from '../../core/api/supabase';
+import NfcManager, { NfcEvents } from 'react-native-nfc-manager';
 import * as Haptics from 'expo-haptics';
+import { supabase } from '../../../core/api/supabase';
 
 NfcManager.start();
 
@@ -130,7 +130,7 @@ const ScanActive = ({ route }) => {
                 <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Scan de tag van het lokaal</Text>
             </View>
             <View className="justify-center items-center mt-12">
-                <AnimatedLottieView source={require('../../assets/animations/NFC-Scan.json')} autoPlay loop style={{ width: '80%' }} />
+                <AnimatedLottieView source={require('../../../../assets/animations/NFC-Scan.json')} autoPlay loop style={{ width: '80%' }} />
             </View>
             <View className="mt-6 items-center">
                 <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400 text-center">Raak met de achterkant van je telefoon te tag aan om deze te scannen.</Text>

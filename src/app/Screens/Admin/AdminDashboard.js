@@ -1,14 +1,13 @@
-import { View, Text, TouchableOpacity, TextInput, ScrollView, RefreshControl, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { supabase } from '../../core/api/supabase';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowRightOnRectangleIcon, ArrowUpRightIcon, MagnifyingGlassIcon, PlusIcon } from 'react-native-heroicons/outline';
 import MakeClassroom from './MakeClassroom';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useAuthContext } from '../../Components/Auth/AuthProvider';
-import LogoutAlert from '../../Components/Auth/LogoutAlert';
-import { getAllClassrooms } from '../../core/modules/classroom/api';
+import { supabase } from '../../../core/api/supabase';
+import { useAuthContext } from '../../../../Components/Auth/AuthProvider';
+import LogoutAlert from '../../../../Components/Auth/LogoutAlert';
+import { getAllClassrooms } from '../../../core/modules/classroom/api';
 
 const AdminDashboard = () => {
     const { user } = useAuthContext();

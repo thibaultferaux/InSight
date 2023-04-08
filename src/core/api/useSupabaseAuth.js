@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { getCurrentSession } from "../modules/auth/api";
 import { supabase } from "./supabase";
+import { getCurrentSession } from "../modules/auth/api";
 
 
 const useSupabaseAuth = () => {

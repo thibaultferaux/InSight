@@ -1,13 +1,11 @@
-import { Alert, FlatList, Image, ScrollView, ScrollViewComponent, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import { EnvelopeIcon, LockClosedIcon } from "react-native-heroicons/outline";
-import { supabase } from '../../core/api/supabase'
 import { useNavigation } from '@react-navigation/native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import LoginInput from '../../Components/Form/LoginInput'
-import { login } from '../../core/modules/auth/api';
+import LoginInput from '../../../../Components/Form/LoginInput'
+import { login } from '../../../core/modules/auth/api';
 
 export default function LoginScreen() {
     const [email, setEmail] = useState('');
@@ -51,7 +49,7 @@ export default function LoginScreen() {
             <SafeAreaView className="flex-1 items-center justify-center">
                 <View className="h-1/6 items-center justify-center">
                     <Image
-                        source={require('../../assets/logo/Logo-Purple.png')}
+                        source={require('../../../../assets/logo/Logo-Purple.png')}
                         style={{ width: 130, resizeMode: 'contain' }}
                     />
                 </View>

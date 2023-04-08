@@ -5,7 +5,7 @@ import { ArrowLeftIcon, ArrowRightIcon, ChevronDownIcon, ClockIcon } from 'react
 import { CalendarIcon } from 'react-native-heroicons/solid';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useForm, Controller } from "react-hook-form";
-import { supabase } from '../../core/api/supabase';
+import { supabase } from '../../../core/api/supabase';
 import { Dropdown } from 'react-native-element-dropdown';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 

@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AdminDashboard from '../screens/admin/AdminDashboard';
-import MakeClassroom from '../screens/admin/MakeClassroom';
-import ScanClassroom from '../screens/admin/ScanClassroom';
-import ScanSuccess from '../screens/admin/ScanSuccess';
+import AdminDashboard from '../src/app/Screens/Admin/AdminDashboard';
+import MakeClassroom from '../src/app/Screens/Admin/MakeClassroom';
+import ScanClassroom from '../src/app/Screens/Admin/ScanClassroom';
+import ScanSuccess from '../src/app/Screens/Admin/ScanSuccess';
 
 const Stack = createNativeStackNavigator();
 

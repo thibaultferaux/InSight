@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react'
-import useSupabaseAuth from '../../core/api/useSupabaseAuth';
+import useSupabaseAuth from '../../src/core/api/useSupabaseAuth';
 
 const AuthContext = createContext();
 

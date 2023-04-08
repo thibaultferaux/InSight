@@ -1,16 +1,16 @@
 import { View, Text, TouchableOpacity, Alert, ScrollView, RefreshControl, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { supabase } from '../../core/api/supabase';
 import { ArrowRightOnRectangleIcon, ArrowUpRightIcon, PencilIcon, PlusIcon, XMarkIcon } from 'react-native-heroicons/outline';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useAuthContext } from '../../Components/Auth/AuthProvider';
-import LogoutAlert from '../../Components/Auth/LogoutAlert';
-import { getLessonsForTeacher } from '../../core/modules/lesson/api';
-import { formatDate, formatTime, isToday } from '../../core/utils/dateTime';
-import NfcProxy from '../../core/proxy/NfcProxy';
-import { addStudentsToAttendance } from '../../core/modules/attendance/api';
+import { formatDate, formatTime, isToday } from '../../../core/utils/dateTime';
+import NfcProxy from '../../../core/proxy/NfcProxy';
+import { addStudentsToAttendance } from '../../../core/modules/attendance/api';
+import { supabase } from '../../../core/api/supabase';
+import { useAuthContext } from '../../../../Components/Auth/AuthProvider';
+import LogoutAlert from '../../../../Components/Auth/LogoutAlert';
+import { getLessonsForTeacher } from '../../../core/modules/lesson/api';
 
 const TeacherDashboard = () => {
     const { user } = useAuthContext();
@@ -67,7 +67,7 @@ const TeacherDashboard = () => {
         <SafeAreaView className="flex-1 justify-start bg-slate-50">
             <ScrollView
                 refreshControl={
-                    <RefreshControl onRefresh={getLessons} />
+                    <RefreshControl onRefresh={getLessons} refreshing={refreshing} />
                 }
             >
                 <View className="px-7 pt-14">
