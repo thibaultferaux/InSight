@@ -5,6 +5,8 @@ import { ArrowLeftIcon, CheckIcon, MagnifyingGlassIcon, TrashIcon, XMarkIcon } f
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CheckCircleIcon, XCircleIcon } from 'react-native-heroicons/solid';
 import { supabase } from '../../../core/api/supabase';
+import { getAttendencesForLesson, setAbsent, setPresent } from '../../../core/modules/attendance/api';
+import { formatDateShort, formatTime } from '../../../core/utils/dateTime';
 
 const ViewAttendances = ({ route }) => {
     const [borderColor, setBorderColor] = useState('#00000000');
@@ -26,97 +28,34 @@ const ViewAttendances = ({ route }) => {
 
     const getAttendences = async () => {
         try {
-            const { data, error, status } = await supabase
-                .from('presentstudent')
-                .select('userId, present, presentAt, profiles(first_name, last_name)')
-                .eq('lessonId', lesson.id)
-                .order('presentAt', { ascending: true })
-
-            if (error && status !== 406) {
-                console.error(error);
-                throw error
-            }
-
-            if (data) {
-                // group by present true or false
-                const grouped = data.reduce((acc, obj) => {
-                    const key = obj.present ? 'present' : 'absent';
-                    if (!acc[key]) {
-                        acc[key] = [];
-                    }
-                    acc[key].push(obj);
-                    return acc;
-                }, {});
-
-                setStudents(grouped);
-            }
+            await getAttendencesForLesson(lesson.id, setStudents);
         } catch (error) {
-            if (error instanceof Error) {
-                console.error(error);
-            }
+            console.error(error);
+            Alert.alert('Fout', 'Er is iets fout gegaan, probeer het later opnieuw.');
         }
     }
 
-    const setPresent = async (userId) => {
+    const handleSetPresent = async (userId) => {
         try {
-            const { error, status } = await supabase
-                .from('presentstudent')
-                .update({ present: true, presentAt: new Date() })
-                .eq('userId', userId)
-                .eq('lessonId', lesson.id)
+            
+            await setPresent(userId, lesson.id);
 
-            if (error && status !== 406) {
-                console.error(error);
-                throw error
-            }
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Fout', 'Er is iets fout gegaan, probeer het later opnieuw.');
+        }
+    }
+
+    const handleSetAbsent = async (userId) => {
+        try {
+            
+            await setAbsent(userId, lesson.id);
 
         } catch (error) {
             if (error) {
                 Alert.alert('Fout', 'Er is iets fout gegaan, probeer het later opnieuw.');
             }
         }
-    }
-
-    const setAbsent = async (userId) => {
-        try {
-            const { error, status } = await supabase
-                .from('presentstudent')
-                .update({ present: false, presentAt: new Date() })
-                .eq('userId', userId)
-                .eq('lessonId', lesson.id)
-
-            if (error && status !== 406) {
-                console.error(error);
-                throw error
-            }
-
-        } catch (error) {
-            if (error) {
-                Alert.alert('Fout', 'Er is iets fout gegaan, probeer het later opnieuw.');
-            }
-        }
-    }
-
-
-    const formatDate = (date) => {
-        const someDate = new Date(date)
-        // weekday as short form in dutch
-        // day with leading zero
-        const day = String(someDate.getDate()).padStart(2, '0');
-        // month with leading zero
-        const month = String(someDate.getMonth() + 1).padStart(2, '0');
-
-        return `${day}/${month}`
-    }
-
-    const formatTime = (time) => {
-        const someTime = new Date(time)
-        // hours with leading zero
-        const hours = String(someTime.getHours()).padStart(2, '0');
-        // minutes with leading zero
-        const minutes = String(someTime.getMinutes()).padStart(2, '0');
-
-        return `${hours}:${minutes}`
     }
 
     const onFocus = () => {
@@ -134,7 +73,7 @@ const ViewAttendances = ({ route }) => {
                     <ArrowLeftIcon size={16} color="#9ca3af" />
                     <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Terug</Text>
                 </TouchableOpacity>
-                <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">{ lesson.course.name } - { formatDate(lesson.startTime) } </Text>
+                <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">{ lesson.course.name } - { formatDateShort(lesson.startTime) } </Text>
             </View>
             <View className="h-[52px] mt-6">
                 <View className="flex-1 flex-row items-center bg-slate-100 px-4 rounded-[10px] space-x-4 border" style={{ borderColor: borderColor }}>
@@ -166,7 +105,7 @@ const ViewAttendances = ({ route }) => {
                                             <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-300 -mt-1">{ formatTime(student.presentAt) }</Text>
                                         </View>
                                     </View>
-                                    <TouchableOpacity className="flex-row items-center space-x-1" onPress={() => setAbsent(student.userId)} >
+                                    <TouchableOpacity className="flex-row items-center space-x-1" onPress={() => handleSetAbsent(student.userId)} >
                                         <XMarkIcon size={24} color="#C4C4C4" />
                                     </TouchableOpacity>
                                 </View>
@@ -187,7 +126,7 @@ const ViewAttendances = ({ route }) => {
                                             <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-300 -mt-1">{ formatTime(student.presentAt) }</Text>
                                         </View>
                                     </View>
-                                    <TouchableOpacity className="flex-row items-center space-x-1" onPress={() => setPresent(student.userId)}>
+                                    <TouchableOpacity className="flex-row items-center space-x-1" onPress={() => handleSetPresent(student.userId)}>
                                         <CheckIcon size={24} color="#C4C4C4" />
                                     </TouchableOpacity>
                                 </View>

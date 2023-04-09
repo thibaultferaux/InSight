@@ -20,23 +20,11 @@ export default function LoginScreen() {
             try {
                 await login({ email, password })
             } catch (error) {
-                console.error(error)
                 Alert.alert(error.message)
             }
         } else {
             Alert.alert("Vul alle velden in")
         }
-
-        /* await AsyncStorage.setItem('user', JSON.stringify({ email, password }))
-        const { error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password
-        })
-
-        if (error) {
-            await AsyncStorage.removeItem('user')
-            Alert.alert(error.message)
-        } */
 
         setLoading(false)
     }

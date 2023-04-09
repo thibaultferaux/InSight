@@ -9,6 +9,10 @@ import LogoutAlert from '../../Components/Auth/LogoutAlert';
 import { supabase } from '../../../core/api/supabase';
 import DateSlider from '../../Components/Data/DateSlider';
 import BlinkingDot from '../../Components/Animations/BlinkingDot';
+import { getLessonsForStudent } from '../../../core/modules/lesson/api';
+import { formatTime, isToday } from '../../../core/utils/dateTime';
+import NfcProxy from '../../../core/proxy/NfcProxy';
+import { makeStudentPresent } from '../../../core/modules/attendance/api';
 
 const StudentDashboard = () => {
     const { user } = useAuthContext();
@@ -17,7 +21,6 @@ const StudentDashboard = () => {
     const [selectedDay, setSelectedDay] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
     const [showLogout, setShowLogout] = useState(false);
-    const navigation = useNavigation();
 
     useEffect(() => {
         getLessons()
@@ -41,42 +44,12 @@ const StudentDashboard = () => {
         try {
             setRefreshing(true);
             setCurrentLesson(null);
+            
+            await getLessonsForStudent(user.id, setLessons, setCurrentLesson)
 
-            // get all lessons from the user
-            let { data, error, status } = await supabase.rpc('getLessons', { profileId: user.id });
-                
-            if (error && status !== 406) {
-                throw error
-            }
-
-            if (data) {
-                const filteredLessons = data.filter(lesson => {
-                    const now = new Date()
-                    const startTime = new Date(lesson.startTime)
-                    const endTime = new Date(lesson.endTime)
-                    if (startTime < now && endTime > now && lesson.active) {
-                        setCurrentLesson(lesson);
-                        return false
-                    } else {
-                        return true
-                    }
-                });
-
-                // group by day
-                const groupedLessons = filteredLessons.reduce((r, a) => {
-                    r[a.startTime.split('T')[0]] = [...r[a.startTime.split('T')[0]] || [], a];
-                    return r;
-                }, {});
-
-                // convert object to array
-                const groupedLessonsArray = Object.entries(groupedLessons).map(([date, items]) => ({ date, items }));
-
-                setLessons(groupedLessonsArray)
-            }
         } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            }
+            console.error(error)
+            Alert.alert("Er is iets misgegaan met het ophalen van de lessen. Probeer het later opnieuw.")
         } finally {
             setRefreshing(false);
         }
@@ -86,37 +59,18 @@ const StudentDashboard = () => {
         setSelectedDay(day)
     }
 
-    // check if date is equal to today
-    const isToday = (date) => {
-        const today = new Date()
-        const someDate = new Date(date)
-        return someDate.getDate() == today.getDate() &&
-            someDate.getMonth() == today.getMonth() &&
-            someDate.getFullYear() == today.getFullYear()
-    }
+    const handleSetPresent = async (lesson) => {
+        const resp = await NfcProxy.checkTag(lesson.classroomtagId);
 
-    const formatDate = (date) => {
-        const someDate = new Date(date)
-        // weekday as short form in dutch
-        const weekday = someDate.getDay();
-        const weekdays = ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"];
-        const weekdayName = weekdays[weekday];
-        // day with leading zero
-        const day = String(someDate.getDate()).padStart(2, '0');
-        // month with leading zero
-        const month = String(someDate.getMonth() + 1).padStart(2, '0');
-
-        return `${weekdayName} ${day}/${month}`
-    }
-
-    const formatTime = (time) => {
-        const someTime = new Date(time)
-        // hours with leading zero
-        const hours = String(someTime.getHours()).padStart(2, '0');
-        // minutes with leading zero
-        const minutes = String(someTime.getMinutes()).padStart(2, '0');
-
-        return `${hours}:${minutes}`
+        if (resp) {
+            try {
+                await makeStudentPresent(lesson.id, user.id);
+            } catch (error) {
+                Alert.alert("Er is iets misgegaan met het aanwezig zetten. Probeer het later opnieuw.")
+            }
+        } else {
+            Alert.alert("Deze les is niet in deze klas.")
+        }
     }
 
     return (
@@ -153,7 +107,7 @@ const StudentDashboard = () => {
                                 </View>
                             </TouchableOpacity>
                         ) : (
-                            <TouchableOpacity className="bg-white rounded-3xl px-4 pt-4 pb-2 mb-4 overflow-hidden" onPress={() => navigation.navigate('ScanAttendance', { lessonId: currentLesson.id, classroomId: currentLesson.classroomtagId, userId: user.id })}>
+                            <TouchableOpacity className="bg-white rounded-3xl px-4 pt-4 pb-2 mb-4 overflow-hidden" onPress={() => handleSetPresent(currentLesson)}>
                                 <LinearGradient
                                     colors={['#7C3AED', '#A855F7']}
                                     className="absolute inset-0"

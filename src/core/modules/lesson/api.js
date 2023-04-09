@@ -37,11 +37,57 @@ export const getLessonsForTeacher = async (teacherId, setLessons, setCurrentLess
         }
 }
 
+export const getLessonsForStudent = async (studentId, setLessons, setCurrentLesson) => {
+    let { data, error } = await supabase.rpc('getLessons', { profileId: studentId });
+
+    if (error) throw error
+
+    if (data) {
+        const filteredLessons = data.filter(lesson => {
+            const now = new Date()
+            const startTime = new Date(lesson.startTime)
+            const endTime = new Date(lesson.endTime)
+            if (startTime < now && endTime > now && lesson.active) {
+                setCurrentLesson(lesson);
+                return false
+            } else {
+                return true
+            }
+        });
+
+        // group by day
+        const groupedLessons = filteredLessons.reduce((r, a) => {
+            r[a.startTime.split('T')[0]] = [...r[a.startTime.split('T')[0]] || [], a];
+            return r;
+        }, {});
+
+        // convert object to array
+        const groupedLessonsArray = Object.entries(groupedLessons).map(([date, items]) => ({ date, items }));
+
+        setLessons(groupedLessonsArray)
+    }
+}
+
 export const makeLessonActive = async (lessonId) => {
     const { error } = await supabase
         .from('lesson')
         .update({ active: true })
         .eq('id', lessonId)
+
+    if (error) throw error;
+}
+
+export const makeLesson = async (courseId, classroomtagId, startTime, endTime) => {
+    const { error } = await supabase
+        .from('lesson')
+        .upsert(
+            {
+                courseId,
+                classroomtagId,
+                startTime,
+                endTime,
+            }
+        )
 
     if (error) throw error;
 }

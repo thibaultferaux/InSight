@@ -8,10 +8,15 @@ import { useForm, Controller } from "react-hook-form";
 import { supabase } from '../../../core/api/supabase';
 import { Dropdown } from 'react-native-element-dropdown';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { getCoursesFromTeacher } from '../../../core/modules/course/api';
+import { useAuthContext } from '../../Components/Auth/AuthProvider';
+import { combineDateAndTime, formatDateFull, formatTime, isToday } from '../../../core/utils/dateTime';
+import { getAllClassrooms } from '../../../core/modules/classroom/api';
+import { makeLesson } from '../../../core/modules/lesson/api';
 
 const MakeLesson = ({ route }) => {
     const navigation = useNavigation();
-    const { userId } = route.params;
+    const { user } = useAuthContext();
     const [ subject, setSubject ] = useState();
     const [ classroom, setClassroom ] = useState();
     const [ courses, setCourses ] = useState([]);
@@ -19,9 +24,9 @@ const MakeLesson = ({ route }) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [date, setDate] = useState('');
     const [isStartTimePickerVisible, setStartTimePickerVisibility] = useState(false);
-    const [startTime, setStartTime] = useState('');
+    const [startTime, setStartTime] = useState();
     const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
-    const [endTime, setEndTime] = useState('');
+    const [endTime, setEndTime] = useState();
     const [ errors, setErrors ] = useState({ subject: '', classroom: '', date: '', time: '' });
 
     useEffect(() => {
@@ -58,7 +63,7 @@ const MakeLesson = ({ route }) => {
     };
 
     const checkDate = (date) => {
-        if (date.toDateString() === new Date().toDateString()) {
+        if (isToday(date)) {
             setErrors({ ...errors, date: 'Datum kan niet vandaag zijn' })
             return false
         } else if (date < new Date()) {
@@ -85,70 +90,30 @@ const MakeLesson = ({ route }) => {
     const getCourses = async () => {
         try {
 
-            let { data, error, status } = await supabase
-                .from('course')
-                .select()
-                .eq('teacherId', userId)
-
-            if (error && status !== 406) {
-                throw error
-            }
+            const data = await getCoursesFromTeacher(user.id);
 
             if (data) {
                 setCourses(data)
             }
+
         } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            }
+            console.error(error)
+            Alert.alert(error.message)
         }
     }
 
     const getClassrooms = async () => {
         try {
-            let { data, error, status } = await supabase
-                .from('classroomtag')
-                .select()
-                .order('name', { ascending: true })
-
-            if (error && status !== 406) {
-                throw error
-            }
+            
+            const data = await getAllClassrooms();
 
             if (data) {
                 setClassrooms(data)
             }
         } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert(error.message)
-            }
+            console.error(error)
+            Alert.alert(error.message)
         }
-    }
-
-    const formatDate = (date) => {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-
-        return `${day}/${month}/${year}`;
-    }
-
-    const formatTime = (time) => {
-        const hours = String(time.getHours()).padStart(2, '0');
-        const minutes = String(time.getMinutes()).padStart(2, '0');
-
-        return `${hours}:${minutes}`;
-    }
-
-    const combineTime = (date, time) => {
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const day = date.getDate();
-        const hours = time.getHours();
-        const minutes = time.getMinutes();
-        const seconds = time.getSeconds();
-
-        return new Date(year, month, day, hours, minutes, seconds);
     }
 
     const onSubmit = async () => {
@@ -165,27 +130,20 @@ const MakeLesson = ({ route }) => {
         }
         
         try {
-            let { error, status } = await supabase
-            .from('lesson')
-            .upsert(
-                {
-                    courseId: subject.id,
-                    classroomtagId: classroom.id,
-                    startTime: combineTime(date, startTime),
-                    endTime: combineTime(date, endTime),
-                }
-            )
+            await makeLesson(subject.id, classroom.id, combineDateAndTime(date, startTime), combineDateAndTime(date, endTime));
 
-            if (error && status !== 406) {
-                throw error
-            }
-
-            if (status === 201) {
-                Alert.alert('Les aangemaakt')
-                navigation.goBack()
-            }
+            showMessage({
+                message: "De les is succesvol aangemaakt",
+                type: "success",
+                style: { paddingTop: insets.top },
+                duration: 3000,
+                icon: 'success',
+                position: 'left'
+            })
+            navigation.goBack()
         } catch (error) {
-            Alert.alert(error.message)
+            console.error(error)
+            Alert.alert("Er is iets misgegaan met het aanmaken van de les. Probeer het later opnieuw.")
         }
     }
 
@@ -251,13 +209,15 @@ const MakeLesson = ({ route }) => {
                 <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2">Datum</Text>
                 <TouchableOpacity onPress={() => setDatePickerVisibility(true)} className={`flex-row items-center bg-slate-100 w-full px-4 py-5 rounded-[10px] space-x-4 ${ errors.date && 'border border-red-600'}`}>
                     <CalendarIcon size={22} color="#0F172A" />
-                    <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-slate-900 align-text-bottom">{ date ? formatDate(date) : (<Text className="text-gray-500">Kies een datum</Text>) }</Text>
+                    <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-slate-900 align-text-bottom">{ date ? formatDateFull(date) : (<Text className="text-gray-500">Kies een datum</Text>) }</Text>
                 </TouchableOpacity>
                 <DateTimePickerModal
                     isVisible={isDatePickerVisible}
                     mode="date"
                     onConfirm={handleDateConfirm}
                     onCancel={() => setDatePickerVisibility(false)}
+                    date={new Date()}
+                    locale="nl-BE"
                 />
                 { errors.date && <Text className="text-red-600 text-sm">{ errors.date }</Text> }
             </View>
@@ -274,6 +234,8 @@ const MakeLesson = ({ route }) => {
                             mode="time"
                             onConfirm={handleStartTimeConfirm}
                             onCancel={() => setStartTimePickerVisibility(false)}
+                            date={ startTime ? startTime : new Date() }
+                            locale='nl-BE'
                         />
                     </View>
                     <View className="flex-1">
@@ -287,6 +249,8 @@ const MakeLesson = ({ route }) => {
                             mode="time"
                             onConfirm={handleEndTimeConfirm}
                             onCancel={() => setEndTimePickerVisibility(false)}
+                            date={ endTime ? endTime : new Date() }
+                            locale='nl-BE'
                         />
                     </View>
                 </View>

@@ -4,7 +4,7 @@ import { ArrowRightOnRectangleIcon, ArrowUpRightIcon, PencilIcon, PlusIcon, XMar
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { formatDate, formatTime, isToday } from '../../../core/utils/dateTime';
+import { formatDate, formatDateLong, formatTime, isToday } from '../../../core/utils/dateTime';
 import NfcProxy from '../../../core/proxy/NfcProxy';
 import { addStudentsToAttendance } from '../../../core/modules/attendance/api';
 import { supabase } from '../../../core/api/supabase';
@@ -155,7 +155,7 @@ const TeacherDashboard = () => {
                     <View className="mt-4 space-y-4">
                         {lessons.map((lesson, index) => (
                             <View key={index} className={`border-b-gray-300 pb-3 ${index === lessons.length - 1 ? 'border-none' : 'border-b-[1px]'}`}>
-                                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base mb-2 text-slate-400">{ isToday(lesson.date) ? 'Vandaag' : formatDate(lesson.date)}</Text>
+                                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base mb-2 text-slate-400">{ isToday(lesson.date) ? 'Vandaag' : formatDateLong(lesson.date)}</Text>
                                 {lesson.items.map((item, index) => (
                                     <View key={index} className="flex-row justify-between bg-white shadow-lg shadow-black/40 mb-2 p-3 rounded-2xl">
                                         <View className="justify-between space-y-3">

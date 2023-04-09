@@ -32,9 +32,9 @@ const DateSlider = ({ lessons, onDaySelected }) => {
         const isSelected = item === selectedDate;
 
         return (
-            <TouchableOpacity onPress={() => handleDayPress(item)} className={`my-6 mx-1 ${index == 0 ? 'ml-7' : index + 1 == dates.length && 'mr-7'} w-16 px-5 py-3 rounded-2xl items-center shadow-lg shadow-slate-500/40 ${isSelected ? 'bg-violet-500' : 'bg-white'}`}>
+            <TouchableOpacity onPress={() => handleDayPress(item)} className={`my-6 mx-1 ${index == 0 ? 'ml-7' : index + 1 == dates.length && 'mr-7'} w-16 px-2 py-3 rounded-2xl items-center shadow-lg shadow-slate-500/40 ${isSelected ? 'bg-violet-500' : 'bg-white'}`}>
                 <Text style={{ fontFamily: 'Poppins_400Regular' }} className={`${isSelected ? 'text-violet-100' : 'text-slate-400'}`}>{formatDay(item)}</Text>
-                <Text style={{ fontFamily: 'Poppins_500Medium' }} className={`text-xl -mt-[6px] ${isSelected ? 'text-white' : 'text-gray-500'}`}>{moment(item).format('D')}</Text>
+                <Text style={{ fontFamily: 'Poppins_500Medium' }} numberOfLines={1} className={`text-xl -mt-[6px] ${isSelected ? 'text-white' : 'text-gray-500'}`}>{moment(item).format('D')}</Text>
                 { dayLessons.length > 0 && <View className={`h-1 w-4 mt-[1px] bg-violet-300 rounded-sm`} /> }
             </TouchableOpacity>
         )

@@ -10,3 +10,14 @@ export const getStudentsFromCourse = async (courseId) => {
 
     return data;
 }
+
+export const getCoursesFromTeacher = async (teacherId) => {
+    const { data, error, status } = await supabase
+        .from('course')
+        .select()
+        .eq('teacherId', teacherId)
+
+    if (error) throw error;
+
+    return data;
+}
