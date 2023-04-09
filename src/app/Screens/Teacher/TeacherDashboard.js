@@ -11,6 +11,7 @@ import { supabase } from '../../../core/api/supabase';
 import { useAuthContext } from '../../Components/Auth/AuthProvider';
 import LogoutAlert from '../../Components/Auth/LogoutAlert';
 import { getLessonsForTeacher } from '../../../core/modules/lesson/api';
+import { NfcNotEnabledAlert } from '../../../core/utils/nfc';
 
 const TeacherDashboard = () => {
     const { user } = useAuthContext();
@@ -49,17 +50,24 @@ const TeacherDashboard = () => {
     }
 
     const handleSetActive = async (lesson) => {
-        setModalVisible(false);
-        const resp = await NfcProxy.checkTag(lesson.classroomtag.id)
-        if (resp) {
-            try {
-                await addStudentsToAttendance(lesson.course.id, lesson.id)
-            } catch (error) {
-                console.error(error)
-                Alert.alert("Er is iets misgegaan met het activeren van de les. Probeer het later opnieuw.")
+        
+        if (await NfcProxy.isEnabled()) {
+            setModalVisible(false);
+            const { result, tag } = await NfcProxy.checkTag(lesson.classroomtag.id)
+            if (result) {
+                try {
+                    await addStudentsToAttendance(lesson.course.id, lesson.id)
+                } catch (error) {
+                    console.error(error)
+                    Alert.alert("Er is iets misgegaan met het activeren van de les. Probeer het later opnieuw.")
+                }
+            } else {
+                if (tag) {
+                    Alert.alert('Fout', 'Dit is niet het juiste lokaal');
+                }
             }
         } else {
-            Alert.alert('Fout', 'Dit is niet het juiste lokaal');
+            NfcNotEnabledAlert(() => handleSetActive(lesson))
         }
     }
 

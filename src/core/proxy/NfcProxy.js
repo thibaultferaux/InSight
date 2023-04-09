@@ -135,14 +135,16 @@ class NfcProxy {
 
             result = true
         } catch (error) {
-            Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Warning
-            )
+            if (tag) {
+                Haptics.notificationAsync(
+                    Haptics.NotificationFeedbackType.Warning
+                )
+            }
         } finally {
             NfcManager.cancelTechnologyRequest();
         }
             
-        return result;
+        return { result, tag};
     })
 }
 

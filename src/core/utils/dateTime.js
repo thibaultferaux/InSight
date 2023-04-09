@@ -60,3 +60,12 @@ export const combineDateAndTime = (date, time) => {
 
     return new Date(year, month, day, hours, minutes, seconds);
 }
+
+export const checkTime = (startTime, endTime) => {
+    if (startTime && endTime) {
+        if (startTime >= endTime) {
+            return 'Starttijd moet voor eindtijd liggen';
+        }
+        return true;
+    }
+}

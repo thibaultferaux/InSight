@@ -3,8 +3,8 @@ import NfcProxy from "../proxy/NfcProxy";
 
 export const NfcNotEnabledAlert = (fn) => {
     Alert.alert(
-        'NFC is not enabled',
-        'Please enable NFC in your phone settings',
+        'NFC is niet ingeschakeld',
+        'Schakel NFC in om verder te gaan',
         [
             {
                 text: 'Probeer opnieuw',

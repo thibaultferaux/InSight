@@ -13,6 +13,7 @@ import { getLessonsForStudent } from '../../../core/modules/lesson/api';
 import { formatTime, isToday } from '../../../core/utils/dateTime';
 import NfcProxy from '../../../core/proxy/NfcProxy';
 import { makeStudentPresent } from '../../../core/modules/attendance/api';
+import { NfcNotEnabledAlert } from '../../../core/utils/nfc';
 
 const StudentDashboard = () => {
     const { user } = useAuthContext();
@@ -20,6 +21,7 @@ const StudentDashboard = () => {
     const [currentLesson, setCurrentLesson] = useState(null);
     const [selectedDay, setSelectedDay] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [showLogout, setShowLogout] = useState(false);
 
     useEffect(() => {
@@ -60,17 +62,26 @@ const StudentDashboard = () => {
     }
 
     const handleSetPresent = async (lesson) => {
-        const resp = await NfcProxy.checkTag(lesson.classroomtagId);
+        setLoading(true);
 
-        if (resp) {
-            try {
-                await makeStudentPresent(lesson.id, user.id);
-            } catch (error) {
-                Alert.alert("Er is iets misgegaan met het aanwezig zetten. Probeer het later opnieuw.")
+        if (await NfcProxy.isEnabled()) {
+            const { result, tag } = await NfcProxy.checkTag(lesson.classroomtagId);
+    
+            if (result) {
+                try {
+                    await makeStudentPresent(lesson.id, user.id);
+                } catch (error) {
+                    Alert.alert("Er is iets misgegaan met het aanwezig zetten. Probeer het later opnieuw.")
+                }
+            } else {
+                if (tag) {
+                    Alert.alert("Deze les is niet in deze klas.")
+                }
             }
         } else {
-            Alert.alert("Deze les is niet in deze klas.")
+            NfcNotEnabledAlert(() => handleSetPresent(lesson))
         }
+        setLoading(false)
     }
 
     return (
@@ -91,7 +102,7 @@ const StudentDashboard = () => {
 
                         {/* if there is a lesson at current time */}
                         {currentLesson && (currentLesson.present ? (
-                            <TouchableOpacity className="bg-white rounded-full px-4 mb-4 overflow-hidden">
+                            <TouchableOpacity className="bg-white rounded-full px-4 mb-4 overflow-hidden" disabled={loading}>
                                 <LinearGradient
                                     colors={['#7C3AED', '#A855F7']}
                                     className="absolute inset-0"
