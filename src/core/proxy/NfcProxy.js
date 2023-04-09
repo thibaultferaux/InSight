@@ -93,11 +93,18 @@ class NfcProxy {
             Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success
             )
+            
+            if (Platform.OS === 'ios') {
+                await NfcManager.setAlertMessageIOS('Success');
+            }
+
         } catch (error) {
-            Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Warning
-            )
-            console.error('Oops', error);
+            if (tag) {
+                Haptics.notificationAsync(
+                    Haptics.NotificationFeedbackType.Warning
+                )
+                console.error('Oops', error);
+            }
         } finally {
             NfcManager.cancelTechnologyRequest();
         }
@@ -121,6 +128,10 @@ class NfcProxy {
             Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success
             )
+
+            if (Platform.OS === 'ios') {
+                await NfcManager.setAlertMessageIOS('Success');
+            }
 
             result = true
         } catch (error) {

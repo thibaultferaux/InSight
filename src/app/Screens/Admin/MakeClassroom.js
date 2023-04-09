@@ -5,26 +5,40 @@ import { ArrowLeftIcon, ArrowRightIcon, TagIcon } from 'react-native-heroicons/o
 import { useNavigation } from '@react-navigation/native';
 import { makeClassroom } from '../../../core/modules/classroom/api';
 import NfcProxy from '../../../core/proxy/NfcProxy';
+import { useForm } from 'react-hook-form';
+import FormInput from '../../Components/Form/FormInput';
+import { NfcNotEnabledAlert } from '../../../core/utils/nfc';
 
 const MakeClassroom = () => {
-    const [classroom, setClassroom] = useState('')
+    const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
 
-    const handleMakeClassroom = async () => {
-        const tag = await NfcProxy.readTag()
-        if (tag) {
-            try {
-                await makeClassroom(classroom, tag.id);
-            } catch (error) {
-                if (error.status == 409) {
-                    Alert.alert('Dit klaslokaal bestaat al, u kunt deze aanpassen in het overzicht');
-                } else {
-                    console.error(error);
+    const { control, handleSubmit, formState: { errors } } = useForm();
+
+    const handleMakeClassroom = async ({ classroom }) => {
+
+        setLoading(true);
+
+        if (await NfcProxy.isEnabled()) {
+            const tag = await NfcProxy.readTag()
+            if (tag) {
+                try {
+                    await makeClassroom(classroom, tag.id);
+                } catch (error) {
+                    if (error.status == 409) {
+                        Alert.alert('Dit klaslokaal bestaat al, u kunt deze aanpassen in het overzicht');
+                    } else {
+                        console.error(error);
+                    }
+                } finally {
+                    navigation.navigate('Dashboard')
                 }
-            } finally {
-                navigation.navigate('Dashboard')
             }
+        } else {
+            NfcNotEnabledAlert(() => handleMakeClassroom({ classroom }));
         }
+        
+        setLoading(false);
     }
 
     return (
@@ -37,15 +51,23 @@ const MakeClassroom = () => {
                 <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Maak lokaal aan</Text>
                 <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Vul de naam van het lokaal in en scan de tag van het bijhorende lokaal bij de volgende stap.</Text>
             </View>
-            <View className="mt-12 space-y-1">
-                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-neutral-900">Naam van het lokaal</Text>
-                <View className="flex-row items-center bg-slate-100 w-full p-4 rounded-[10px] space-x-4 border border-transparent focus:border-violet-400">
+            <View className="mt-12">
+                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-neutral-900 mb-1">Naam van het lokaal</Text>
+                <FormInput
+                    name="classroom"
+                    placeholder="bv. B24"
+                    control={control}
+                    rules={{ required: "Naam is verplicht" }}
+                    autoCapitalize="false"
+                    keyboardType="default"
+                    returnKeyType="done"
+                    onSubmitEditing={handleSubmit(handleMakeClassroom)}
+                >
                     <TagIcon color="#0F172A" size={22} />
-                    <TextInput placeholder='bv. B24' keyboardType='default' placeholderTextColor="#6B7280" style={{ fontFamily: 'Poppins_400Regular', paddingTop: 4, paddingBottom: 0 }} textAlignVertical="center" className="flex-1 text-sm text-slate-900 font-normal align-text-bottom" autoCapitalize='false' value={classroom} onChangeText={(text) => setClassroom(text)} />
-                </View>
+                </FormInput>
             </View>
             <View className="mt-12 items-end">
-                <TouchableOpacity className="py-[10px] px-[15px] bg-violet-500 flex-row space-x-2 rounded-lg" onPress={handleMakeClassroom}>
+                <TouchableOpacity className={`${loading ? 'bg-violet-300': 'bg-violet-500'} py-[10px] px-[15px] flex-row space-x-2 rounded-lg`} onPress={handleSubmit(handleMakeClassroom)} disabled={loading}>
                     <Text className="text-white">Scan</Text>
                     <ArrowRightIcon size={22} color="white" />
                 </TouchableOpacity>

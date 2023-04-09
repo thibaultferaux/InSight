@@ -1,47 +1,45 @@
-import { Alert, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { Alert, Image, Keyboard, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import React, { useRef, useState } from 'react'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from "react-native-heroicons/outline";
 import { useNavigation } from '@react-navigation/native'
 import { showMessage } from 'react-native-flash-message'
-import LoginInput from '../../Components/Form/LoginInput';
+import FormInput from '../../Components/Form/FormInput';
 import { register } from '../../../core/modules/auth/api';
+import { useForm } from 'react-hook-form';
 
+const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 const RegisterScreen = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const firstNameInputRef = useRef(null);
+    const lastNameInputRef = useRef(null);
+    const emailInputRef = useRef(null);
+    const passwordInputRef = useRef(null);
+
+    const { control, handleSubmit, formState: {errors}} = useForm();
 
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
 
-    const handleRegister = async () => {
-        setLoading(true);
-        if (email !== '' && password !== '' && firstName !== '' && lastName !== '') {
-            try {
-                await register({ email: email, password, first_name: firstName, last_name: lastName, role_id: 1 })
-
-                showMessage({
-                    message: "Je account is succesvol aangemaakt",
-                    type: "success",
-                    style: { paddingTop: insets.top },
-                    duration: 5000,
-                    icon: 'success',
-                    position: 'left'
-                })
-            } catch (error) {
-                console.error(error)
-                Alert.alert(error.message)
-            }
-        } else {
-            Alert.alert("Vul alle velden in")
+    const handleRegister = async (data) => {
+        try {
+            setLoading(true);
+            await register(data)
+            showMessage({
+                message: "Je account is succesvol aangemaakt",
+                type: "success",
+                style: { paddingTop: insets.top },
+                duration: 5000,
+                icon: 'success',
+                position: 'left'
+            })
+        } catch (error) {
+            Alert.alert(error.message);
+        } finally {
+            setLoading(false)
         }
-        
-        setLoading(false)
     }
 
     return (
@@ -65,30 +63,75 @@ const RegisterScreen = () => {
                         >Registreer</Text>
                         <View className="flex-1 w-full mt-12 space-y-7">
                             <View>
-                                <LoginInput placeholder="Voornaam" keyboardType="default" autoCapitalize="words" secureTextEntry={false} onChangeText={(text) => setFirstName(text)} value={firstName}>
+                                <FormInput
+                                    name="first_name"
+                                    placeholder="Voornaam"
+                                    ref={firstNameInputRef}
+                                    control={control}
+                                    rules={{ required: 'Voornaam is verplicht'}}
+                                    autoCapitalize="words"
+                                    keyboardType="default"
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => lastNameInputRef.current && lastNameInputRef.current.focus()}
+                                >
                                     <UserIcon color="#0F172A" size={22} />
-                                </LoginInput>
+                                </FormInput>
                             </View>
                             <View>
-                                <LoginInput placeholder="Familienaam" keyboardType="default" autoCapitalize="words" secureTextEntry={false} onChangeText={(text) => setLastName(text)} value={lastName}>
+                                <FormInput
+                                    name="last_name"
+                                    placeholder="Familienaam"
+                                    ref={lastNameInputRef}
+                                    control={control}
+                                    rules={{ required: 'Familienaam is verplicht'}}
+                                    autoCapitalize="words"
+                                    keyboardType="default"
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => emailInputRef.current && emailInputRef.current.focus()}
+                                >
                                     <UserIcon color="#0F172A" size={22} />
-                                </LoginInput>
+                                </FormInput>
                             </View>
                             <View>
-                                <LoginInput placeholder="Email" keyboardType="email-address" autoCapitalize="none" secureTextEntry={false} onChangeText={(text) => setEmail(text)} value={email}>
+                                <FormInput
+                                    name="email"
+                                    placeholder="E-mail"
+                                    ref={emailInputRef}
+                                    control={control}
+                                    rules={{
+                                        required: 'E-mailadres is verplicht',
+                                        pattern: {
+                                            value: EMAIL_REGEX,
+                                            message: 'Vul een geldig e-mailadres in'
+                                        }
+                                    }}
+                                    keyboardType="email-address"
+                                    autoCapitalize="none"
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => passwordInputRef.current && passwordInputRef.current.focus()}
+                                >
                                     <EnvelopeIcon color="#0F172A" size={22} />
-                                </LoginInput>
+                                </FormInput>
                             </View>
                             <View>
-                                <LoginInput placeholder="Wachtwoord" keyboardType="default" autoCapitalize="none" secureTextEntry={true} onChangeText={(text) => setPassword(text)} value={password}>
+                                <FormInput
+                                    name="password"
+                                    placeholder="Wachtwoord"
+                                    ref={passwordInputRef}
+                                    control={control}
+                                    rules={{ required: 'Wachtwoord is verplicht' }}
+                                    secureTextEntry
+                                    returnKeyType="done"
+                                    onSubmitEditing={Keyboard.dismiss}
+                                >
                                     <LockClosedIcon color="#0F172A" size={22} />
-                                </LoginInput>
+                                </FormInput>
                             </View>
                         </View>
                     </View>
                 </ScrollView>
                 <View className="px-10 py-8 w-full items-center bg-white absolute bottom-0">
-                    <TouchableOpacity className={`${loading ? 'bg-neutral-500' : 'bg-neutral-900'} w-full p-4 rounded-[10px] justify-center items-center`} onPress={() => handleRegister()} disabled={loading}>
+                    <TouchableOpacity className={`${loading ? 'bg-neutral-500' : 'bg-neutral-900'} w-full p-4 rounded-[10px] justify-center items-center`} onPress={handleSubmit(handleRegister)} disabled={loading}>
                         <Text
                             className="text-white text-base"
                             style={{ fontFamily: 'Poppins_400Regular' }}

@@ -1,32 +1,33 @@
-import { Alert, Image, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { Alert, Image, Keyboard, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import React, { useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import { EnvelopeIcon, LockClosedIcon } from "react-native-heroicons/outline";
 import { useNavigation } from '@react-navigation/native'
-import LoginInput from '../../Components/Form/LoginInput'
+import FormInput from '../../Components/Form/FormInput'
 import { login } from '../../../core/modules/auth/api';
+import { useForm } from 'react-hook-form';
 
 export default function LoginScreen() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const emailInputRef = useRef(null);
+    const passwordInputRef = useRef(null);
+
+    const { control, handleSubmit, formState: {errors}} = useForm();
 
     const navigation = useNavigation();
 
-    const handleLogin = async () => {
+    const handleLogin = async (data) => {
         setLoading(true);
-        if (email !== '' && password !== '') {
-            try {
-                await login({ email, password })
-            } catch (error) {
-                Alert.alert(error.message)
-            }
-        } else {
-            Alert.alert("Vul alle velden in")
+        try {
+            await login(data)
+        } catch (error) {
+            Alert.alert(error.message)
+        } finally {
+            setLoading(false)
         }
 
-        setLoading(false)
+
     }
 
     return (
@@ -46,20 +47,44 @@ export default function LoginScreen() {
                         style={{ fontFamily: 'Poppins_600SemiBold' }}
                         className="text-3xl font-semibold"
                     >Log in</Text>
-                    <View className="flex-1 w-full mt-12 space-y-7">
+                    <ScrollView
+                        className="flex-1 w-full space-y-7"
+                        contentContainerStyle={{ marginTop: 48 }}
+                        showsVerticalScrollIndicator={false}
+                    >
                         <View>
-                            <LoginInput placeholder="Email" keyboardType="email-address" autoCapitalize="none" secureTextEntry={false} onChangeText={(text) => setEmail(text)} value={email}>
+                            <FormInput
+                                name="email"
+                                placeholder="E-mail"
+                                ref={emailInputRef}
+                                control={control}
+                                rules={{ required: "E-mail is verplicht" }}
+                                autoCapitalize="none"
+                                keyboardType="email-address"
+                                returnKeyType="next"
+                                onSubmitEditing={() => passwordInputRef.current && passwordInputRef.current.focus()}
+                            >
                                 <EnvelopeIcon color="#0F172A" size={22} />
-                            </LoginInput>
+                            </FormInput>
                         </View>
                         <View>
-                            <LoginInput placeholder="Wachtwoord" keyboardType="default" autoCapitalize="none" secureTextEntry={true} onChangeText={(text) => setPassword(text)} value={password}>
+                            <FormInput
+                                name="password"
+                                placeholder="Wachtwoord"
+                                ref={passwordInputRef}
+                                control={control}
+                                rules={{ required: "Wachtwoord is verplicht" }}
+                                autoCapitalize="none"
+                                secureTextEntry
+                                returnKeyType="done"
+                                onSubmitEditing={handleSubmit(handleLogin)}
+                            >
                                 <LockClosedIcon color="#0F172A" size={22} />
-                            </LoginInput>
+                            </FormInput>
                         </View>
-                    </View>
+                    </ScrollView>
                     <View className="py-8 w-full items-center">
-                        <TouchableOpacity className={`${loading ? 'bg-neutral-500' : 'bg-neutral-900'} w-full p-4 rounded-[10px] justify-center items-center`} onPress={() => handleLogin()} disabled={loading}>
+                        <TouchableOpacity className={`${loading ? 'bg-neutral-500' : 'bg-neutral-900'} w-full p-4 rounded-[10px] justify-center items-center`} onPress={handleSubmit(handleLogin)} disabled={loading}>
                             <Text
                                 className="text-white text-base"
                                 style={{ fontFamily: 'Poppins_400Regular' }}

@@ -1,7 +1,7 @@
 import { View, Text, Animated, Modal, TouchableOpacity } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import AnimatedLottieView from 'lottie-react-native';
-import nfcManager from 'react-native-nfc-manager';
+import NfcManager from 'react-native-nfc-manager';
 import { useGlobalState } from 'state-pool';
 import { store } from '../../../core/store/store';
 
@@ -29,7 +29,7 @@ const NfcModalAndroid = (props) => {
 
     const cancelNfcScan = () => {
         setTimeout(() => {
-            nfcManager.cancelTechnologyRequest().catch(() => 0);
+            NfcManager.cancelTechnologyRequest().catch(() => 0);
         }, 200);
         setModalData({
             visible: false,
