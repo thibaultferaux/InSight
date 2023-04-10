@@ -8,7 +8,8 @@ module.exports = function (api) {
         "envName": "APP_ENV",
         "moduleName": "@env",
         "path": ".env",
-      }]
+      }],
+      'react-native-reanimated/plugin',
     ],
   };
 };

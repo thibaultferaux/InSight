@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert, ScrollView, RefreshControl } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, ScrollView, RefreshControl, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowRightOnRectangleIcon } from 'react-native-heroicons/outline';
@@ -169,11 +169,13 @@ const StudentDashboard = () => {
                                 </View>
                             ) : isToday(selectedDay.date) ? (
                                 // TODO: add illustration
-                                <View className="flex-row justify-center items-center">
+                                <View className="justify-center items-center mt-28 space-y-4">
+                                    <Image source={require('../../../../assets/NoLessonsIcon.png')} style={{ width: 200, height: 120, resizeMode:'contain' }} />
                                     <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-gray-300">Geen verdere lessen vandaag</Text>
                                 </View>
                             ) : (
-                                <View className="flex-row justify-center items-center">
+                                <View className="justify-center items-center mt-28 space-y-4">
+                                    <Image source={require('../../../../assets/NoLessonsIcon.png')} style={{ width: 200, height: 120, resizeMode:'contain' }} />
                                     <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-gray-300">Geen lessen deze dag</Text>
                                 </View>
                             ))}
