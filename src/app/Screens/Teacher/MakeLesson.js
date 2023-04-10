@@ -14,6 +14,7 @@ import { checkTime, combineDateAndTime, formatDateFull, formatTime, isToday } fr
 import { getAllClassrooms } from '../../../core/modules/classroom/api';
 import { makeLesson } from '../../../core/modules/lesson/api';
 import { showMessage } from 'react-native-flash-message';
+import * as NavigationBar from 'expo-navigation-bar'
 
 const MakeLesson = ({ route }) => {
     const navigation = useNavigation();

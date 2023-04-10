@@ -4,11 +4,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { supabase } from '../../../core/api/supabase';
 import { useAuthContext } from '../../Components/Auth/AuthProvider';
 import { getLessonsForTeacher } from '../../../core/modules/lesson/api';
-import CurrentLessons from './CurrentLessons';
-import PreviousLessons from './PreviousLessons';
 import TeacherHeader from '../../Components/Teacher/TeacherHeader';
 import TeacherTabBar from '../../Components/Teacher/TeacherTabBar';
 import { Tabs } from 'react-native-collapsible-tab-view';
+import TeacherPreviousLessons from '../../Components/Teacher/TeacherPreviousLessons';
+import TeacherFutureLessons from '../../Components/Teacher/TeacherFutureLessons';
+
 
 const TeacherDashboard = () => {
     const { user } = useAuthContext();
@@ -43,15 +44,15 @@ const TeacherDashboard = () => {
         <SafeAreaView className="flex-1 justify-start bg-slate-50">                    
             <Tabs.Container
                 renderHeader={() => (<TeacherHeader currentLesson={currentLesson} />)}
-                headerContainerStyle={{ backgroundColor: 'transparent', shadowOpacity: 0, elevation: 0 }}
+                headerContainerStyle={{ backgroundColor: '#f8fafc', shadowOpacity: 0, elevation: 0 }}
                 allowHeaderOverscroll={false}
                 renderTabBar={TeacherTabBar}
             >
                 <Tabs.Tab name="Komende Lessen">
-                    <CurrentLessons lessons={futurelessons} />
+                    <TeacherFutureLessons lessons={futurelessons} />
                 </Tabs.Tab>
                 <Tabs.Tab name="Vorige Lessen">
-                    <PreviousLessons lessons={pastLessons} />
+                    <TeacherPreviousLessons lessons={pastLessons} />
                 </Tabs.Tab>
             </Tabs.Container>
         </SafeAreaView>

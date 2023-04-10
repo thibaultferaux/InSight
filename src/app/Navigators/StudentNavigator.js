@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import StudentDashboard from '../Screens/Student/StudentDashboard'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
+import * as NavigationBar from 'expo-navigation-bar';
 
 const Stack = createNativeStackNavigator();
 
 const StudentNavigator = () => {
+    useEffect(() => {
+        NavigationBar.setBackgroundColorAsync('#f8fafc');
+    })
+
     return (
         <>
             <Stack.Navigator>

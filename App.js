@@ -6,7 +6,6 @@ import AuthProvider from './src/app/Components/Auth/AuthProvider';
 import AppContent from './src/app/Navigators/AppContent';
 import NfcContainer from './src/app/Components/Nfc/NfcContainer';
 import NfcModalAndroid from './src/app/Components/Nfc/NfcModalAndroid';
-import { StatusBar } from 'expo-status-bar';
 
 
 export default function App() {

@@ -16,14 +16,16 @@
         },
         "assetBundlePatterns": ["**/*"],
         "ios": {
-            "supportsTablet": true
+            "supportsTablet": true,
+            "jsEngine": "hermes"
         },
         "android": {
             "adaptiveIcon": {
                 "foregroundImage": "./assets/adaptive-icon.png",
                 "backgroundColor": "#FFFFFF"
             },
-            "package": "com.thibaultferaux.InSight"
+            "package": "com.thibaultferaux.InSight",
+            "jsEngine": "hermes"
         },
         "web": {
             "favicon": "./assets/favicon.png"
@@ -32,6 +34,11 @@
             "eas": {
                 "projectId": "7e0a32a8-5f4b-423d-b80c-cca84f072557"
             }
+        },
+        "primaryColor": "#8b5cf6",
+        "androidStatusBar": {
+            "barStyle": "dark-content",
+            "backgroundColor": "#f8fafc"
         }
     }
 }
