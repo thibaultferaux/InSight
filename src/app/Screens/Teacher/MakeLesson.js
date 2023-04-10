@@ -69,7 +69,7 @@ const MakeLesson = ({ route }) => {
             showMessage({
                 message: "De les is succesvol aangemaakt",
                 type: "success",
-                style: { paddingTop: insets.top },
+                style: { paddingTop: insets.top + 15 },
                 duration: 3000,
                 icon: 'success',
                 position: 'left'

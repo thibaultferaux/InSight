@@ -6,7 +6,7 @@ import NfcProxy from '../../../core/proxy/NfcProxy';
 import { addStudentsToAttendance } from '../../../core/modules/attendance/api';
 import { NfcNotEnabledAlert } from '../../../core/utils/nfc';
 import { PencilIcon, XMarkIcon } from 'react-native-heroicons/outline';
-import { LinearGradient } from 'react-native-svg';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const TeacherCurrentLesson = ({ currentLesson }) => {
     const [modalVisible, setModalVisible] = useState(false);

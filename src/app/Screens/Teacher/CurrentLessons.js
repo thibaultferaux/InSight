@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { formatDateLong, formatTime, isToday } from '../../../core/utils/dateTime'
-import { LinearGradient } from 'react-native-svg'
 import { ArrowUpRightIcon } from 'react-native-heroicons/outline'
 import { Tabs } from 'react-native-collapsible-tab-view'
 import { useNavigation } from '@react-navigation/native'
+import { LinearGradient } from 'expo-linear-gradient'
 
 const CurrentLessons = ({ lessons }) => {    
 

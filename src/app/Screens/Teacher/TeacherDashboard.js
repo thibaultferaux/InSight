@@ -12,7 +12,8 @@ import { Tabs } from 'react-native-collapsible-tab-view';
 
 const TeacherDashboard = () => {
     const { user } = useAuthContext();
-    const [lessons, setLessons] = useState([]);
+    const [futurelessons, setFutureLessons] = useState([]);
+    const [pastLessons, setPastLessons] = useState([]);
     const [currentLesson, setCurrentLesson] = useState(null);
 
     useEffect(() => {
@@ -30,7 +31,7 @@ const TeacherDashboard = () => {
         try {
             setCurrentLesson(null);
 
-            await getLessonsForTeacher(user.id, setLessons, setCurrentLesson);
+            await getLessonsForTeacher({teacherId: user.id, setFutureLessons, setPastLessons, setCurrentLesson});
 
         } catch (error) {
             console.error(error)
@@ -47,13 +48,11 @@ const TeacherDashboard = () => {
                 renderTabBar={TeacherTabBar}
             >
                 <Tabs.Tab name="Komende Lessen">
-                    <CurrentLessons lessons={lessons} />
+                    <CurrentLessons lessons={futurelessons} />
                 </Tabs.Tab>
                 <Tabs.Tab name="Vorige Lessen">
-                    <PreviousLessons lessons={lessons} />
+                    <PreviousLessons lessons={pastLessons} />
                 </Tabs.Tab>
-
-                
             </Tabs.Container>
         </SafeAreaView>
     )

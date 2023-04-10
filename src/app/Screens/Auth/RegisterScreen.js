@@ -30,7 +30,7 @@ const RegisterScreen = () => {
             showMessage({
                 message: "Je account is succesvol aangemaakt",
                 type: "success",
-                style: { paddingTop: insets.top },
+                style: { paddingTop: insets.top + 15 },
                 duration: 5000,
                 icon: 'success',
                 position: 'left'

@@ -1,39 +1,53 @@
 import { supabase } from "../../api/supabase";
 
-export const getLessonsForTeacher = async (teacherId, setLessons, setCurrentLesson) => {
+export const getLessonsForTeacher = async ({teacherId, setFutureLessons, setPastLessons, setCurrentLesson}) => {
     let { data, error } = await supabase
         .from('lesson')
         .select('id, startTime, endTime, active, course!inner(id, name), classroomtag(id, name)')
         .eq('course.teacherId', teacherId)
         .order('startTime', { ascending: true })
-        .gte('endTime', new Date().toISOString())
 
         
         if (error) throw error
 
         if (data) {
-            const filteredLessons = data.filter(lesson => {
+            // split lessons into current, previous and future
+            // split lessons into current, previous and future
+            const filteredLessons = data.reduce((r, a) => {
                 const now = new Date()
-                const startTime = new Date(lesson.startTime)
-                const endTime = new Date(lesson.endTime)
+                const startTime = new Date(a.startTime)
+                const endTime = new Date(a.endTime)
                 if (startTime < now && endTime > now) {
-                    setCurrentLesson(lesson);
-                    return false
+                    setCurrentLesson(a);
+                } else if (startTime < now && endTime < now) {
+                    r.previous.push(a);
                 } else {
-                    return true
+                    r.future.push(a);
                 }
-            });
+                return r;
+            }, { previous: [], future: [] });
 
-            // group by day
-            const groupedLessons = filteredLessons.reduce((r, a) => {
+            // group futurelessons by day
+            const groupedLessonsFuture = filteredLessons.future.reduce((r, a) => {
                 r[a.startTime.split('T')[0]] = [...r[a.startTime.split('T')[0]] || [], a];
                 return r;
             }, {});
 
             // convert object to array
-            const groupedLessonsArray = Object.entries(groupedLessons).map(([date, items]) => ({ date, items }));
-            
-            setLessons(groupedLessonsArray);
+            const groupedLessonsFutureArray = Object.entries(groupedLessonsFuture).map(([date, items]) => ({ date, items }));
+
+            setFutureLessons(groupedLessonsFutureArray)
+
+            // group previouslessons by day
+            const groupedLessonsPrevious = filteredLessons.previous.reduce((r, a) => {
+                r[a.startTime.split('T')[0]] = [...r[a.startTime.split('T')[0]] || [], a];
+                return r;
+            }, {});
+
+            // reverse order of previous lessons and convert object to array
+            const groupedLessonsPreviousArray = Object.entries(groupedLessonsPrevious).map(([date, items]) => ({ date, items })).reverse();
+
+            setPastLessons(groupedLessonsPreviousArray)
         }
 }
 
