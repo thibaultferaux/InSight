@@ -51,6 +51,7 @@ export default function LoginScreen() {
                         className="flex-1 w-full space-y-7"
                         contentContainerStyle={{ marginTop: 48 }}
                         showsVerticalScrollIndicator={false}
+                        keyboardShouldPersistTaps="handled"
                     >
                         <View>
                             <FormInput

@@ -47,6 +47,7 @@ const StudentsOverview = () => {
         <SafeAreaView className="flex-1 justify-start bg-white">
             <ScrollView
                 contentContainerStyle={{ paddingHorizontal: 28, paddingVertical: 56 }}
+                keyboardShouldPersistTaps="handled"
             >
                 <View className="flex-row justify-between items-start mb-4">
                     <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Studenten</Text>

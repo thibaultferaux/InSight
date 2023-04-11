@@ -32,7 +32,7 @@ const FormInput = forwardRef(
                 }) => (
                     <>
                         <View
-                            className={`flex-row items-center bg-slate-100 w-full p-4 rounded-[10px] space-x-4 border ${error ? 'border-red-500 focus:border-red-600' : 'border-transparent focus:border-violet-500'}`}
+                            className={`flex-row items-center bg-slate-100 w-full p-4 rounded-[10px] space-x-4 border relative ${error ? 'border-red-500 focus:border-red-600' : 'border-transparent focus:border-violet-500'}`}
                         >
                             {children}
                             <TextInput
@@ -54,7 +54,7 @@ const FormInput = forwardRef(
                             />
                             { secureTextEntry &&(
                                 <TouchableOpacity
-                                    className="flex-row items-center justify-center"
+                                    className="items-center justify-center"
                                     onPress={() => setVisible(!visible)}
                                 >
                                     { visible ? (
@@ -67,7 +67,7 @@ const FormInput = forwardRef(
                             {/* x icon when typing to clear input */}
                             { (name === 'search' && value.length > 0) && (
                                 <TouchableOpacity
-                                    className="flex-row items-center justify-center"
+                                    className="items-center justify-center"
                                     onPress={() => onChange('')}
                                 >
                                     <XMarkIcon size={22} color="#0F172A" />

@@ -48,7 +48,10 @@ const RegisterScreen = () => {
             className="flex-1 "
         >
             <SafeAreaView className="flex-1 items-center justify-center">
-                <ScrollView className="w-full">
+                <ScrollView
+                    className="w-full"
+                    keyboardShouldPersistTaps="handled"
+                >
  
                     <View className="h-1/6 items-center justify-center">
                         <Image
