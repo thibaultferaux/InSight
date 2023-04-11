@@ -15,7 +15,7 @@ const StudentsOverview = () => {
     const [students, setStudents] = useState();
     const navigation = useNavigation();
 
-    const { control, handleSubmit, watch } = useForm({
+    const { control, watch } = useForm({
         defaultValues: {
             search: '',
         }

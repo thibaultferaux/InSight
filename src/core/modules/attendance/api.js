@@ -28,7 +28,7 @@ export const makeStudentPresent = async (lessonId, userId) => {
     if (error) throw error
 }
 
-export const getAttendencesForLesson = async (lessonId, setStudents) => {
+export const getAttendencesForLesson = async (lessonId) => {
     const { data, error } = await supabase
         .from('presentstudent')
         .select('userId, present, presentAt, profiles(first_name, last_name)')
@@ -48,7 +48,7 @@ export const getAttendencesForLesson = async (lessonId, setStudents) => {
             return acc;
         }, {});
 
-        setStudents(grouped);
+        return grouped;
     }
 }
 

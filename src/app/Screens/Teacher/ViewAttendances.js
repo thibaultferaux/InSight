@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, ScrollView, Alert, Image } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, ScrollView, Alert, Image, Keyboard } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { ArrowLeftIcon, CheckIcon, MagnifyingGlassIcon, TrashIcon, XMarkIcon } from 'react-native-heroicons/outline';
@@ -7,11 +7,21 @@ import { CheckCircleIcon, XCircleIcon } from 'react-native-heroicons/solid';
 import { supabase } from '../../../core/api/supabase';
 import { getAttendencesForLesson, setAbsent, setPresent } from '../../../core/modules/attendance/api';
 import { formatDateShort, formatTime } from '../../../core/utils/dateTime';
+import { useForm } from 'react-hook-form';
+import FormInput from '../../Components/Form/FormInput';
+import { filterStudents } from '../../../core/utils/students';
 
 const ViewAttendances = ({ route }) => {
     const [borderColor, setBorderColor] = useState('#00000000');
     const { lesson } = route.params;
     const [ students, setStudents ] = useState();
+    const [filteredStudents, setFilteredStudents] = useState();
+
+    const { control, watch } = useForm({
+        defaultValues: {
+            search: '',
+        }
+    });
 
     const navigation = useNavigation();
 
@@ -26,9 +36,20 @@ const ViewAttendances = ({ route }) => {
             ).subscribe();
     }, [])
 
+    useEffect(() => {
+        if (students) {
+            setFilteredStudents(filterStudents(students, watch('search')));
+        }
+    }, [watch('search')])
+
     const getAttendences = async () => {
         try {
-            await getAttendencesForLesson(lesson.id, setStudents);
+            const data = await getAttendencesForLesson(lesson.id);
+
+            if (data) {
+                setStudents(data);
+                setFilteredStudents(data);
+            }
         } catch (error) {
             console.error(error);
             Alert.alert('Fout', 'Er is iets fout gegaan, probeer het later opnieuw.');
@@ -58,16 +79,8 @@ const ViewAttendances = ({ route }) => {
         }
     }
 
-    const onFocus = () => {
-        setBorderColor('#a78bfa');
-    }
-
-    const onBlur = () => {
-        setBorderColor('#00000000');
-    }
-
     return (
-        <SafeAreaView className="flex-1 justify-start bg-white px-7 py-10">
+        <SafeAreaView className="flex-1 justify-start bg-white px-7 pt-10">
             <View className="items-start space-y-2">
                 <TouchableOpacity className="flex-row space-x-1 justify-center items-center" onPress={() => navigation.goBack()}>
                     <ArrowLeftIcon size={16} color="#9ca3af" />
@@ -84,66 +97,77 @@ const ViewAttendances = ({ route }) => {
                 </View>
             ) : (
                 <>
-                    <View className="h-[52px] mt-6">
-                        <View className="flex-1 flex-row items-center bg-slate-100 px-4 rounded-[10px] space-x-4 border" style={{ borderColor: borderColor }}>
+                    <View className="mt-6 h-[58px]">
+                        <FormInput
+                            name="search"
+                            placeholder="Zoek een student"
+                            control={control}
+                            autoCapitalize="words"
+                            returnKeyType="search"
+                            onSubmitEditing={Keyboard.dismiss}
+                        >
                             <MagnifyingGlassIcon size={22} color="#0F172A" />
-                            <TextInput
-                                placeholder='Zoek een student'
-                                keyboardType='default'
-                                placeholderTextColor="#6B7280"
-                                style={{ fontFamily: 'Poppins_400Regular', paddingTop: 4, paddingBottom: 0 }}
-                                textAlignVertical="center"
-                                className="flex-1 text-sm text-slate-900 font-normal align-text-bottom focus:border-violet-500"
-                                autoCapitalize='words'
-                                onFocus={() => onFocus()}
-                                onBlur={() => onBlur()}
-                            />
-                        </View>
+                        </FormInput>
                     </View>
-                    <ScrollView className="mt-2 flex-1" vertical>
-                        { students.present && (
-                            <View className="mt-6">
-                                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-gray-400">Aanwezig</Text>
-                                <View className="mt-3 space-y-3">
-                                    { students.present.map((student, index) => (
-                                        <View key={index} className="flex-row justify-between items-center">
-                                            <View className="flex-row items-center space-x-2">
-                                                <CheckCircleIcon size={34} color="#10B981" />
-                                                <View>
-                                                    <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base">{ student.profiles.first_name } { student.profiles.last_name }</Text>
-                                                    <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-300 -mt-1">{ formatTime(student.presentAt) }</Text>
-                                                </View>
-                                            </View>
-                                            <TouchableOpacity className="flex-row items-center space-x-1" onPress={() => handleSetAbsent(student.userId)} >
-                                                <XMarkIcon size={24} color="#C4C4C4" />
-                                            </TouchableOpacity>
-                                        </View>
-                                    ))}
-                                </View>
-                            </View>
-                        )}
-                        { students.absent && (
-                            <View className="mt-6">
-                                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-gray-400">Afwezig</Text>
-                                <View className="mt-3 space-y-3">
-                                    { students.absent.map((student, index) => (
-                                        <View key={index} className="flex-row justify-between items-center">
-                                            <View className="flex-row items-center space-x-2">
-                                                <XCircleIcon size={34} color="#EF4444" />
-                                                <View>
-                                                    <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base">{ student.profiles.first_name } { student.profiles.last_name }</Text>
-                                                    <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-300 -mt-1">{ formatTime(student.presentAt) }</Text>
-                                                </View>
-                                            </View>
-                                            <TouchableOpacity className="flex-row items-center space-x-1" onPress={() => handleSetPresent(student.userId)}>
-                                                <CheckIcon size={24} color="#C4C4C4" />
-                                            </TouchableOpacity>
-                                        </View>
-                                    ))}
-                                </View>
-                            </View>
-                        )}
+                    <ScrollView
+                        className="mt-2 flex-1"
+                        vertical
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ paddingBottom: 48 }}
+                    >
                         
+                        { filteredStudents && ((filteredStudents.present || filteredStudents.absent) ? (
+                            <>
+                                {filteredStudents.present && (
+                                    <View className="mt-6">
+                                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-gray-400">Aanwezig</Text>
+                                        <View className="mt-3 space-y-3">
+                                            { filteredStudents.present.map((student, index) => (
+                                                <View key={index} className="flex-row justify-between items-center">
+                                                    <View className="flex-row items-center space-x-2">
+                                                        <CheckCircleIcon size={34} color="#10B981" />
+                                                        <View>
+                                                            <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base">{ student.profiles.first_name } { student.profiles.last_name }</Text>
+                                                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-300 -mt-1">{ formatTime(student.presentAt) }</Text>
+                                                        </View>
+                                                    </View>
+                                                    <TouchableOpacity className="flex-row items-center p-2 space-x-1" onPress={() => handleSetAbsent(student.userId)} >
+                                                        <XMarkIcon size={24} color="#C4C4C4" />
+                                                    </TouchableOpacity>
+                                                </View>
+                                            ))}
+                                        </View>
+                                    </View>
+                                )}
+                                {filteredStudents.absent && (
+                                    <View className="mt-6">
+                                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-gray-400">Afwezig</Text>
+                                        <View className="mt-3 space-y-3">
+                                            { filteredStudents.absent.map((student, index) => (
+                                                <View key={index} className="flex-row justify-between items-center">
+                                                    <View className="flex-row items-center space-x-2">
+                                                        <XCircleIcon size={34} color="#EF4444" />
+                                                        <View>
+                                                            <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base">{ student.profiles.first_name } { student.profiles.last_name }</Text>
+                                                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-300 -mt-1">{ formatTime(student.presentAt) }</Text>
+                                                        </View>
+                                                    </View>
+                                                    <TouchableOpacity className="flex-row items-center p-2 space-x-1" onPress={() => handleSetPresent(student.userId)}>
+                                                        <CheckIcon size={24} color="#C4C4C4" />
+                                                    </TouchableOpacity>
+                                                </View>
+                                            ))}
+                                        </View>
+                                    </View>
+                                )}
+                            </>
+                            ) : (
+                                <View className="justify-center items-center mt-20 space-y-4">
+                                    <Image source={require('../../../../assets/NoLessonsIcon.png')} style={{ width: 200, height: 120, resizeMode:'contain' }} />
+                                    <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-gray-300">Geen studenten gevonden</Text>
+                                </View>
+                            )
+                        )}
                     </ScrollView>
                 </>
             ))}
