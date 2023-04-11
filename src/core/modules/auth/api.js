@@ -32,7 +32,7 @@ export const register = async (credentials) => {
         password: password,
         options: {
             data: {
-                ...extra
+                ...extra,
             }
         }
     });

@@ -71,3 +71,55 @@ export const setAbsent = async (userId, lessonId) => {
 
     if (error) throw error;
 }
+
+export const getAttendancesOfStudentForTeacher = async (userId, teacherId, filter30Days = false) => {
+    let attendanceAll = {present: 0, total: 0}
+
+    let query = supabase
+        .from('presentstudent')
+        .select('lessonId, present, presentAt, lesson!inner(courseId, active, endTime, course!inner(name, teacherId))')
+        .eq('userId', userId)
+        .eq('lesson.course.teacherId', teacherId)
+        .lt('lesson.endTime', new Date().toISOString())
+
+
+    if (filter30Days) {
+        query = query.gt('lesson.endTime', new Date(new Date().setDate(new Date().getDate() - 30)).toISOString())
+    }
+
+    const { data, error } = await query
+
+    if (error) throw error;
+
+    if (data) {
+
+        // group by courseId without keys and count present and total attendances
+        const grouped = data.reduce((acc, obj) => {
+            const key = obj.lesson.courseId;
+            if (!acc[key]) {
+                acc[key] = [];
+            }
+            acc[key].push(obj);
+            return acc;
+        }, {});
+
+        const lessons = Object.keys(grouped).map((key) => {
+            const lesson = grouped[key][0].lesson;
+            const present = grouped[key].filter((item) => item.present).length;
+            const total = grouped[key].length;
+
+            attendanceAll.present += present;
+            attendanceAll.total += total;
+
+            return {
+                ...lesson,
+                present: present,
+                total: total,
+            }
+        }
+        )
+
+        return {lessons, attendanceAll}
+    }
+
+}

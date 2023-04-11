@@ -7,19 +7,19 @@ import { useForm } from 'react-hook-form'
 import FormInput from '../../Components/Form/FormInput'
 import { ArrowRightOnRectangleIcon, ArrowUpRightIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline'
 import { getStudentsForTeacher } from '../../../core/modules/students/api'
+import { useNavigation } from '@react-navigation/native'
 
 const StudentsOverview = () => {
     const { user } = useAuthContext();
     const [showLogout, setShowLogout] = useState(false)
     const [students, setStudents] = useState();
+    const navigation = useNavigation();
 
     const { control, handleSubmit, watch } = useForm({
         defaultValues: {
             search: '',
         }
     });
-
-    console.log(watch('search'));
 
     useEffect(() => {
         getStudents()
@@ -82,7 +82,7 @@ const StudentsOverview = () => {
                             const afterMatch = name.slice(indexMatch + inputText.length);
                             
                             return (
-                                <TouchableOpacity key={index} className="flex-row justify-between items-center py-4 border-b-[1px] border-gray-300">
+                                <TouchableOpacity key={index} className="flex-row justify-between items-center py-4 border-b-[1px] border-gray-300" onPress={() => navigation.navigate('StudentDetails', { student })}>
                                     <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-neutral-900">
                                         {beforeMatch}
                                         <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-base text-neutral-900">{match}</Text>

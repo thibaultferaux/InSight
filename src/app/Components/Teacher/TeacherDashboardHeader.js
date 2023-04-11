@@ -6,7 +6,7 @@ import { ArrowRightOnRectangleIcon, PlusIcon } from 'react-native-heroicons/outl
 import LogoutAlert from '../Auth/LogoutAlert';
 import { useNavigation } from '@react-navigation/native';
 
-const TeacherHeader = ({ currentLesson }) => {
+const TeacherDashboardHeader = ({ currentLesson }) => {
     const [showLogout, setShowLogout] = useState(false);
     const { user } = useAuthContext();
     const navigation = useNavigation()
@@ -33,4 +33,4 @@ const TeacherHeader = ({ currentLesson }) => {
     )
 }
 
-export default TeacherHeader
+export default TeacherDashboardHeader

@@ -9,6 +9,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import StudentsOverview from '../Screens/Teacher/StudentsOverview'
 import { CalendarIcon, UserGroupIcon } from 'react-native-heroicons/outline'
 import * as NavigationBar from 'expo-navigation-bar'
+import StudentDetails from '../Screens/Teacher/StudentDetails'
 
 const getTabBarIcon = (name, color) => {
     switch (name) {
@@ -77,6 +78,7 @@ const TeacherNavigator = () => {
                     <Stack.Screen name="Dashboard" component={TeacherTabs} />
                     <Stack.Screen name="MakeLesson" component={MakeLesson} />
                     <Stack.Screen name="ViewAttendances" component={ViewAttendances} />
+                    <Stack.Screen name="StudentDetails" component={StudentDetails} />
                 </Stack.Group>
             </Stack.Navigator>
             <StatusBar style='dark' animated backgroundColor='#f8fafc' />

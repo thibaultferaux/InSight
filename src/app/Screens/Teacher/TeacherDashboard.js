@@ -4,11 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { supabase } from '../../../core/api/supabase';
 import { useAuthContext } from '../../Components/Auth/AuthProvider';
 import { getLessonsForTeacher } from '../../../core/modules/lesson/api';
-import TeacherHeader from '../../Components/Teacher/TeacherHeader';
 import TeacherTabBar from '../../Components/Teacher/TeacherTabBar';
 import { Tabs } from 'react-native-collapsible-tab-view';
 import TeacherPreviousLessons from '../../Components/Teacher/TeacherPreviousLessons';
 import TeacherFutureLessons from '../../Components/Teacher/TeacherFutureLessons';
+import TeacherDashboardHeader from '../../Components/Teacher/TeacherDashboardHeader';
 
 
 const TeacherDashboard = () => {
@@ -43,7 +43,7 @@ const TeacherDashboard = () => {
     return (
         <SafeAreaView className="flex-1 justify-start bg-slate-50">                    
             <Tabs.Container
-                renderHeader={() => (<TeacherHeader currentLesson={currentLesson} />)}
+                renderHeader={() => (<TeacherDashboardHeader currentLesson={currentLesson} />)}
                 headerContainerStyle={{ backgroundColor: '#f8fafc', shadowOpacity: 0, elevation: 0 }}
                 allowHeaderOverscroll={false}
                 renderTabBar={TeacherTabBar}
