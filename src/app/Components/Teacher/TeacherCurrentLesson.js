@@ -62,7 +62,7 @@ const TeacherCurrentLesson = ({ currentLesson }) => {
                         </View>
                         <View className="flex-row space-x-1">
                             <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-neutral-400">Datum:</Text>
-                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-neutral-900">{new Date(currentLesson.startTime).toLocaleDateString('nl_BE')}</Text>
+                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-neutral-900">{new Date(currentLesson.startTime).toLocaleDateString()}</Text>
                         </View>
                         <View className="flex-row space-x-1">
                             <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-neutral-400">Tijd:</Text>

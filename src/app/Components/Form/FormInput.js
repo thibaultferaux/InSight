@@ -1,7 +1,7 @@
 import { View, Text, TextInput, TouchableOpacity } from 'react-native'
 import React, { forwardRef, useState } from 'react'
 import { Controller } from 'react-hook-form';
-import { EyeIcon, EyeSlashIcon } from 'react-native-heroicons/outline';
+import { EyeIcon, EyeSlashIcon, XMarkIcon } from 'react-native-heroicons/outline';
 
 const FormInput = forwardRef(
     (
@@ -62,6 +62,15 @@ const FormInput = forwardRef(
                                     ) : (
                                         <EyeSlashIcon size={22} color="#0F172A" />
                                     ) }
+                                </TouchableOpacity>
+                            ) }
+                            {/* x icon when typing to clear input */}
+                            { (name === 'search' && value.length > 0) && (
+                                <TouchableOpacity
+                                    className="flex-row items-center justify-center"
+                                    onPress={() => onChange('')}
+                                >
+                                    <XMarkIcon size={22} color="#0F172A" />
                                 </TouchableOpacity>
                             ) }
                         </View>

@@ -11,10 +11,10 @@ const TeacherPreviousLessons = ({ lessons }) => {
 
     return (
         <Tabs.ScrollView className="space-y-4"
-            contentContainerStyle={{ marginTop: 16, flex: 1, paddingHorizontal: 28}}
+            contentContainerStyle={{ marginTop: 16, paddingHorizontal: 28, paddingBottom: 56 }}
             showsVerticalScrollIndicator={false}
         >
-            {lessons.length > 0 ? 
+            {lessons && (lessons.length > 0 ? 
                 
             
             lessons.map((lesson, index) => (
@@ -46,7 +46,7 @@ const TeacherPreviousLessons = ({ lessons }) => {
                     <Image source={require('../../../../assets/NoLessonsIcon.png')} style={{ width: 200, height: 120, resizeMode:'contain' }} />
                     <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-gray-300">Geen lessen deze dag</Text>
                 </View>
-            )}
+            ))}
         </Tabs.ScrollView>
     )
 }

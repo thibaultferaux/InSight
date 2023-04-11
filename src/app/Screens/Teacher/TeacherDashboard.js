@@ -13,8 +13,8 @@ import TeacherFutureLessons from '../../Components/Teacher/TeacherFutureLessons'
 
 const TeacherDashboard = () => {
     const { user } = useAuthContext();
-    const [futurelessons, setFutureLessons] = useState([]);
-    const [pastLessons, setPastLessons] = useState([]);
+    const [futurelessons, setFutureLessons] = useState();
+    const [pastLessons, setPastLessons] = useState();
     const [currentLesson, setCurrentLesson] = useState(null);
 
     useEffect(() => {
