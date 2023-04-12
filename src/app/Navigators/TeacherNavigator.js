@@ -10,6 +10,7 @@ import StudentsOverview from '../Screens/Teacher/StudentsOverview'
 import { CalendarIcon, UserGroupIcon } from 'react-native-heroicons/outline'
 import * as NavigationBar from 'expo-navigation-bar'
 import StudentDetails from '../Screens/Teacher/StudentDetails'
+import UpdateLesson from '../Screens/Teacher/UpdateLesson'
 
 const getTabBarIcon = (name, color) => {
     switch (name) {
@@ -77,6 +78,7 @@ const TeacherNavigator = () => {
                 <Stack.Group screenOptions={{ headerShown: false }}>
                     <Stack.Screen name="Dashboard" component={TeacherTabs} />
                     <Stack.Screen name="MakeLesson" component={MakeLesson} />
+                    <Stack.Screen name="UpdateLesson" component={UpdateLesson} />
                     <Stack.Screen name="ViewAttendances" component={ViewAttendances} />
                     <Stack.Screen name="StudentDetails" component={StudentDetails} />
                 </Stack.Group>

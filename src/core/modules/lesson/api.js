@@ -111,3 +111,19 @@ export const makeLesson = async (courseId, classroomtagId, startTime, endTime) =
         await addStudentsToAttendance(courseId, data[0].id)
     }
 }
+
+export const updateLesson = async (lessonId, courseId, classroomtagId, startTime, endTime) => {
+    const { error } = await supabase
+        .from('lesson')
+        .update(
+            {
+                courseId,
+                classroomtagId,
+                startTime,
+                endTime,
+            }
+        )
+        .eq('id', lessonId)
+
+    if (error) throw error;
+}

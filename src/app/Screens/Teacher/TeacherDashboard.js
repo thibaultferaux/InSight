@@ -52,17 +52,13 @@ const TeacherDashboard = () => {
                 renderTabBar={TeacherTabBar}
             >
                 <Tabs.Tab name="Komende Lessen">
-                    <TeacherFutureLessons lessons={futurelessons} setModalLesson={setModalLesson} setModalVisible={setModalVisible} />
+                    <TeacherFutureLessons lessons={futurelessons} />
                 </Tabs.Tab>
                 <Tabs.Tab name="Vorige Lessen">
                     <TeacherPreviousLessons lessons={pastLessons} />
                 </Tabs.Tab>
             </Tabs.Container>
-            <LessonsDetailsModal lesson={modalLesson} modalVisible={modalVisible} setModalVisible={setModalVisible}>
-                <TouchableOpacity className="bg-violet-500 items-center py-3 rounded-xl flex-1 mr-1">
-                    <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-white mt-[2px]">Bewerken</Text>
-                </TouchableOpacity>
-            </LessonsDetailsModal>
+            
         </SafeAreaView>
     )
 }
