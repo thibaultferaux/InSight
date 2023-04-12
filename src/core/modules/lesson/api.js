@@ -1,9 +1,10 @@
 import { supabase } from "../../api/supabase";
+import { addStudentsToAttendance } from "../attendance/api";
 
 export const getLessonsForTeacher = async ({teacherId, setFutureLessons, setPastLessons, setCurrentLesson}) => {
     let { data, error } = await supabase
         .from('lesson')
-        .select('id, startTime, endTime, active, course!inner(id, name), classroomtag(id, name)')
+        .select('id, startTime, endTime, course!inner(id, name), classroomtag(id, name)')
         .eq('course.teacherId', teacherId)
         .order('startTime', { ascending: true })
 
@@ -61,7 +62,7 @@ export const getLessonsForStudent = async (studentId, setLessons, setCurrentLess
             const now = new Date()
             const startTime = new Date(lesson.startTime)
             const endTime = new Date(lesson.endTime)
-            if (startTime < now && endTime > now && lesson.active) {
+            if (startTime < now && endTime > now) {
                 setCurrentLesson(lesson);
                 return false
             } else {
@@ -92,7 +93,7 @@ export const makeLessonActive = async (lessonId) => {
 }
 
 export const makeLesson = async (courseId, classroomtagId, startTime, endTime) => {
-    const { error } = await supabase
+    const { data, error } = await supabase
         .from('lesson')
         .upsert(
             {
@@ -102,6 +103,11 @@ export const makeLesson = async (courseId, classroomtagId, startTime, endTime) =
                 endTime,
             }
         )
+        .select()
 
     if (error) throw error;
+
+    if(data) {
+        await addStudentsToAttendance(courseId, data[0].id)
+    }
 }

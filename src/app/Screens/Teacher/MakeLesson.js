@@ -24,6 +24,7 @@ const MakeLesson = ({ route }) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [isStartTimePickerVisible, setStartTimePickerVisibility] = useState(false);
     const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
+    const [loading, setLoading] = useState(false);
     const insets = useSafeAreaInsets();
 
     const { control, handleSubmit, formState: {errors}, getValues } = useForm();
@@ -63,7 +64,7 @@ const MakeLesson = ({ route }) => {
     }
 
     const onSubmit = async ({ subject, classroom, date, startTime, endTime}) => {
-        
+        setLoading(true);
         try {
             await makeLesson(subject.id, classroom.id, combineDateAndTime(date, startTime), combineDateAndTime(date, endTime));
 
@@ -79,6 +80,8 @@ const MakeLesson = ({ route }) => {
         } catch (error) {
             console.error(error)
             Alert.alert("Er is iets misgegaan met het aanmaken van de les. Probeer het later opnieuw.")
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -266,7 +269,7 @@ const MakeLesson = ({ route }) => {
                 { (errors.startTime && errors.endTime) || errors.startTime ? (<Text className="text-red-500 text-sm">{ errors.startTime.message }</Text>) : (errors.endTime && (<Text className="text-red-500 text-sm">{ errors.endTime.message }</Text>))}
             </View>
             <View className="mt-12 items-end">
-                <TouchableOpacity className={`py-[10px] px-[15px] flex-row space-x-2 rounded-lg ${ Object.keys(errors).length === 0 ? 'bg-violet-500' : 'bg-neutral-400'}`} onPress={handleSubmit(onSubmit)} disabled={Object.keys(errors).length !== 0}>
+                <TouchableOpacity className={`py-[10px] px-[15px] flex-row space-x-2 rounded-lg ${ (Object.keys(errors).length === 0 && !loading) ? 'bg-violet-500' : 'bg-violet-500/50'}`} onPress={handleSubmit(onSubmit)} disabled={(Object.keys(errors).length !== 0) || loading}>
                     <Text className="text-white">Maak</Text>
                     <ArrowRightIcon size={22} color="white" />
                 </TouchableOpacity>

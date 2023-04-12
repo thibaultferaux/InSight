@@ -1,6 +1,5 @@
 import { supabase } from "../../api/supabase";
 import { getStudentsFromCourse } from "../course/api";
-import { makeLessonActive } from "../lesson/api";
 
 export const addStudentsToAttendance = async (courseId, lessonId) => {
     const data = await getStudentsFromCourse(courseId)
@@ -14,8 +13,6 @@ export const addStudentsToAttendance = async (courseId, lessonId) => {
     const { error } = await supabase.from('presentstudent').insert(attendanceData)
 
     if (error) throw error
-
-    await makeLessonActive(lessonId);
 }
 
 export const makeStudentPresent = async (lessonId, userId) => {
@@ -77,7 +74,7 @@ export const getAttendancesOfStudentForTeacher = async (userId, teacherId, filte
 
     let query = supabase
         .from('presentstudent')
-        .select('lessonId, present, presentAt, lesson!inner(courseId, active, endTime, course!inner(name, teacherId))')
+        .select('lessonId, present, presentAt, lesson!inner(courseId, endTime, course!inner(name, teacherId))')
         .eq('userId', userId)
         .eq('lesson.course.teacherId', teacherId)
         .lt('lesson.endTime', new Date().toISOString())

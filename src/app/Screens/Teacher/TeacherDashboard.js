@@ -9,6 +9,7 @@ import { Tabs } from 'react-native-collapsible-tab-view';
 import TeacherPreviousLessons from '../../Components/Teacher/TeacherPreviousLessons';
 import TeacherFutureLessons from '../../Components/Teacher/TeacherFutureLessons';
 import TeacherDashboardHeader from '../../Components/Teacher/TeacherDashboardHeader';
+import LessonsDetailsModal from '../../Components/Modal/LessonsDetailsModal';
 
 
 const TeacherDashboard = () => {
@@ -16,6 +17,8 @@ const TeacherDashboard = () => {
     const [futurelessons, setFutureLessons] = useState();
     const [pastLessons, setPastLessons] = useState();
     const [currentLesson, setCurrentLesson] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalLesson, setModalLesson] = useState(null);
 
     useEffect(() => {
         getLessons()
@@ -49,12 +52,17 @@ const TeacherDashboard = () => {
                 renderTabBar={TeacherTabBar}
             >
                 <Tabs.Tab name="Komende Lessen">
-                    <TeacherFutureLessons lessons={futurelessons} />
+                    <TeacherFutureLessons lessons={futurelessons} setModalLesson={setModalLesson} setModalVisible={setModalVisible} />
                 </Tabs.Tab>
                 <Tabs.Tab name="Vorige Lessen">
                     <TeacherPreviousLessons lessons={pastLessons} />
                 </Tabs.Tab>
             </Tabs.Container>
+            <LessonsDetailsModal lesson={modalLesson} modalVisible={modalVisible} setModalVisible={setModalVisible}>
+                <TouchableOpacity className="bg-violet-500 items-center py-3 rounded-xl flex-1 mr-1">
+                    <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-white mt-[2px]">Bewerken</Text>
+                </TouchableOpacity>
+            </LessonsDetailsModal>
         </SafeAreaView>
     )
 }
