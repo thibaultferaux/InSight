@@ -23,3 +23,15 @@ export const makeClassroom = async (name, id) => {
         throw error;
     };
 }
+
+export const updateClassroom = async (name, id) => {
+    let { error, status } = await supabase
+        .from('classroomtag')
+        .update({ name: name })
+        .eq('id', id)
+
+    if (error) {
+        error.status = status;
+        throw error;
+    };
+}

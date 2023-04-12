@@ -33,7 +33,7 @@ const FormInput = forwardRef(
                 }) => (
                     <>
                         <View
-                            className={`flex-row items-center bg-slate-100 flex-1 px-4 py-[14px] rounded-[10px] space-x-4 border relative ${error ? 'border-red-500 focus:border-red-600' : 'border-transparent focus:border-violet-500'}`}
+                            className={`flex-row items-center bg-slate-100 px-4 py-[14px] rounded-[10px] space-x-4 border relative ${error ? 'border-red-500 focus:border-red-600' : 'border-transparent focus:border-violet-500'}`}
                         >
                             {children}
                             <TextInput

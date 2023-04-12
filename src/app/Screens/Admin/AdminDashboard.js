@@ -91,7 +91,7 @@ const AdminDashboard = () => {
                             const afterMatch = classroom.name.slice(indexMatch + watch('search').length);
 
                             return (
-                                <TouchableOpacity key={index} className="flex-row justify-between items-center py-4 border-b-[1px] border-gray-300">
+                                <TouchableOpacity key={index} className="flex-row justify-between items-center py-4 border-b-[1px] border-gray-300" onPress={() => navigation.navigate('EditClassroom', {classroom: classroom})}>
                                     <View className="space-y-2">
                                         <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-xl text-neutral-900">
                                             {beforeMatch}

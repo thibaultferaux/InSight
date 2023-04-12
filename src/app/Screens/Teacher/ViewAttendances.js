@@ -97,7 +97,7 @@ const ViewAttendances = ({ route }) => {
                 </View>
             ) : (
                 <>
-                    <View className="mt-6 h-[58px]">
+                    <View className="mt-6">
                         <FormInput
                             name="search"
                             placeholder="Zoek een student"
