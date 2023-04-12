@@ -19,11 +19,11 @@ const LessonForm = ({ lesson, onSubmit, submitLabel, loading }) => {
 
     const { control, handleSubmit, formState: { errors }, getValues } = useForm({
         defaultValues: {
-            subject: lesson.course || {},
-            classroom: lesson.classroomtag || {},
-            date: lesson.startTime ? new Date(lesson.startTime) : null,
-            startTime: lesson.startTime ? new Date(lesson.startTime) : null,
-            endTime: lesson.endTime ? new Date(lesson.endTime) : null,
+            subject: lesson ? lesson.course : {},
+            classroom: lesson ? lesson.classroomtag : {},
+            date: lesson ? new Date(lesson.startTime) : null,
+            startTime: lesson ? new Date(lesson.startTime) : null,
+            endTime: lesson ? new Date(lesson.endTime) : null,
         }
     });
 

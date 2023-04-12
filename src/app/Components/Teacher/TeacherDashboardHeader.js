@@ -23,7 +23,7 @@ const TeacherDashboardHeader = ({ currentLesson }) => {
             {/* if there is a lesson at current time */}
             {currentLesson && (<TeacherCurrentLesson currentLesson={currentLesson} />) }
             <View className="mt-2">
-                <TouchableOpacity className="w-full rounded-full flex-row bg-violet-500 p-4 justify-center align-middle space-x-2" onPress={() => navigation.navigate("MakeLesson", { userId: user.id })}>
+                <TouchableOpacity className="w-full rounded-full flex-row bg-violet-500 p-4 justify-center align-middle space-x-2" onPress={() => navigation.navigate("MakeLesson")}>
                     <PlusIcon color="white" size={24} />
                     <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-white mt-[2px]">Nieuwe les</Text>
                 </TouchableOpacity>
