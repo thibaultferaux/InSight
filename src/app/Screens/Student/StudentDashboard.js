@@ -53,6 +53,7 @@ const StudentDashboard = () => {
             console.error(error)
             Alert.alert("Er is iets misgegaan met het ophalen van de lessen. Probeer het later opnieuw.")
         } finally {
+            console.log(lessons);
             setRefreshing(false);
         }
     }
@@ -136,8 +137,11 @@ const StudentDashboard = () => {
                             </TouchableOpacity>
                         ))}
 
-                        {/* make a horizontal slider with days after today to select */}
-                        <DateSlider lessons={lessons} onDaySelected={handleDaySelected} />
+                        {
+                            lessons.length > 0 && (
+                                <DateSlider lessons={lessons} onDaySelected={handleDaySelected} />
+                            )
+                        }
                         
 
                         <View className="space-y-4">

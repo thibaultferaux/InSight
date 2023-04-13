@@ -41,6 +41,7 @@ export const formatDateShort = (date) => {
 
 
 export const formatTime = (time) => {
+    console.log(time);
     const someTime = new Date(time)
     // hours with leading zero
     const hours = String(someTime.getHours()).padStart(2, '0');

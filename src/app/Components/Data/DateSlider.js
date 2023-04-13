@@ -7,8 +7,9 @@ const DateSlider = ({ lessons, onDaySelected }) => {
 
     useEffect(() => {
         const selectedDay = lessons.find((lesson) => lesson.date === selectedDate) ?? { date: selectedDate, items: [] };
+        console.log(selectedDay);
         onDaySelected(selectedDay);
-    }, [ selectedDate ]);
+    }, [ selectedDate, lessons ]);
 
     const twoWeeksFromNow = moment().add(2, 'weeks');
     const dates = [];
