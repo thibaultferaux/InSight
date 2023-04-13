@@ -8,6 +8,7 @@ import EditClassroom from '../Screens/Admin/EditClassroom';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TagIcon, UserGroupIcon } from 'react-native-heroicons/outline';
 import UsersOverview from '../Screens/Admin/UsersOverview';
+import MakeUser from '../Screens/Admin/MakeUser';
 
 const getTabBarIcon = (name, color) => {
     switch (name) {
@@ -78,6 +79,7 @@ const AdminNavigator = () => {
                     <Stack.Screen name="Dashboard" component={AdminTabs} />
                     <Stack.Screen name="MakeClassroom" component={MakeClassroom} />
                     <Stack.Screen name="EditClassroom" component={EditClassroom} />
+                    <Stack.Screen name="MakeUser" component={MakeUser} />
                 </Stack.Group>
             </Stack.Navigator>
             <StatusBar style='dark' animated backgroundColor='#f8fafc' />

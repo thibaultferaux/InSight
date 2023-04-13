@@ -30,7 +30,10 @@ const AdminHeader = ({ control }) => {
                         <MagnifyingGlassIcon size={22} color="#0F172A" />
                     </FormInput>
                 </View>
-                <TouchableOpacity className="bg-violet-500 justify-center h-fit aspect-square items-center rounded-2xl">
+                <TouchableOpacity
+                    className="bg-violet-500 justify-center h-fit aspect-square items-center rounded-2xl"
+                    onPress={() => navigation.navigate('MakeUser')}
+                >
                     <PlusIcon size={22} color="white" />
                 </TouchableOpacity>
             </View>

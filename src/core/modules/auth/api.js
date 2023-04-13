@@ -1,5 +1,5 @@
 import { Alert } from "react-native";
-import { supabase } from "../../api/supabase"
+import { supabase, supabaseAdmin } from "../../api/supabase"
 
 export const getCurrentSession = async () => {
     const { 
@@ -35,6 +35,22 @@ export const register = async (credentials) => {
                 ...extra,
                 role_id: extra.role_id || 1
             }
+        }
+    });
+    if (error) {
+        return Promise.reject(error);
+    }
+    return Promise.resolve(data);
+}
+
+export const createUser = async (credentials) => {
+    const { email, password, ...extra } = credentials;
+    const { data, error } = await supabaseAdmin.auth.admin.createUser({
+        email: email,
+        password: password,
+        user_metadata: {
+            ...extra,
+            role_id: extra.role_id || 1
         }
     });
     if (error) {

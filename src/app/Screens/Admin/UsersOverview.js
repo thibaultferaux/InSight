@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { getAllStudents, getAllTeachers } from '../../../core/modules/users/api'
 import UserList from '../../Components/Admin/UserList'
+import { supabase } from '../../../core/api/supabase'
 
 const UsersOverview = () => {
     const [students, setStudents] = useState();
@@ -20,6 +21,14 @@ const UsersOverview = () => {
     useEffect(() => {
         getStudents()
         getTeachers()
+        const profilesListener = supabase
+            .channel('public:profiles')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' },
+                (payload) => {
+                    getStudents()
+                    getTeachers()
+                }
+            ).subscribe();
     }, [])
 
     const getStudents = async () => {

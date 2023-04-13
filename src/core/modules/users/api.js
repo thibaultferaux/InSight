@@ -23,7 +23,7 @@ export const getAllStudents = async () => {
 export const getAllTeachers = async () => {
     const { data, error } = await supabase
         .from('profiles')
-        .select('*, course!inner(id, name)')
+        .select('*, course(id, name)')
         .eq('role_id', 2)
         .order('last_name', { ascending: true })
 
