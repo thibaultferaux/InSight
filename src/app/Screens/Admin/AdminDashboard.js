@@ -12,7 +12,6 @@ import { useForm } from 'react-hook-form';
 import FormInput from '../../Components/Form/FormInput';
 
 const AdminDashboard = () => {
-    const { user } = useAuthContext();
     const [classrooms, setClassrooms] = useState();
     const [showLogout, setShowLogout] = useState(false);
     const navigation = useNavigation();
@@ -58,7 +57,7 @@ const AdminDashboard = () => {
                 keyboardShouldPersistTaps="handled"
             >
                 <View className="flex-row justify-between items-start">
-                    <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Hallo {user.first_name},</Text>
+                    <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Tags</Text>
                     <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => setShowLogout(true)}>
                         <ArrowRightOnRectangleIcon color="white" size={22} />
                     </TouchableOpacity>

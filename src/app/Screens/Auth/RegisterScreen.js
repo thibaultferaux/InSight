@@ -122,7 +122,13 @@ const RegisterScreen = () => {
                                     placeholder="Wachtwoord"
                                     ref={passwordInputRef}
                                     control={control}
-                                    rules={{ required: 'Wachtwoord is verplicht' }}
+                                    rules={{ 
+                                        required: 'Wachtwoord is verplicht',
+                                        minLength: {
+                                            value: 6,
+                                            message: 'Wachtwoord moet minstens 6 karakters zijn'
+                                        }
+                                    }}
                                     secureTextEntry
                                     returnKeyType="done"
                                     onSubmitEditing={Keyboard.dismiss}

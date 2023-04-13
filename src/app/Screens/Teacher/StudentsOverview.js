@@ -6,8 +6,8 @@ import { useAuthContext } from '../../Components/Auth/AuthProvider'
 import { useForm } from 'react-hook-form'
 import FormInput from '../../Components/Form/FormInput'
 import { ArrowRightOnRectangleIcon, ArrowUpRightIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline'
-import { getStudentsForTeacher } from '../../../core/modules/students/api'
 import { useNavigation } from '@react-navigation/native'
+import { getStudentsForTeacher } from '../../../core/modules/users/api'
 
 const StudentsOverview = () => {
     const { user } = useAuthContext();

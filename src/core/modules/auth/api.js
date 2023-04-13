@@ -33,6 +33,7 @@ export const register = async (credentials) => {
         options: {
             data: {
                 ...extra,
+                role_id: extra.role_id || 1
             }
         }
     });
