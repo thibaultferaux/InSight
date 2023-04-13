@@ -7,7 +7,6 @@ const DateSlider = ({ lessons, onDaySelected }) => {
 
     useEffect(() => {
         const selectedDay = lessons.find((lesson) => lesson.date === selectedDate) ?? { date: selectedDate, items: [] };
-        console.log(selectedDay);
         onDaySelected(selectedDay);
     }, [ selectedDate, lessons ]);
 

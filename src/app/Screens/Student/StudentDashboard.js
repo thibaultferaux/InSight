@@ -14,6 +14,7 @@ import { formatTime, isToday } from '../../../core/utils/dateTime';
 import NfcProxy from '../../../core/proxy/NfcProxy';
 import { makeStudentPresent } from '../../../core/modules/attendance/api';
 import { NfcNotEnabledAlert } from '../../../core/utils/nfc';
+import LessonsDetailsModal from '../../Components/Modal/LessonsDetailsModal';
 
 const StudentDashboard = () => {
     const { user } = useAuthContext();
@@ -23,6 +24,8 @@ const StudentDashboard = () => {
     const [refreshing, setRefreshing] = useState(false);
     const [loading, setLoading] = useState(false);
     const [showLogout, setShowLogout] = useState(false);
+    const [modalLesson, setModalLesson] = useState()
+    const [modalVisible, setModalVisible] = useState(false)
 
     useEffect(() => {
         getLessons()
@@ -53,7 +56,6 @@ const StudentDashboard = () => {
             console.error(error)
             Alert.alert("Er is iets misgegaan met het ophalen van de lessen. Probeer het later opnieuw.")
         } finally {
-            console.log(lessons);
             setRefreshing(false);
         }
     }
@@ -83,6 +85,11 @@ const StudentDashboard = () => {
             NfcNotEnabledAlert(() => handleSetPresent(lesson))
         }
         setLoading(false)
+    }
+
+    const handleLessonPress = (lesson) => {
+        setModalLesson(lesson)
+        setModalVisible(true)
     }
 
     return (
@@ -149,7 +156,12 @@ const StudentDashboard = () => {
                                 <View>
                                     {
                                         selectedDay.items.map((item, index) => (
-                                            <View key={index} className={`border-b-gray-300 pb-3 flex-row space-x-4 ${index === selectedDay.items.length - 1 ? 'border-none mt-4' : index == 0 ? 'border-b-[1px]' : 'border-b-[1px] mt-4'}`}>
+                                            <TouchableOpacity
+                                                key={index}
+                                                className={`border-b-gray-300 pb-3 flex-row space-x-4 ${index === selectedDay.items.length - 1 ? 'border-none mt-4' : index == 0 ? 'border-b-[1px]' : 'border-b-[1px] mt-4'}`}
+                                                activeOpacity={0.6}
+                                                onPress={() => handleLessonPress(item)}
+                                            >
                                                 <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base mb-2 text-slate-400 pt-4">{ formatTime(item.startTime) }</Text>
                                                 <View className="flex-1 flex-row justify-between bg-white shadow-lg shadow-black/40 mb-2 p-3 rounded-2xl">
                                                     <View className="justify-between space-y-2">
@@ -167,7 +179,7 @@ const StudentDashboard = () => {
                                                         </LinearGradient>
                                                     </View>
                                                 </View>
-                                            </View>
+                                            </TouchableOpacity>
                                         ))
                                     }
                                 </View>
@@ -187,6 +199,15 @@ const StudentDashboard = () => {
                         </View>
                     </View>
                 </ScrollView>
+                <LessonsDetailsModal
+                    modalVisible={modalVisible}
+                    setModalVisible={setModalVisible}
+                    classroomName={modalLesson?.classroomtagName}
+                    courseName={modalLesson?.courseName}
+                    teacherName={modalLesson?.teacherName}
+                    startTime={modalLesson?.startTime}
+                    endTime={modalLesson?.endTime}
+                />
                 { showLogout && <LogoutAlert onCancel={() => setShowLogout(false)} /> }
         </SafeAreaView>
     )

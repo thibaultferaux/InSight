@@ -3,8 +3,17 @@ import React from 'react'
 import { XMarkIcon } from 'react-native-heroicons/outline';
 import { formatTime } from '../../../core/utils/dateTime';
 
-const LessonsDetailsModal = ({ lesson, modalVisible, setModalVisible, children }) => {
-    if (!lesson) return null;
+const LessonsDetailsModal = ({ 
+    modalVisible,
+    setModalVisible,
+    classroomName,
+    courseName,
+    teacherName,
+    startTime,
+    endTime,
+    children
+}) => {
+    if (!classroomName || !courseName || !startTime || !endTime) return null;
 
     return (
         <Modal
@@ -25,19 +34,25 @@ const LessonsDetailsModal = ({ lesson, modalVisible, setModalVisible, children }
                         </View>
                         <View className="flex-row space-x-1">
                             <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-neutral-400">Klas:</Text>
-                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-neutral-900">{ lesson.classroomtag.name }</Text>
+                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-neutral-900">{ classroomName }</Text>
                         </View>
                         <View className="flex-row space-x-1">
                             <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-neutral-400">Les:</Text>
-                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-neutral-900">{lesson.course.name}</Text>
+                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-neutral-900">{ courseName }</Text>
                         </View>
+                        { teacherName && (
+                            <View className="flex-row space-x-1">
+                                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-neutral-400">Leerkracht:</Text>
+                                <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-neutral-900">{ teacherName }</Text>
+                            </View>
+                        )}
                         <View className="flex-row space-x-1">
                             <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-neutral-400">Datum:</Text>
-                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-neutral-900">{new Date(lesson.startTime).toLocaleDateString()}</Text>
+                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-neutral-900">{new Date(startTime).toLocaleDateString()}</Text>
                         </View>
                         <View className="flex-row space-x-1">
                             <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-neutral-400">Tijd:</Text>
-                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-neutral-900">{formatTime(lesson.startTime)} - {formatTime(lesson.endTime)}</Text>
+                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-neutral-900">{formatTime(startTime)} - {formatTime(endTime)}</Text>
                         </View>
                         <View className="mt-4 flex-row gap">
                             { children }

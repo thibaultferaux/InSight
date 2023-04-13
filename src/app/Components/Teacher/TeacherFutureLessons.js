@@ -55,7 +55,14 @@ const TeacherFutureLessons = ({ lessons }) => {
                     </View>
                 ))}
             </Tabs.ScrollView>
-            <LessonsDetailsModal lesson={modalLesson} modalVisible={modalVisible} setModalVisible={setModalVisible}>
+            <LessonsDetailsModal
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                classroomName={modalLesson?.classroomtag.name}
+                courseName={modalLesson?.course.name}
+                startTime={modalLesson?.startTime}
+                endTime={modalLesson?.endTime}
+            >
                 <TouchableOpacity
                     className="bg-violet-500 items-center py-3 rounded-xl flex-1 mr-1"
                     onPress={() => {
