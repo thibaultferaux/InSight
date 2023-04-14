@@ -58,7 +58,7 @@ const EditClassroom = ({ route }) => {
                     <ArrowLeftIcon size={16} color="#9ca3af" />
                     <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Terug</Text>
                 </TouchableOpacity>
-                <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Wijzig lokaalnaam</Text>
+                <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl text-neutral-900">Wijzig lokaalnaam</Text>
                 <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Vul de nieuwe naam van het lokaal in en scan de tag om deze te bevestigen.</Text>
             </View>
             <View className="mt-12">
@@ -74,7 +74,7 @@ const EditClassroom = ({ route }) => {
                         returnKeyType="done"
                         onSubmitEditing={handleSubmit(handleUpdateClassroom)}
                     >
-                        <TagIcon color="#0F172A" size={22} />
+                        <TagIcon color="#171717" size={22} />
                     </FormInput>
                 </View>
             </View>

@@ -21,10 +21,10 @@ const StudentDetails = ({ route }) => {
     useEffect(() => {
         getAllAttendances();
         get30DayAttendances();
-        const attendanceListener = supabase
+        supabase
             .channel('public:presentstudent:userId=eq.' + student.studentId)
             .on('postgres_changes', { event: '*', schema: 'public', table: 'presentstudent', filter: 'userId=eq.' + student.studentId },
-                (payload) => {
+                () => {
                     getAllAttendances();
                     get30DayAttendances();
                 }

@@ -25,7 +25,7 @@ const UserForm = ({ user, onSubmit, submitLabel, loading}) => {
     return (
         <View className="space-y-4">
             <View className="mt-12">
-                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2">Voornaam</Text>
+                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2 text-neutral-900">Voornaam</Text>
                 <FormInput
                     name="first_name"
                     ref={firstNameInputRef}
@@ -36,11 +36,11 @@ const UserForm = ({ user, onSubmit, submitLabel, loading}) => {
                     returnKeyType="next"
                     onSubmitEditing={() => lastNameInputRef.current && lastNameInputRef.current.focus()}
                 >
-                    <UserIcon color="#0F172A" size={22} />
+                    <UserIcon color="#171717" size={22} />
                 </FormInput>
             </View>
             <View>
-                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2">Familienaam</Text>
+                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2 text-neutral-900">Familienaam</Text>
                 <FormInput
                     name="last_name"
                     ref={lastNameInputRef}
@@ -51,11 +51,11 @@ const UserForm = ({ user, onSubmit, submitLabel, loading}) => {
                     returnKeyType="next"
                     onSubmitEditing={() => emailInputRef.current && emailInputRef.current.focus()}
                 >
-                    <UserIcon color="#0F172A" size={22} />
+                    <UserIcon color="#171717" size={22} />
                 </FormInput>
             </View>
             <View>
-                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2">E-mail</Text>
+                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2 text-neutral-900">E-mail</Text>
                 <FormInput
                     name="email"
                     ref={emailInputRef}
@@ -77,11 +77,11 @@ const UserForm = ({ user, onSubmit, submitLabel, loading}) => {
                         }
                     }}
                 >
-                    <EnvelopeIcon color="#0F172A" size={22} />
+                    <EnvelopeIcon color="#171717" size={22} />
                 </FormInput>
             </View>
             <View className="mb-12">
-                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2">Rol</Text>
+                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2 text-neutral-900">Rol</Text>
                 <Controller
                     control={control}
                     name="role"
@@ -104,19 +104,19 @@ const UserForm = ({ user, onSubmit, submitLabel, loading}) => {
                                 placeholder=""
                                 className={`items-center bg-slate-100 w-full px-4 py-[14px] rounded-[10px] space-x-4 text-sm border ${error ? 'border-red-500' : 'border-transparent'}`}
                                 placeholderStyle={{ color: '#6B7280', marginTop: 4, fontSize: 14 }}
-                                selectedTextStyle={{ marginTop: 4, fontSize: 14, color:'#0F172A' }}
+                                selectedTextStyle={{ marginTop: 4, fontSize: 14, color:'#171717' }}
                                 activeColor="#f1f5f9"
-                                itemTextStyle={{ marginTop: 4, fontSize: 14, color:'#0F172A' }}
+                                itemTextStyle={{ marginTop: 4, fontSize: 14, color:'#171717' }}
                                 itemContainerStyle={{ borderRadius: 10 }}
                                 fontFamily="Poppins_400Regular"
                                 labelField="label"
                                 valueField="value"
                                 renderLeftIcon={() => (
                                     <View className="mr-4">
-                                        <AcademicCapIcon size={24} color="#0F172A" />
+                                        <AcademicCapIcon size={24} color="#171717" />
                                     </View>
                                 )}
-                                renderRightIcon={() => <ChevronDownIcon size={24} color="#0F172A" /> }
+                                renderRightIcon={() => <ChevronDownIcon size={24} color="#171717" /> }
                             />
                             {error && <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-red-500">{error.message || 'Error'}</Text>}
                         </>

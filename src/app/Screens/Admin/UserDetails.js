@@ -114,9 +114,10 @@ const UserDetails = ({ route }) => {
                             <ArrowLeftIcon size={16} color="#9ca3af" />
                             <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Terug</Text>
                         </TouchableOpacity>
+
                         <View className="flex-row justify-between">
                             <View className="items-start space-y-2">
-                                <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-xl pt-1">{ user.first_name + ' ' + user.last_name }</Text>
+                                <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-xl pt-1 text-neutral-900">{ user.first_name + ' ' + user.last_name }</Text>
                                 <View className="flex-row space-x-1">
                                     <EnvelopeIcon size={16} color="#9ca3af" />
                                     <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-xs text-gray-500">{ user.email }</Text>
@@ -132,12 +133,13 @@ const UserDetails = ({ route }) => {
                                         className="px-4 py-[5px] bg-gray-200 rounded-md"
                                         onPress={() => navigation.navigate('EditUser', { user })}
                                     >
-                                        <Text style={{ fontFamily: 'Poppins_500Medium', paddingTop: 1 }} >
+                                        <Text style={{ fontFamily: 'Poppins_500Medium', paddingTop: 1 }} className="text-neutral-900" >
                                             Gegevens bewerken
                                         </Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
+                            
                             <View className="aspect-square h-24 rounded-full bg-zinc-200 justify-center items-center">
                                 {/* first letter firstname + first letter lastname */}
                                 <Text style={{ fontFamily: 'Poppins_700Bold' }} className="text-3xl pt-1 text-gray-400">
@@ -146,14 +148,16 @@ const UserDetails = ({ route }) => {
                             </View>
                         </View>
                     </View>
+
                     <View className="mt-10 mb-12">
                         <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-gray-500 uppercase">
                             Vakken
                         </Text>
+
                         <View className="mt-4 space-y-4">
                             {user.course.map((course) => (
                                 <View key={course.id} className="flex-row justify-between items-center">
-                                    <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-lg">
+                                    <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-lg text-neutral-900">
                                         {course.name}
                                     </Text>
                                     <TouchableOpacity>
@@ -165,10 +169,11 @@ const UserDetails = ({ route }) => {
                                 className="bg-gray-200 self-start px-4 py-2 rounded-md"
                                 onPress={() => user.role_id === 1 ? navigation.navigate('AddCourseToUser', { user }) : navigation.navigate('MakeCourse', { user })}
                             >
-                                <PlusIcon size={20} color="#0F172A" />
+                                <PlusIcon size={20} color="#171717" />
                             </TouchableOpacity>
                         </View>
                     </View>
+
                     <View className="flex-1 items-center justify-end mt-8">
                         <TouchableOpacity className="pt-2 px-2" onPress={handleDelete}>
                             <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-red-500">
@@ -176,6 +181,7 @@ const UserDetails = ({ route }) => {
                             </Text>
                         </TouchableOpacity>
                     </View>
+
                 </ScrollView>
             )}
         </SafeAreaView>

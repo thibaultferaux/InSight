@@ -22,7 +22,7 @@ export const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE, {
 })
 
 export const createAccounts = async () => {
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
         email: "admin@example.com",
         password: "password123",
         options: {
@@ -36,7 +36,7 @@ export const createAccounts = async () => {
     if (error) {
         console.error(error);
     }
-    const { data: data2, error: error2 } = await supabase.auth.signUp({
+    const { error: error2 } = await supabase.auth.signUp({
         email: "teacher@example.com",
         password: "password123",
         options: {

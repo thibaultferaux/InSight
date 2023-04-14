@@ -50,6 +50,7 @@ const RegisterScreen = () => {
                 <ScrollView
                     className="w-full"
                     keyboardShouldPersistTaps="handled"
+                    showsVerticalScrollIndicator={false}
                 >
  
                     <View className="h-1/6 items-center justify-center">
@@ -61,7 +62,7 @@ const RegisterScreen = () => {
                     <View className="flex-1 w-full bg-white rounded-t-[50px] items-center px-7 pt-10">
                         <Text
                             style={{ fontFamily: 'Poppins_600SemiBold' }}
-                            className="text-3xl font-semibold"
+                            className="text-3xl font-semibold text-neutral-900"
                         >Registreer</Text>
                         <View className="flex-1 w-full mt-12 space-y-7">
                             <View>
@@ -76,7 +77,7 @@ const RegisterScreen = () => {
                                     returnKeyType="next"
                                     onSubmitEditing={() => lastNameInputRef.current && lastNameInputRef.current.focus()}
                                 >
-                                    <UserIcon color="#0F172A" size={22} />
+                                    <UserIcon color="#171717" size={22} />
                                 </FormInput>
                             </View>
                             <View>
@@ -91,7 +92,7 @@ const RegisterScreen = () => {
                                     returnKeyType="next"
                                     onSubmitEditing={() => emailInputRef.current && emailInputRef.current.focus()}
                                 >
-                                    <UserIcon color="#0F172A" size={22} />
+                                    <UserIcon color="#171717" size={22} />
                                 </FormInput>
                             </View>
                             <View>
@@ -112,7 +113,7 @@ const RegisterScreen = () => {
                                     returnKeyType="next"
                                     onSubmitEditing={() => passwordInputRef.current && passwordInputRef.current.focus()}
                                 >
-                                    <EnvelopeIcon color="#0F172A" size={22} />
+                                    <EnvelopeIcon color="#171717" size={22} />
                                 </FormInput>
                             </View>
                             <View>
@@ -132,7 +133,7 @@ const RegisterScreen = () => {
                                     returnKeyType="done"
                                     onSubmitEditing={Keyboard.dismiss}
                                 >
-                                    <LockClosedIcon color="#0F172A" size={22} />
+                                    <LockClosedIcon color="#171717" size={22} />
                                 </FormInput>
                             </View>
                         </View>

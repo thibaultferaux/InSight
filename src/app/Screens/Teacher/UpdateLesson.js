@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/outline';
@@ -44,7 +44,7 @@ const UpdateLesson = ({ route }) => {
                     <ArrowLeftIcon size={16} color="#9ca3af" />
                     <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Terug</Text>
                 </TouchableOpacity>
-                <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Les bewerken</Text>
+                <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl text-neutral-900">Les bewerken</Text>
                 <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Verander gewenste velden over de les.</Text>
             </View>
             <LessonForm lesson={lesson} onSubmit={onSubmit} submitLabel="Update" loading={loading}  />

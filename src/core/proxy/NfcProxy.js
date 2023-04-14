@@ -3,8 +3,6 @@ import NfcManager, { NfcTech } from 'react-native-nfc-manager';
 import { store } from '../store/store';
 import * as Haptics from 'expo-haptics';
 
-
-
 // wrapper function that checks if platform is android and if so shows the androidmodal
 const checkPlatform = (fn) => {
     async function wrapper() {

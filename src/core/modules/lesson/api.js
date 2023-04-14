@@ -13,7 +13,6 @@ export const getLessonsForTeacher = async ({teacherId, setFutureLessons, setPast
 
         if (data) {
             // split lessons into current, previous and future
-            // split lessons into current, previous and future
             const filteredLessons = data.reduce((r, a) => {
                 const now = new Date()
                 const startTime = new Date(a.startTime)
@@ -45,7 +44,7 @@ export const getLessonsForTeacher = async ({teacherId, setFutureLessons, setPast
                 return r;
             }, {});
 
-            // reverse order of previous lessons and convert object to array
+            // reverse order of previous lessons
             const groupedLessonsPreviousArray = Object.entries(groupedLessonsPrevious).map(([date, items]) => ({ date, items })).reverse();
 
             setPastLessons(groupedLessonsPreviousArray)

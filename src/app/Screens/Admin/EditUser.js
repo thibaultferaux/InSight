@@ -55,7 +55,7 @@ const EditUser = ({ route }) => {
                         <ArrowLeftIcon size={16} color="#9ca3af" />
                         <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Terug</Text>
                     </TouchableOpacity>
-                    <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Gebruiker wijzigen</Text>
+                    <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl text-neutral-900">Gebruiker wijzigen</Text>
                     <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Verander geweste velden over de gebruiker.</Text>
                 </View>
                 <UserForm user={user} onSubmit={onSubmit} submitLabel="Update" loading={loading} />

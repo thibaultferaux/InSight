@@ -74,7 +74,7 @@ const LessonForm = ({ lesson, onSubmit, submitLabel, loading }) => {
                     fieldState: { error }
                 }) => (
                     <View className="mt-12">
-                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2">Vak</Text>
+                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2 text-neutral-900">Vak</Text>
                         <Dropdown
                             label="Vak"
                             data={courses}
@@ -87,14 +87,14 @@ const LessonForm = ({ lesson, onSubmit, submitLabel, loading }) => {
                             placeholder="Selecteer een vak"
                             className={`items-center bg-slate-100 w-full px-4 py-[14px] rounded-[10px] space-x-4 text-sm border ${error ? 'border-red-500' : 'border-transparent'}`}
                             placeholderStyle={{ color: '#6B7280', marginTop: 4, fontSize: 14 }}
-                            selectedTextStyle={{ marginTop: 4, fontSize: 14, color:'#0F172A' }}
+                            selectedTextStyle={{ marginTop: 4, fontSize: 14, color:'#171717' }}
                             activeColor="#f1f5f9"
-                            itemTextStyle={{ marginTop: 4, fontSize: 14, color:'#0F172A' }}
+                            itemTextStyle={{ marginTop: 4, fontSize: 14, color:'#171717' }}
                             itemContainerStyle={{ borderRadius: 10 }}
                             fontFamily="Poppins_400Regular"
                             labelField="name"
                             valueField="id"
-                            renderRightIcon={() => <ChevronDownIcon size={24} color="#0F172A" /> }
+                            renderRightIcon={() => <ChevronDownIcon size={24} color="#171717" /> }
                         />
                         {error && <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-red-500">{error.message || 'Error'}</Text>}
                     </View>
@@ -109,7 +109,7 @@ const LessonForm = ({ lesson, onSubmit, submitLabel, loading }) => {
                     fieldState: { error }
                 }) => (
                     <View className="mt-4">
-                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2">Lokaal</Text>
+                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2 text-neutral-900">Lokaal</Text>
                         <Dropdown
                             label="Vak"
                             data={classrooms}
@@ -122,14 +122,14 @@ const LessonForm = ({ lesson, onSubmit, submitLabel, loading }) => {
                             placeholder="Selecteer een lokaal"
                             className={`items-center bg-slate-100 w-full px-4 py-[14px] rounded-[10px] space-x-4 text-sm border ${error ? 'border-red-500' : 'border-transparent'}`}
                             placeholderStyle={{ color: '#6B7280', marginTop: 4, fontSize: 14 }}
-                            selectedTextStyle={{ marginTop: 4, fontSize: 14, color:'#0F172A' }}
+                            selectedTextStyle={{ marginTop: 4, fontSize: 14, color:'#171717' }}
                             activeColor="#f1f5f9"
-                            itemTextStyle={{ marginTop: 4, fontSize: 14, color:'#0F172A' }}
+                            itemTextStyle={{ marginTop: 4, fontSize: 14, color:'#171717' }}
                             itemContainerStyle={{ borderRadius: 10 }}
                             fontFamily="Poppins_400Regular"
                             labelField="name"
                             valueField="id"
-                            renderRightIcon={() => <ChevronDownIcon size={24} color="#0F172A" /> }
+                            renderRightIcon={() => <ChevronDownIcon size={24} color="#171717" /> }
                         />
                         {error && <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-red-500">{error.message || 'Error' }</Text>}
                     </View>
@@ -147,10 +147,10 @@ const LessonForm = ({ lesson, onSubmit, submitLabel, loading }) => {
                     fieldState: { error }
                 }) => (
                     <View className="mt-4">
-                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2">Datum</Text>
+                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2 text-neutral-900">Datum</Text>
                         <TouchableOpacity onPress={() => setDatePickerVisibility(true)} className={`flex-row items-center bg-slate-100 w-full px-4 py-[14px] rounded-[10px] space-x-4 border ${ error ? 'border-red-500' : 'border-transparent'}`}>
-                            <CalendarIcon size={22} color="#0F172A" />
-                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-slate-900 align-text-bottom">{ value ? formatDateFull(value) : (<Text className="text-gray-500">Kies een datum</Text>) }</Text>
+                            <CalendarIcon size={22} color="#171717" />
+                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-neutral-900 align-text-bottom">{ value ? formatDateFull(value) : (<Text className="text-gray-500">Kies een datum</Text>) }</Text>
                         </TouchableOpacity>
                         <DateTimePickerModal
                             isVisible={isDatePickerVisible}
@@ -183,10 +183,10 @@ const LessonForm = ({ lesson, onSubmit, submitLabel, loading }) => {
                             fieldState: { error }
                         }) => (
                             <View className="flex-1 mr-2">
-                                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2">Start</Text>
+                                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2 text-neutral-900">Start</Text>
                                 <TouchableOpacity onPress={() => setStartTimePickerVisibility(true)} className={`flex-row items-center bg-slate-100 w-full px-4 py-[14px] rounded-[10px] space-x-4 border ${ error ? 'border-red-500' : 'border-transparent'}`}>
-                                    <ClockIcon size={22} color="#0F172A" />
-                                    <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-slate-900 align-text-bottom">{ value && formatTime(value) }</Text>
+                                    <ClockIcon size={22} color="#171717" />
+                                    <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-neutral-900 align-text-bottom">{ value && formatTime(value) }</Text>
                                 </TouchableOpacity>
                                 <DateTimePickerModal
                                     isVisible={isStartTimePickerVisible}
@@ -215,10 +215,10 @@ const LessonForm = ({ lesson, onSubmit, submitLabel, loading }) => {
                             fieldState: { error }
                         }) => (
                             <View className="flex-1 ml-2">
-                                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2">Einde</Text>
+                                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2 text-neutral-900">Einde</Text>
                                 <TouchableOpacity onPress={() => setEndTimePickerVisibility(true)} className={`flex-row items-center bg-slate-100 w-full px-4 py-[14px] rounded-[10px] space-x-4 border ${ error ? 'border-red-500' : 'border-transparent'}`}>
-                                    <ClockIcon size={22} color="#0F172A" />
-                                    <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-slate-900 align-text-bottom">{ value && formatTime(value) }</Text>
+                                    <ClockIcon size={22} color="#171717" />
+                                    <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-neutral-900 align-text-bottom">{ value && formatTime(value) }</Text>
                                 </TouchableOpacity>
                                 <DateTimePickerModal
                                     isVisible={isEndTimePickerVisible}

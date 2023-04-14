@@ -1,4 +1,3 @@
-import { Alert } from "react-native";
 import { supabase, supabaseAdmin } from "../../api/supabase"
 
 export const getCurrentSession = async () => {

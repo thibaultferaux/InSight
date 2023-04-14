@@ -12,7 +12,6 @@ import FormInput from '../../Components/Form/FormInput';
 import { filterStudents } from '../../../core/utils/students';
 
 const ViewAttendances = ({ route }) => {
-    const [borderColor, setBorderColor] = useState('#00000000');
     const { lesson } = route.params;
     const [ students, setStudents ] = useState();
     const [filteredStudents, setFilteredStudents] = useState();
@@ -27,10 +26,10 @@ const ViewAttendances = ({ route }) => {
 
     useEffect(() => {
         getAttendences()
-        const attendanceListener = supabase
+        supabase
             .channel('public:presentstudent:lessonId=eq.' + lesson.id)
             .on('postgres_changes', { event: '*', schema: 'public', table: 'presentstudent', filter: 'lessonId=eq.' + lesson.id },
-                (payload) => {
+                () => {
                     getAttendences()
                 }
             ).subscribe();
@@ -86,7 +85,7 @@ const ViewAttendances = ({ route }) => {
                     <ArrowLeftIcon size={16} color="#9ca3af" />
                     <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Terug</Text>
                 </TouchableOpacity>
-                <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">{ lesson.course.name } - { formatDateShort(lesson.startTime) } </Text>
+                <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl text-neutral-900">{ lesson.course.name } - { formatDateShort(lesson.startTime) } </Text>
             </View>
             { students && ((!students.present && !students.absent) ? (
                 <View className="flex-1 flex-row justify-center items-center">
@@ -106,7 +105,7 @@ const ViewAttendances = ({ route }) => {
                             returnKeyType="search"
                             onSubmitEditing={Keyboard.dismiss}
                         >
-                            <MagnifyingGlassIcon size={22} color="#0F172A" />
+                            <MagnifyingGlassIcon size={22} color="#171717" />
                         </FormInput>
                     </View>
                     <ScrollView
@@ -127,7 +126,7 @@ const ViewAttendances = ({ route }) => {
                                                     <View className="flex-row items-center space-x-2">
                                                         <CheckCircleIcon size={34} color="#10B981" />
                                                         <View>
-                                                            <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base">{ student.profiles.first_name } { student.profiles.last_name }</Text>
+                                                            <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-neutral-900">{ student.profiles.first_name } { student.profiles.last_name }</Text>
                                                             <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-300 -mt-1">{ formatTime(student.presentAt) }</Text>
                                                         </View>
                                                     </View>
@@ -148,7 +147,7 @@ const ViewAttendances = ({ route }) => {
                                                     <View className="flex-row items-center space-x-2">
                                                         <XCircleIcon size={34} color="#EF4444" />
                                                         <View>
-                                                            <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base">{ student.profiles.first_name } { student.profiles.last_name }</Text>
+                                                            <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-neutral-900">{ student.profiles.first_name } { student.profiles.last_name }</Text>
                                                             <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-300 -mt-1">{ formatTime(student.presentAt) }</Text>
                                                         </View>
                                                     </View>

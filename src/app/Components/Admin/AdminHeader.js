@@ -12,7 +12,7 @@ const AdminHeader = ({ control }) => {
     return (
         <View className="px-7 pt-14">
             <View className="flex-row justify-between items-start">
-                <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Gebruikers</Text>
+                <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl text-neutral-900">Gebruikers</Text>
                 <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => setShowLogout(true)}>
                     <ArrowRightOnRectangleIcon color="white" size={22} />
                 </TouchableOpacity>
@@ -27,7 +27,7 @@ const AdminHeader = ({ control }) => {
                         returnKeyType='search'
                         onSubmitEditing={Keyboard.dismiss}
                     >
-                        <MagnifyingGlassIcon size={22} color="#0F172A" />
+                        <MagnifyingGlassIcon size={22} color="#171717" />
                     </FormInput>
                 </View>
                 <TouchableOpacity

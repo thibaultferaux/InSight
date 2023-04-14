@@ -7,7 +7,6 @@ import { useNavigation } from '@react-navigation/native';
 import { supabase } from '../../../core/api/supabase';
 import LogoutAlert from '../../Components/Auth/LogoutAlert';
 import { getAllClassrooms } from '../../../core/modules/classroom/api';
-import { useAuthContext } from '../../Components/Auth/AuthProvider';
 import { useForm } from 'react-hook-form';
 import FormInput from '../../Components/Form/FormInput';
 
@@ -24,14 +23,13 @@ const AdminDashboard = () => {
 
     useEffect(() => {
         getClassrooms()
-        const classroomListener = supabase
+        supabase
             .channel('public:classroomtag')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'classroomtag' },
-                (payload) => {
+                () => {
                     getClassrooms()
                 }
             ).subscribe();
-        // return classroomListener.unsubscribe()
     }, [])
 
     const getClassrooms = async () => {
@@ -57,7 +55,7 @@ const AdminDashboard = () => {
                 keyboardShouldPersistTaps="handled"
             >
                 <View className="flex-row justify-between items-start">
-                    <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Tags</Text>
+                    <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl text-neutral-900">Tags</Text>
                     <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => setShowLogout(true)}>
                         <ArrowRightOnRectangleIcon color="white" size={22} />
                     </TouchableOpacity>
@@ -72,7 +70,7 @@ const AdminDashboard = () => {
                             returnKeyType='search'
                             onSubmitEditing={Keyboard.dismiss}
                         >
-                            <MagnifyingGlassIcon size={22} color="#0F172A" />
+                            <MagnifyingGlassIcon size={22} color="#171717" />
                         </FormInput>
                     </View>
                     <TouchableOpacity className="bg-violet-500 justify-center h-fit aspect-square items-center rounded-2xl" onPress={() => navigation.navigate(MakeClassroom)}>

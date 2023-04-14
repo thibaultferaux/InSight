@@ -44,7 +44,7 @@ const FormInput = forwardRef(
                                 placeholderTextColor="#6B7280"
                                 style={{ fontFamily: 'Poppins_400Regular', paddingTop: 4, paddingBottom: 0 }}
                                 textAlignVertical="center"
-                                className="flex-1 text-sm text-slate-900 font-normal align-text-bottom"
+                                className="flex-1 text-sm text-neutral-900 font-normal align-text-bottom"
                                 secureTextEntry={secureTextEntry ? !visible : false}
                                 autoCapitalize={autoCapitalize}
                                 keyboardType={keyboardType}
@@ -59,9 +59,9 @@ const FormInput = forwardRef(
                                     onPress={() => setVisible(!visible)}
                                 >
                                     { visible ? (
-                                        <EyeIcon size={22} color="#0F172A" />
+                                        <EyeIcon size={22} color="#171717" />
                                     ) : (
-                                        <EyeSlashIcon size={22} color="#0F172A" />
+                                        <EyeSlashIcon size={22} color="#171717" />
                                     ) }
                                 </TouchableOpacity>
                             ) }
@@ -71,7 +71,7 @@ const FormInput = forwardRef(
                                     className="items-center justify-center"
                                     onPress={() => onChange('')}
                                 >
-                                    <XMarkIcon size={22} color="#0F172A" />
+                                    <XMarkIcon size={22} color="#171717" />
                                 </TouchableOpacity>
                             ) }
                         </View>

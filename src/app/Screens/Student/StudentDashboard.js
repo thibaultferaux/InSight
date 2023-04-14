@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowRightOnRectangleIcon } from 'react-native-heroicons/outline';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
 import { useAuthContext } from '../../Components/Auth/AuthProvider';
 import LogoutAlert from '../../Components/Auth/LogoutAlert';
 import { supabase } from '../../../core/api/supabase';
@@ -29,17 +28,17 @@ const StudentDashboard = () => {
 
     useEffect(() => {
         getLessons()
-        const attendanceListener = supabase
+        supabase
             .channel('public:presentstudent:userId=eq.' + user.id)
             .on('postgres_changes', { event: '*', schema: 'public', table: 'presentstudent', filter: 'userId=eq.' + user.id },
-                (payload) => {
+                () => {
                     getLessons()
                 }
             ).subscribe();
-        const lessonListender = supabase
+        supabase
             .channel('public:lesson')
             .on('postgres_changes', { event: 'update', schema: 'public', table: 'lesson' },
-                (payload) => {
+                () => {
                     getLessons()
                 }
             ).subscribe();
@@ -101,7 +100,7 @@ const StudentDashboard = () => {
                 >
                     <View className="px-7 pt-14">
                         <View className="flex-row justify-between items-start mb-4">
-                            <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Hallo {user.first_name},</Text>
+                            <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl text-neutral-900">Hallo {user.first_name},</Text>
                             <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => setShowLogout(true)}>
                                 <ArrowRightOnRectangleIcon color="white" size={22} />
                             </TouchableOpacity>
@@ -135,7 +134,7 @@ const StudentDashboard = () => {
                                 />
                                 <View className="flex-row justify-between">
                                     <Text className="text-base text-violet-300" style={{ fontFamily: 'Poppins_500Medium' }}>{ formatTime(currentLesson.startTime)} - { formatTime(currentLesson.endTime) }</Text>
-                                    <Text className="text-base bg-white px-3 py-1 pt-[5px] rounded-full" style={{ fontFamily: 'Poppins_600SemiBold' }}>{ currentLesson.classroomtagName }</Text>
+                                    <Text className="text-base bg-white px-3 py-1 pt-[5px] rounded-full text-neutral-900" style={{ fontFamily: 'Poppins_600SemiBold' }}>{ currentLesson.classroomtagName }</Text>
                                 </View>
                                 <Text className="text-2xl mt-1 text-white" style={{ fontFamily: 'Poppins_600SemiBold' }}>{ currentLesson.courseName }</Text>
                                 <View className="items-center mt-3">
@@ -163,9 +162,9 @@ const StudentDashboard = () => {
                                                 onPress={() => handleLessonPress(item)}
                                             >
                                                 <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base mb-2 text-slate-400 pt-4">{ formatTime(item.startTime) }</Text>
-                                                <View className="flex-1 flex-row justify-between bg-white shadow-lg shadow-black/40 mb-2 p-3 rounded-2xl">
+                                                <View className="flex-1 flex-row justify-between bg-white shadow-lg shadow-black/40 mb-2 p-3 rounded-2xl text-neutral-900">
                                                     <View className="justify-between space-y-2">
-                                                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base">{item.courseName}</Text>
+                                                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-neutral-900">{item.courseName}</Text>
                                                         <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-500">{ formatTime(item.startTime) } - { formatTime(item.endTime) }</Text>
                                                     </View>
                                                     <View className="justify-end">
@@ -175,7 +174,7 @@ const StudentDashboard = () => {
                                                             end={{ x: 1, y: 1 }}
                                                             className="px-2 py-[1px] rounded-full shadow-inner shadow-black/40 bg-slate-50"
                                                         >
-                                                            <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm uppercase">{item.classroomtagName}</Text>
+                                                            <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm uppercase text-neutral-900">{item.classroomtagName}</Text>
                                                         </LinearGradient>
                                                     </View>
                                                 </View>

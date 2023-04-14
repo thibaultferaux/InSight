@@ -23,7 +23,7 @@ const TeacherPreviousLessons = ({ lessons }) => {
                     {lesson.items.map((item, index) => (
                         <TouchableOpacity key={index} className="flex-row justify-between bg-white shadow-lg shadow-black/40 mb-2 p-3 rounded-2xl" onPress={() => navigation.navigate('ViewAttendances', {lesson: item})}>
                             <View className="justify-between space-y-3">
-                                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base">{item.course.name}</Text>
+                                <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-neutral-900">{item.course.name}</Text>
                                 <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-500">{formatTime(item.startTime)} - {formatTime(item.endTime)}</Text>
                             </View>
                             <View className="justify-between items-end">
@@ -34,7 +34,7 @@ const TeacherPreviousLessons = ({ lessons }) => {
                                     end={{ x: 1, y: 1 }}
                                     className="px-2 py-[1px] rounded-full shadow-inner shadow-black/40 bg-slate-50"
                                 >
-                                    <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm uppercase">{item.classroomtag.name}</Text>
+                                    <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm uppercase text-neutral-900">{item.classroomtag.name}</Text>
                                 </LinearGradient>
                             </View>
                         </TouchableOpacity>

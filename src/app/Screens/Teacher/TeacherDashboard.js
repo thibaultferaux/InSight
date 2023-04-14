@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, Alert, ScrollView, RefreshControl, Modal, useWindowDimensions } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import { Alert } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { supabase } from '../../../core/api/supabase';
 import { useAuthContext } from '../../Components/Auth/AuthProvider';
@@ -9,7 +9,6 @@ import { Tabs } from 'react-native-collapsible-tab-view';
 import TeacherPreviousLessons from '../../Components/Teacher/TeacherPreviousLessons';
 import TeacherFutureLessons from '../../Components/Teacher/TeacherFutureLessons';
 import TeacherDashboardHeader from '../../Components/Teacher/TeacherDashboardHeader';
-import LessonsDetailsModal from '../../Components/Modal/LessonsDetailsModal';
 
 
 const TeacherDashboard = () => {
@@ -17,15 +16,13 @@ const TeacherDashboard = () => {
     const [futurelessons, setFutureLessons] = useState();
     const [pastLessons, setPastLessons] = useState();
     const [currentLesson, setCurrentLesson] = useState(null);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalLesson, setModalLesson] = useState(null);
 
     useEffect(() => {
         getLessons()
-        const lessonListener = supabase
+        supabase
             .channel('public:lesson')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'lesson' },
-                (payload) => {
+                () => {
                     getLessons()
                 }
             ).subscribe();

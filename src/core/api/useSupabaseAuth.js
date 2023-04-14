@@ -18,7 +18,6 @@ const useSupabaseAuth = () => {
 
     useEffect(() => {
         supabase.auth.onAuthStateChange((event, session) => {
-            // setAuth(session) at sign in, user update and token refresh, but null at sign out or user delete
             switch (event) {
                 case 'SIGNED_IN':
                 case 'USER_UPDATED':

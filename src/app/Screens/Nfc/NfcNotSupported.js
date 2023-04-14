@@ -12,10 +12,10 @@ const NfcNotSupported = ({ reloadFunction, reload }) => {
                     }
                 >
                     <View className="flex-1 justify-center items-center space-y-4">
-                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-lg text-center">
+                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-lg text-center text-neutral-900">
                             Nfc wordt niet ondersteund op uw apparaat.
                         </Text>
-                        <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-center  text-gray-500">
+                        <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-center text-gray-500">
                             Tot er een oplossing is, kunt u de app niet gebruiken. Onze excuses voor het ongemak.
                         </Text>
                     </View> 

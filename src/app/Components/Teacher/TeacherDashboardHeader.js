@@ -15,7 +15,7 @@ const TeacherDashboardHeader = ({ currentLesson }) => {
     return (
         <View className="px-7 pt-14">
             <View className="flex-row justify-between items-start mb-4">
-                <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Hallo {user.first_name},</Text>
+                <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl text-neutral-900">Hallo {user.first_name},</Text>
                 <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => setShowLogout(true)}>
                     <ArrowRightOnRectangleIcon color="white" size={22} />
                 </TouchableOpacity>

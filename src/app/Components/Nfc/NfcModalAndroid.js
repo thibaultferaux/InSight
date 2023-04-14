@@ -5,7 +5,7 @@ import NfcManager from 'react-native-nfc-manager';
 import { useGlobalState } from 'state-pool';
 import { store } from '../../../core/store/store';
 
-const NfcModalAndroid = (props) => {
+const NfcModalAndroid = () => {
     const [visible, setVisible] = useState(false);
     const animValue = useRef(new Animated.Value(0)).current;
     const [ modalData, setModalData ] = useGlobalState(store);
@@ -72,13 +72,13 @@ const NfcModalAndroid = (props) => {
                                 <AnimatedLottieView source={require('../../../../assets/animations/NFC-Scan.json')} autoPlay loop style={{ width: 120 }} />
                             )
                         }
-                        <Text style={{ fontFamily: 'Poppins_400Regular' }} className={`text-base ${modalData.success && 'opacity-0'}`}>
+                        <Text style={{ fontFamily: 'Poppins_400Regular' }} className={`text-base text-neutral-900 ${modalData.success && 'opacity-0'}`}>
                             Hou je telefoon tegen de NFC tag
                         </Text>
                     </View>
 
                     <TouchableOpacity onPress={cancelNfcScan} disabled={modalData.success} className={`w-full justify-center items-center py-5 bg-gray-300 rounded-lg ${modalData.success && 'opacity-0'}`}>
-                        <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-base pt-[1px]">
+                        <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-base pt-[1px] text-neutral-900">
                             Cancel
                         </Text>
                     </TouchableOpacity>

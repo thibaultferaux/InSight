@@ -50,7 +50,7 @@ const StudentsOverview = () => {
                 keyboardShouldPersistTaps="handled"
             >
                 <View className="flex-row justify-between items-start mb-4">
-                    <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Studenten</Text>
+                    <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl text-neutral-900">Studenten</Text>
                     <TouchableOpacity className="bg-neutral-900 p-2 rounded-md" onPress={() => setShowLogout(true)}>
                         <ArrowRightOnRectangleIcon color="white" size={22} />
                     </TouchableOpacity>
@@ -65,7 +65,7 @@ const StudentsOverview = () => {
                         returnKeyType="search"
                         onSubmitEditing={Keyboard.dismiss}
                     >
-                        <MagnifyingGlassIcon size={22} color="#0F172A" />
+                        <MagnifyingGlassIcon size={22} color="#171717" />
                     </FormInput>
                 </View>
                 

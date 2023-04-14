@@ -1,4 +1,3 @@
-import { View, Text } from 'react-native'
 import React, { useEffect } from 'react'
 import TeacherDashboard from '../Screens/Teacher/TeacherDashboard'
 import MakeLesson from '../Screens/Teacher/MakeLesson'
@@ -28,8 +27,8 @@ const TeacherTabs = () => {
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ color }) => getTabBarIcon(route.name, color),
-                tabBarActiveTintColor: '#030712',
-                tabBarInactiveTintColor: '#030712',
+                tabBarActiveTintColor: '#171717',
+                tabBarInactiveTintColor: '#171717',
                 tabBarActiveBackgroundColor: '#E5E7EB',
                 tabBarStyle: {
                     paddingTop: 5,

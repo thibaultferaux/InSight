@@ -51,15 +51,18 @@ const MakeUser = () => {
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={{ paddingHorizontal: 28, paddingVertical: 40 }}
             >
+
                 <View className="justify-between items-start space-y-2">
                     <TouchableOpacity className="flex-row space-x-1 justify-center items-center" onPress={() => navigation.goBack()}>
                         <ArrowLeftIcon size={16} color="#9ca3af" />
                         <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Terug</Text>
                     </TouchableOpacity>
-                    <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Maak een gebruiker aan</Text>
+                    <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl text-neutral-900">Maak een gebruiker aan</Text>
                     <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Vul alle gegevens in om de gebruiker aan te maken.</Text>
                 </View>
+
                 <UserForm onSubmit={onSubmit} submitLabel="Maak" loading={loading} />
+
             </ScrollView>
         </SafeAreaView>
     )

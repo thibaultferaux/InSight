@@ -1,4 +1,4 @@
-import { View, Text, Alert } from 'react-native'
+import { Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Tabs } from 'react-native-collapsible-tab-view'
 import AdminHeader from '../../Components/Admin/AdminHeader'
@@ -21,10 +21,10 @@ const UsersOverview = () => {
     useEffect(() => {
         getStudents()
         getTeachers()
-        const profilesListener = supabase
+        supabase
             .channel('public:profiles')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' },
-                (payload) => {
+                () => {
                     getStudents()
                     getTeachers()
                 }

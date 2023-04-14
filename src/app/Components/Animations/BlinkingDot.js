@@ -1,7 +1,7 @@
 import React from 'react';
 import { Animated } from 'react-native';
 
-const BlinkingDot = ({ size = 5, color = 'black' }) => {
+const BlinkingDot = () => {
   const opacity = new Animated.Value(1);
 
   Animated.loop(
