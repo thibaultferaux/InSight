@@ -25,7 +25,7 @@ const EditUser = ({ route }) => {
         try {
             setLoading(true);
             await updateUser(user.id, data)
-            navigation.navigate('Gebruikers');
+            navigation.goBack();
             showMessage({
                 message: "De gebruiker is succesvol aangepast",
                 type: "success",
