@@ -10,6 +10,7 @@ import { TagIcon, UserGroupIcon } from 'react-native-heroicons/outline';
 import UsersOverview from '../Screens/Admin/UsersOverview';
 import MakeUser from '../Screens/Admin/MakeUser';
 import UserDetails from '../Screens/Admin/UserDetails';
+import EditUser from '../Screens/Admin/EditUser';
 
 const getTabBarIcon = (name, color) => {
     switch (name) {
@@ -82,6 +83,7 @@ const AdminNavigator = () => {
                     <Stack.Screen name="EditClassroom" component={EditClassroom} />
                     <Stack.Screen name="MakeUser" component={MakeUser} />
                     <Stack.Screen name="UserDetails" component={UserDetails} />
+                    <Stack.Screen name="EditUser" component={EditUser} />
                 </Stack.Group>
             </Stack.Navigator>
             <StatusBar style='dark' animated backgroundColor='#f8fafc' />

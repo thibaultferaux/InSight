@@ -1,47 +1,46 @@
-import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { ArrowLeftIcon } from 'react-native-heroicons/outline';
+import { ArrowLeftIcon } from 'react-native-heroicons/mini';
 import UserForm from '../../Components/Form/UserForm';
-import { randomPassword } from '../../../core/utils/randomPassword';
-import { createUser, register } from '../../../core/modules/auth/api';
+import { updateUser } from '../../../core/modules/auth/api';
 import { showMessage } from 'react-native-flash-message';
 
-const MakeUser = () => {
-    const [loading, setLoading] = useState(false);
+const EditUser = ({ route }) => {
+    const { user } = route.params;
     const navigation = useNavigation();
+    const [loading, setLoading] = useState(false);
     const insets = useSafeAreaInsets();
 
     const onSubmit = async ({ first_name, last_name, email, role}) => {
-        
+
         const data = {
             first_name,
             last_name,
             email,
-            password: randomPassword(),
             role_id: role.value,
         }
         
         try {
             setLoading(true);
-            await createUser(data)
-            navigation.goBack();
+            await updateUser(user.id, data)
+            navigation.navigate('Gebruikers');
             showMessage({
-                message: "De gebruiker is succesvol aangemaakt",
+                message: "De gebruiker is succesvol aangepast",
                 type: "success",
                 style: { paddingTop: insets.top + 15 },
                 duration: 3000,
                 icon: 'success',
                 position: 'left'
             })
-            Alert.alert("Gebruiker aangemaakt", "De gebruiker is succesvol aangemaakt. Het wachtwoord is: " + data.password)
         } catch (error) {
             console.log(error);
-            Alert.alert(error.message);
+            Alert.alert("Er is iets misgegaan met wijzigen van de gebruiker. Probeer het later opnieuw.")
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
+
     }
 
     return (
@@ -56,13 +55,13 @@ const MakeUser = () => {
                         <ArrowLeftIcon size={16} color="#9ca3af" />
                         <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Terug</Text>
                     </TouchableOpacity>
-                    <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Maak een gebruiker aan</Text>
-                    <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Vul alle gegevens in om de gebruiker aan te maken.</Text>
+                    <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-2xl">Gebruiker wijzigen</Text>
+                    <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-400">Verander geweste velden over de gebruiker.</Text>
                 </View>
-                <UserForm onSubmit={onSubmit} submitLabel="Maak" loading={loading} />
+                <UserForm user={user} onSubmit={onSubmit} submitLabel="Update" loading={loading} />
             </ScrollView>
         </SafeAreaView>
     )
 }
 
-export default MakeUser
+export default EditUser

@@ -1,15 +1,53 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { AcademicCapIcon, ArrowLeftIcon, EnvelopeIcon, PlusIcon } from 'react-native-heroicons/mini';
 import { XMarkIcon } from 'react-native-heroicons/outline';
+import { deleteUser } from '../../../core/modules/auth/api';
+import { showMessage } from 'react-native-flash-message';
+import { AUTHROLES } from '../../../core/constants/constants';
 
 const UserDetails = ({ route }) => {
-    const { user, role } = route.params;
+    const { user } = route.params;
     const navigation = useNavigation();
+    const insets = useSafeAreaInsets();
 
-    console.log(user);
+    const handleDelete = () => {
+        try {
+            
+            Alert.alert(
+                "Weet je het zeker?",
+                "Weet je zeker dat je deze gebruiker wilt verwijderen? Dit kan niet ongedaan worden gemaakt.",
+                [
+                    {
+                        text: "Annuleren",
+                        style: "cancel"
+                    },
+                    {
+                        text: "Verwijderen",
+                        onPress: async () => {
+                            await deleteUser(user.id);
+                            navigation.goBack();
+                            showMessage({
+                                message: "Gebruiker succesvol verwijderd",
+                                type: "success",
+                                style: { paddingTop: insets.top + 15 },
+                                duration: 3000,
+                                icon: 'success',
+                                position: 'left'
+                            })
+                        }
+                    }
+                ],
+            )
+                
+
+        } catch (error) {
+            console.log(error);
+            Alert.alert("Er is iets misgegaan. Probeer het later opnieuw.");
+        }
+    }
 
     return (
         <SafeAreaView className="flex-1 justify-start bg-slate-50">
@@ -31,12 +69,13 @@ const UserDetails = ({ route }) => {
                             <View className="flex-row space-x-1">
                                 <AcademicCapIcon size={16} color="#9ca3af" />
                                 <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-xs text-gray-500">
-                                    { role }
+                                    { AUTHROLES.find(role => role.value === user.role_id)?.label ?? 'Unknown' }
                                 </Text>
                             </View>
                             <View className="pt-3">
                                 <TouchableOpacity
                                     className="px-4 py-[5px] bg-gray-200 rounded-md"
+                                    onPress={() => navigation.navigate('EditUser', { user })}
                                 >
                                     <Text style={{ fontFamily: 'Poppins_500Medium', paddingTop: 1 }} >
                                         Gegevens bewerken
@@ -73,7 +112,7 @@ const UserDetails = ({ route }) => {
                     </View>
                 </View>
                 <View className="flex-1 items-center justify-end mt-8">
-                    <TouchableOpacity className="pt-2 px-2">
+                    <TouchableOpacity className="pt-2 px-2" onPress={handleDelete}>
                         <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-red-500">
                             Gebruiker verwijderen
                         </Text>

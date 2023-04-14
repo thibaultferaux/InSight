@@ -8,8 +8,7 @@ import { showMessage } from 'react-native-flash-message'
 import FormInput from '../../Components/Form/FormInput';
 import { register } from '../../../core/modules/auth/api';
 import { useForm } from 'react-hook-form';
-
-const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+import { EMAIL_REGEX } from '../../../core/constants/constants';
 
 const RegisterScreen = () => {
     const [loading, setLoading] = useState(false);

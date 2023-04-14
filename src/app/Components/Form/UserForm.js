@@ -4,14 +4,9 @@ import { AcademicCapIcon, ArrowRightIcon, ChevronDownIcon, EnvelopeIcon, UserIco
 import { Controller, useForm } from 'react-hook-form'
 import FormInput from './FormInput'
 import { Dropdown } from 'react-native-element-dropdown'
+import { AUTHROLES, EMAIL_REGEX } from '../../../core/constants/constants'
 
-const AUTHROLES = [
-    { label: 'Student', value: 1 },
-    { label: 'Docent', value: 2 },
-]
-const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-
-const UserForm = ({ onSubmit, submitLabel, loading}) => {
+const UserForm = ({ user, onSubmit, submitLabel, loading}) => {
     const firstNameInputRef = useRef(null);
     const lastNameInputRef = useRef(null);
     const emailInputRef = useRef(null);
@@ -20,10 +15,10 @@ const UserForm = ({ onSubmit, submitLabel, loading}) => {
 
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
-            first_name: '',
-            last_name: '',
-            email: '',
-            role: null,
+            first_name: user ? user.first_name : '',
+            last_name: user ? user.last_name : '',
+            email: user ? user.email : '',
+            role: user ? AUTHROLES.find(item => item.value = user.role_id) : null,
         }
     });
 

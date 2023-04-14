@@ -31,7 +31,7 @@ const UpdateLesson = ({ route }) => {
             navigation.goBack();
         } catch (error) {
             console.error(error)
-            Alert.alert("Er is iets misgegaan met het aanmaken van de les. Probeer het later opnieuw.")
+            Alert.alert("Er is iets misgegaan met het wijzigen van de les. Probeer het later opnieuw.")
         } finally {
             setLoading(false);
         }
