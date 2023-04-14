@@ -16,7 +16,7 @@ const StudentDetailHeader = ({ student }) => {
                 <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-xl pt-1">{ student.first_name + ' ' + student.last_name }</Text>
                 <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-xs text-gray-500 pt-2">{ student.email }</Text>
             </View>
-            <View className="aspect-square h-fit rounded-full bg-zinc-200 justify-center items-center">
+            <View className="aspect-square h-24 rounded-full bg-zinc-200 justify-center items-center">
                 {/* first letter firstname + first letter lastname */}
                 <Text style={{ fontFamily: 'Poppins_700Bold' }} className="text-3xl pt-1 text-gray-400">
                     {student.first_name.charAt(0) + student.last_name.charAt(0)}

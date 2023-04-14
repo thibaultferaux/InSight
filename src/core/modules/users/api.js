@@ -16,6 +16,14 @@ export const getAllStudents = async () => {
         .order('last_name', { ascending: true })
 
     if (error) throw error
+    
+    // make course array first level in the object
+    data.forEach((student) => {
+        student.course = student.usercourse.map((usercourse) => {
+            return {...usercourse.course, id: usercourse.courseId}
+        })
+        delete student.usercourse
+    })
 
     return data
 }

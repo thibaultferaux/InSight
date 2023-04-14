@@ -2,8 +2,11 @@ import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import { Tabs } from 'react-native-collapsible-tab-view'
 import { ArrowUpRightIcon } from 'react-native-heroicons/outline'
+import { useNavigation } from '@react-navigation/native'
 
 const UserList = ({ users, search }) => {
+    const navigation = useNavigation();
+
     return (
         <Tabs.ScrollView
             contentContainerStyle={{ marginTop: 16, paddingHorizontal: 28, paddingBottom: 56}}
@@ -20,7 +23,14 @@ const UserList = ({ users, search }) => {
                     const afterMatch = name.slice(indexMatch + search.length);
 
                     return (
-                        <TouchableOpacity key={index} className="flex-row justify-between items-center py-4 border-b-[1px] border-gray-300">
+                        <TouchableOpacity
+                            key={index}
+                            className="flex-row justify-between items-center py-4 border-b-[1px] border-gray-300"
+                            onPress={() => navigation.navigate('UserDetails', {
+                                user: user,
+                                role: "Student",
+                            })}
+                        >
                             <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-neutral-900">
                                 {beforeMatch}
                                 <Text style={{ fontFamily: 'Poppins_600SemiBold' }} className="text-base text-neutral-900">{match}</Text>

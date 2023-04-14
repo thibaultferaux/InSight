@@ -8,7 +8,6 @@ import { Dropdown } from 'react-native-element-dropdown'
 const AUTHROLES = [
     { label: 'Student', value: 1 },
     { label: 'Docent', value: 2 },
-    { label: 'Admin', value: 3 },
 ]
 const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 

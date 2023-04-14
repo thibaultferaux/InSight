@@ -49,7 +49,7 @@ const MakeUser = () => {
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="handled"
-                contentContainerStyle={{ paddingHorizontal: 28, paddingVertical: 56 }}
+                contentContainerStyle={{ paddingHorizontal: 28, paddingVertical: 40 }}
             >
                 <View className="justify-between items-start space-y-2">
                     <TouchableOpacity className="flex-row space-x-1 justify-center items-center" onPress={() => navigation.goBack()}>
