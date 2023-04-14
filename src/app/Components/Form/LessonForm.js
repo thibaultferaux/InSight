@@ -239,7 +239,7 @@ const LessonForm = ({ lesson, onSubmit, submitLabel, loading }) => {
                 { (errors.startTime && errors.endTime) || errors.startTime ? (<Text className="text-red-500 text-sm">{ errors.startTime.message }</Text>) : (errors.endTime && (<Text className="text-red-500 text-sm">{ errors.endTime.message }</Text>))}
             </View>
             <View className="mt-12 items-end">
-                <TouchableOpacity className={`py-[10px] px-[15px] flex-row space-x-2 rounded-lg ${ (Object.keys(errors).length === 0 && !loading) ? 'bg-violet-500' : 'bg-violet-500/50'}`} onPress={handleSubmit(onSubmit)} disabled={(Object.keys(errors).length !== 0) || loading}>
+                <TouchableOpacity className={`py-[10px] px-[15px] flex-row space-x-2 rounded-lg ${ (Object.keys(errors).length === 0 && !loading) ? 'bg-violet-500' : 'bg-violet-300'}`} onPress={handleSubmit(onSubmit)} disabled={(Object.keys(errors).length !== 0) || loading}>
                     <Text className="text-white">{ submitLabel }</Text>
                     <ArrowRightIcon size={22} color="white" />
                 </TouchableOpacity>

@@ -7,11 +7,11 @@ import { XMarkIcon } from 'react-native-heroicons/outline';
 import { deleteUser } from '../../../core/modules/auth/api';
 import { showMessage } from 'react-native-flash-message';
 import { AUTHROLES } from '../../../core/constants/constants';
-import { getStudentById } from '../../../core/modules/users/api';
+import { getStudentById, getTeacherById } from '../../../core/modules/users/api';
 import { deleteCourse, removeUserFromCourse } from '../../../core/modules/course/api';
 
 const UserDetails = ({ route }) => {
-    const { userId } = route.params;
+    const { userId, roleId } = route.params;
     const [user, setUser] = useState();
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
@@ -24,7 +24,13 @@ const UserDetails = ({ route }) => {
 
     const getUser = async () => {
         try {
-            const response = await getStudentById(userId);
+            let response;
+
+            if (roleId === 1) {
+                response = await getStudentById(userId);
+            } else {
+                response = await getTeacherById(userId);
+            }
 
             setUser(response);
 
@@ -157,7 +163,7 @@ const UserDetails = ({ route }) => {
                             ))}
                             <TouchableOpacity
                                 className="bg-gray-200 self-start px-4 py-2 rounded-md"
-                                onPress={() => user.role_id === 1 && navigation.navigate('AddCourseToUser', { user })}
+                                onPress={() => user.role_id === 1 ? navigation.navigate('AddCourseToUser', { user }) : navigation.navigate('MakeCourse', { user })}
                             >
                                 <PlusIcon size={20} color="#0F172A" />
                             </TouchableOpacity>

@@ -124,7 +124,7 @@ const UserForm = ({ user, onSubmit, submitLabel, loading}) => {
                 />
             </View>
             <View className="items-end">
-                <TouchableOpacity className={`py-[10px] px-[15px] flex-row space-x-2 rounded-lg ${ (Object.keys(errors).length === 0 && !loading) ? 'bg-violet-500' : 'bg-violet-500/50'}`} onPress={handleSubmit(onSubmit)} disabled={(Object.keys(errors).length !== 0) || loading}>
+                <TouchableOpacity className={`py-[10px] px-[15px] flex-row space-x-2 rounded-lg ${ (Object.keys(errors).length === 0 && !loading) ? 'bg-violet-500' : 'bg-violet-300'}`} onPress={handleSubmit(onSubmit)} disabled={(Object.keys(errors).length !== 0) || loading}>
                     <Text className="text-white">{ submitLabel }</Text>
                     <ArrowRightIcon size={22} color="white" />
                 </TouchableOpacity>

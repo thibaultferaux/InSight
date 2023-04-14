@@ -28,6 +28,7 @@ const UserList = ({ users, search }) => {
                             className="flex-row justify-between items-center py-4 border-b-[1px] border-gray-300"
                             onPress={() => navigation.navigate('UserDetails', {
                                 userId: user.id,
+                                roleId: user.role_id,
                             })}
                         >
                             <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-base text-neutral-900">

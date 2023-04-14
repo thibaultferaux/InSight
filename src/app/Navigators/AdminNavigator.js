@@ -12,6 +12,7 @@ import MakeUser from '../Screens/Admin/MakeUser';
 import UserDetails from '../Screens/Admin/UserDetails';
 import EditUser from '../Screens/Admin/EditUser';
 import AddCourseToUser from '../Screens/Admin/AddCourseToUser';
+import MakeCourse from '../Screens/Admin/MakeCourse';
 
 const getTabBarIcon = (name, color) => {
     switch (name) {
@@ -86,6 +87,7 @@ const AdminNavigator = () => {
                     <Stack.Screen name="UserDetails" component={UserDetails} />
                     <Stack.Screen name="EditUser" component={EditUser} />
                     <Stack.Screen name="AddCourseToUser" component={AddCourseToUser} />
+                    <Stack.Screen name="MakeCourse" component={MakeCourse} />
                 </Stack.Group>
             </Stack.Navigator>
             <StatusBar style='dark' animated backgroundColor='#f8fafc' />

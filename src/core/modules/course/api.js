@@ -65,3 +65,13 @@ export const addCoursesToStudent = async (userId, courseIds) => {
 
     return data;
 }
+
+export const makeCourseWithTeacher = async (courseName, teacherId) => {
+    const { data, error } = await supabase
+        .from('course')
+        .insert({ name: courseName, teacherId })
+
+    if (error) throw error;
+
+    return data;
+}

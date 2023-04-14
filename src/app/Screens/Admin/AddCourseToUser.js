@@ -115,7 +115,7 @@ const AddCourseToUser = ({ route }) => {
                         />
 
                         <View className="mt-12 items-end">
-                            <TouchableOpacity className={`py-[10px] px-[15px] flex-row space-x-2 rounded-lg ${ !loading ? 'bg-violet-500' : 'bg-violet-500/50'}`} onPress={handleSubmit(onSubmit)} disabled={loading}>
+                            <TouchableOpacity className={`py-[10px] px-[15px] flex-row space-x-2 rounded-lg ${ !loading ? 'bg-violet-500' : 'bg-violet-300'}`} onPress={handleSubmit(onSubmit)} disabled={loading}>
                                 <Text className="text-white">Toevoegen</Text>
                                 <ArrowRightIcon size={22} color="white" />
                             </TouchableOpacity>
