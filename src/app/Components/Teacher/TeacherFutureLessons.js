@@ -51,7 +51,7 @@ const TeacherFutureLessons = ({ lessons }) => {
                 )) : (
                     <View className="justify-center items-center mt-20 space-y-4">
                         <Image source={require('../../../../assets/NoLessonsIcon.png')} style={{ width: 200, height: 120, resizeMode:'contain' }} />
-                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-gray-300">Geen lessen deze dag</Text>
+                        <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-gray-300">Geen lessen om weer te geven</Text>
                     </View>
                 ))}
             </Tabs.ScrollView>

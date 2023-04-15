@@ -53,7 +53,7 @@ const UserDetails = ({ route }) => {
                     {
                         text: "Verwijderen",
                         onPress: async () => {
-                            user.role_id === 1 ? await removeUserFromCourse(userId, courseId) : await deleteCourse(courseId);
+                            roleId === 1 ? await removeUserFromCourse(userId, courseId) : await deleteCourse(courseId);
                             getUser();
                         }
                     }
@@ -125,7 +125,7 @@ const UserDetails = ({ route }) => {
                                 <View className="flex-row space-x-1">
                                     <AcademicCapIcon size={16} color="#9ca3af" />
                                     <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-xs text-gray-500">
-                                        { AUTHROLES.find(role => role.value === user.role_id)?.label ?? 'Unknown' }
+                                        { AUTHROLES.find(role => role.value === roleId)?.label ?? 'Unknown' }
                                     </Text>
                                 </View>
                                 <View className="pt-3">

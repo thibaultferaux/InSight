@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { createClient } from "@supabase/supabase-js"
 import { SUPABASE_URL, SUPABASE_ANON, SUPABASE_SERVICE_ROLE } from "@env"
 import 'react-native-url-polyfill/auto'
+import { createUser } from "../modules/auth/api"
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
     auth: {
@@ -21,33 +22,23 @@ export const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE, {
     }
 })
 
-export const createAccounts = async () => {
-    const { error } = await supabase.auth.signUp({
-        email: "admin@example.com",
-        password: "password123",
-        options: {
-            data: {
-                first_name: "Admin",
-                last_name: "Admin",
-                role_id: 3
-            }
-        }
-    });
-    if (error) {
-        console.error(error);
+/* export const createAccounts = async () => {
+    try {
+        await createUser({
+            email: "admin@example.com",
+            password: "InSight_Admin123",
+            first_name: "Martin",
+            last_name: "Delmote",
+            role_id: 3
+        })
+        await createUser({
+            email: "teacher@example.com",
+            password: "InSight_Teacher123",
+            first_name: "Jannick",
+            last_name: "Louage",
+            role_id: 2
+        })
+    } catch (error) {
+        console.error(error)
     }
-    const { error: error2 } = await supabase.auth.signUp({
-        email: "teacher@example.com",
-        password: "password123",
-        options: {
-            data: {
-                first_name: "Teacher",
-                last_name: "Teacher",
-                role_id: 2
-            }
-        }
-    });
-    if (error2) {
-        console.error(error2);
-    }
-}
+} */

@@ -148,7 +148,7 @@ const LessonForm = ({ lesson, onSubmit, submitLabel, loading }) => {
                 }) => (
                     <View className="mt-4">
                         <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2 text-neutral-900">Datum</Text>
-                        <TouchableOpacity onPress={() => setDatePickerVisibility(true)} className={`flex-row items-center bg-slate-100 w-full px-4 py-[14px] rounded-[10px] space-x-4 border ${ error ? 'border-red-500' : 'border-transparent'}`}>
+                        <TouchableOpacity onPress={() => setDatePickerVisibility(true)} className={`flex-row items-center bg-slate-100 w-full px-4 py-5 rounded-[10px] space-x-4 border ${ error ? 'border-red-500' : 'border-transparent'}`}>
                             <CalendarIcon size={22} color="#171717" />
                             <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-neutral-900 align-text-bottom">{ value ? formatDateFull(value) : (<Text className="text-gray-500">Kies een datum</Text>) }</Text>
                         </TouchableOpacity>
@@ -184,7 +184,7 @@ const LessonForm = ({ lesson, onSubmit, submitLabel, loading }) => {
                         }) => (
                             <View className="flex-1 mr-2">
                                 <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2 text-neutral-900">Start</Text>
-                                <TouchableOpacity onPress={() => setStartTimePickerVisibility(true)} className={`flex-row items-center bg-slate-100 w-full px-4 py-[14px] rounded-[10px] space-x-4 border ${ error ? 'border-red-500' : 'border-transparent'}`}>
+                                <TouchableOpacity onPress={() => setStartTimePickerVisibility(true)} className={`flex-row items-center bg-slate-100 w-full px-4 py-5 rounded-[10px] space-x-4 border ${ error ? 'border-red-500' : 'border-transparent'}`}>
                                     <ClockIcon size={22} color="#171717" />
                                     <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-neutral-900 align-text-bottom">{ value && formatTime(value) }</Text>
                                 </TouchableOpacity>
@@ -216,7 +216,8 @@ const LessonForm = ({ lesson, onSubmit, submitLabel, loading }) => {
                         }) => (
                             <View className="flex-1 ml-2">
                                 <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-sm mb-2 text-neutral-900">Einde</Text>
-                                <TouchableOpacity onPress={() => setEndTimePickerVisibility(true)} className={`flex-row items-center bg-slate-100 w-full px-4 py-[14px] rounded-[10px] space-x-4 border ${ error ? 'border-red-500' : 'border-transparent'}`}>
+                                <TouchableOpacity onPress={() => setEndTimePickerVisibility(true)} className={`flex-row items-center bg-slate-100 w-full px-4 py-5
+                                 rounded-[10px] space-x-4 border ${ error ? 'border-red-500' : 'border-transparent'}`}>
                                     <ClockIcon size={22} color="#171717" />
                                     <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-neutral-900 align-text-bottom">{ value && formatTime(value) }</Text>
                                 </TouchableOpacity>

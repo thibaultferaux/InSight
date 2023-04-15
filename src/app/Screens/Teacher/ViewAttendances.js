@@ -148,7 +148,7 @@ const ViewAttendances = ({ route }) => {
                                                         <XCircleIcon size={34} color="#EF4444" />
                                                         <View>
                                                             <Text style={{ fontFamily: 'Poppins_500Medium' }} className="text-base text-neutral-900">{ student.profiles.first_name } { student.profiles.last_name }</Text>
-                                                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-300 -mt-1">{ formatTime(student.presentAt) }</Text>
+                                                            <Text style={{ fontFamily: 'Poppins_400Regular' }} className="text-sm text-gray-300 -mt-1">Afwezig</Text>
                                                         </View>
                                                     </View>
                                                     <TouchableOpacity className="flex-row items-center p-2 space-x-1" onPress={() => handleSetPresent(student.userId)}>

@@ -17,7 +17,7 @@ import LessonsDetailsModal from '../../Components/Modal/LessonsDetailsModal';
 
 const StudentDashboard = () => {
     const { user } = useAuthContext();
-    const [lessons, setLessons] = useState([]);
+    const [lessons, setLessons] = useState(null);
     const [currentLesson, setCurrentLesson] = useState(null);
     const [selectedDay, setSelectedDay] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
@@ -118,7 +118,7 @@ const StudentDashboard = () => {
                                 />
                                 <View className="flex-row justify-between items-center py-2">
                                     <View className="flex-row items-center">
-                                        <Text className="text-base text-violet-300 mr-1 pt-[1px]" style={{ fontFamily: 'Poppins_500Medium' }}>{ currentLesson.courseName } - Aanwezig</Text>
+                                        <Text className="text-violet-300 mr-1 pt-[1px]" style={{ fontFamily: 'Poppins_500Medium' }}>{ currentLesson.courseName } - Aanwezig</Text>
                                         <BlinkingDot />
                                     </View>
                                     <Text className="text-sm text-violet-300 pt-[1px]" style={{ fontFamily: 'Poppins_500Medium' }}>{ formatTime(currentLesson.startTime)} - { formatTime(currentLesson.endTime) }</Text>
@@ -144,7 +144,7 @@ const StudentDashboard = () => {
                         ))}
 
                         {
-                            lessons.length > 0 && (
+                            lessons && (
                                 <DateSlider lessons={lessons} onDaySelected={handleDaySelected} />
                             )
                         }

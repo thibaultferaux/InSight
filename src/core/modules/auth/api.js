@@ -50,7 +50,8 @@ export const createUser = async (credentials) => {
         user_metadata: {
             ...extra,
             role_id: extra.role_id || 1
-        }
+        },
+        email_confirm: true
     });
     if (error) {
         return Promise.reject(error);
